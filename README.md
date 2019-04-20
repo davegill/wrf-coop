@@ -4,7 +4,8 @@ Build a container without WRF, then use that to build a container with WRF.
 
 It takes too long to always rebuild the container from scratch.
 
-Build first image. This has the libs, data, diretory, etc. This uses the `Dockerfile-first_part`.
+### Build first image. 
+This has the libs, data, directory, etc. This uses the `Dockerfile-first_part`.
 ```
 > cp Dockerfile-first_part Dockerfile
 > docker build -t wrf-coop --build-arg argname=regtest .
@@ -56,12 +57,14 @@ d69483a6face: Mounted from library/centos
 firsttry: digest: sha256:5ee88699d04e2867ff1bc2c437f604426483968608d6bab031ff721a1c037892 size: 6192
 ```
 
-Then we build the second image, much shorter time, thank you very much. 
+### Build the second image
+The second image is requires a much shorter time to build, thank you very much. 
 ```
 > cp Dockerfile-second_part Dockerfile
 > docker build -t wrftest .
 ```
 
+### With the second image, build three containers
 We do a few of these containers: real, nmm, chem. These are a few seconds each.
 ```
 > docker run -d -t --name test_001 wrftest
@@ -69,13 +72,15 @@ We do a few of these containers: real, nmm, chem. These are a few seconds each.
 > docker run -d -t --name test_003 wrftest
 ```
 
-Build the specific containers. These are 5-10 minutes each.
+### With those available containers, build the WRF code in three separate ways
+Build the specific containers: em_real, NMM, Chem. These are 5-10 minutes each.
 ```
 > docker exec test_001 ./script.csh BUILD CLEAN 34 1 em_real -d J=-j@3
 > docker exec test_002 ./script.csh BUILD CLEAN 34 1 nmm_real -d J=-j@3 WRF_NMM_CORE=1
 > docker exec test_003 ./script.csh BUILD CLEAN 34 1 em_real -d J=-j@3 WRF_CHEM=1
 ```
 
+### Do a simulation
 Run a single test in each container, takes less than a minute for each.
 ```
 > docker exec test_001 ./script.csh RUN em_real 34 em_real 01 ; set OK = $status ; echo $OK for test 01
