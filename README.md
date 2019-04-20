@@ -71,7 +71,17 @@ We do a few of these containers: real, nmm, chem. These are a few seconds each.
 
 Build the specific containers. These are 5-10 minutes each.
 ```
-docker exec test_001 ./script.csh BUILD CLEAN 34 1 em_real -d J=-j@3
-docker exec test_002 ./script.csh BUILD CLEAN 34 1 nmm_real -d J=-j@3 WRF_NMM_CORE=1
-docker exec test_003 ./script.csh BUILD CLEAN 34 1 em_real -d J=-j@3 WRF_CHEM=1
+> docker exec test_001 ./script.csh BUILD CLEAN 34 1 em_real -d J=-j@3
+> docker exec test_002 ./script.csh BUILD CLEAN 34 1 nmm_real -d J=-j@3 WRF_NMM_CORE=1
+> docker exec test_003 ./script.csh BUILD CLEAN 34 1 em_real -d J=-j@3 WRF_CHEM=1
+```
+
+Run a single test in each container, takes less than a minute for each.
+```
+> docker exec test_001 ./script.csh RUN em_real 34 em_real 01 ; set OK = $status ; echo $OK for test 01
+0 for test 01
+> docker exec test_002 ./script.csh RUN nmm_real 34 nmm_nest 01 ; set OK = $status ; echo $OK for test 01
+0 for test 01
+> docker exec test_003 ./script.csh RUN em_real 34 em_chem 1 ; set OK = $status ; echo $OK for test 1
+0 for test 1
 ```
