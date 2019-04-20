@@ -72,12 +72,20 @@ We do a few of these containers: real, nmm, chem. These are a few seconds each.
 > docker run -d -t --name test_003 wrftest
 ```
 
+
 ### With those available containers, build the WRF code in three separate ways
 Build the specific containers: em_real, NMM, Chem. These are 5-10 minutes each.
 ```
 > docker exec test_001 ./script.csh BUILD CLEAN 34 1 em_real -d J=-j@3
 > docker exec test_002 ./script.csh BUILD CLEAN 34 1 nmm_real -d J=-j@3 WRF_NMM_CORE=1
 > docker exec test_003 ./script.csh BUILD CLEAN 34 1 em_real -d J=-j@3 WRF_CHEM=1
+```
+If your machine is _beefy_ enough ...`
+```
+> docker exec test_001 ./script.csh BUILD CLEAN 34 1 em_real -d J=-j@3 &
+> docker exec test_002 ./script.csh BUILD CLEAN 34 1 nmm_real -d J=-j@3 WRF_NMM_CORE=1 &
+> docker exec test_003 ./script.csh BUILD CLEAN 34 1 em_real -d J=-j@3 WRF_CHEM=1 &
+> wait
 ```
 
 ### Do a simulation
