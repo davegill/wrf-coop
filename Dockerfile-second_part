@@ -1,5 +1,5 @@
 #
-FROM davegill/wrf-coop:secondtry
+FROM davegill/wrf-coop:fourthtry
 MAINTAINER Dave Gill <gill@ucar.edu>
 
 #RUN echo _HERE1_
