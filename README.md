@@ -20,7 +20,7 @@ wrf-coop            latest              bd2082d1eb7d        19 minutes ago      
 centos              latest              9f38484d220f        5 weeks ago         202MB
 ```
 
-Once we have that image, we want to save it. That is the _WHOLE_ purpose of this exercise. Then we just pull it down and add in the WRF repository, and voi-fricking-la. Note, this is `firsttry`. I am at `secondtry`.
+Once we have that image, we want to save it. That is the _WHOLE_ purpose of this exercise. Then we just pull it down and add in the WRF repository, and voi-fricking-la. Note, this is `firsttry`. I am at `fourthtry`.
 ```
 > docker tag bd2082d1eb7d davegill/wrf-coop:firsttry
 
@@ -58,7 +58,7 @@ firsttry: digest: sha256:5ee88699d04e2867ff1bc2c437f604426483968608d6bab031ff721
 ```
 
 ### Build the second image
-The second image is requires a much shorter time to build, thank you very much. 
+The second image is faster (it requires a much shorter time to build), thank you very much. 
 ```
 > cp Dockerfile-second_part Dockerfile
 > docker build -t wrftest .
@@ -80,7 +80,7 @@ Build the specific containers: em_real, NMM, Chem. These are 5-10 minutes each.
 > docker exec test_002 ./script.csh BUILD CLEAN 34 1 nmm_real -d J=-j@3 WRF_NMM_CORE=1
 > docker exec test_003 ./script.csh BUILD CLEAN 34 1 em_real -d J=-j@3 WRF_CHEM=1
 ```
-If your machine is _beefy_ enough, put these build jobs (as in "build WRF") in the background.
+If your machine is _beefy_ enough, put these build jobs (as in "build a wrf executable") in the background.
 ```
 > docker exec test_001 ./script.csh BUILD CLEAN 34 1 em_real -d J=-j@3 &
 > docker exec test_002 ./script.csh BUILD CLEAN 34 1 nmm_real -d J=-j@3 WRF_NMM_CORE=1 &
@@ -91,10 +91,12 @@ If your machine is _beefy_ enough, put these build jobs (as in "build WRF") in t
 ### Do a simulation
 Run a single test in each container, takes less than a minute for each.
 ```
-> docker exec test_001 ./script.csh RUN em_real 34 em_real 01 ; set OK = $status ; echo $OK for test 01
+> docker exec test_001 ./script.csh RUN em_real 34 em_real 01 NP=3 ; set OK = $status ; echo $OK for test 01
 0 for test 01
-> docker exec test_002 ./script.csh RUN nmm_real 34 nmm_nest 01 ; set OK = $status ; echo $OK for test 01
+> docker exec test_002 ./script.csh RUN nmm_real 34 nmm_nest 01 NP=3 ; set OK = $status ; echo $OK for test 01
 0 for test 01
-> docker exec test_003 ./script.csh RUN em_real 34 em_chem 1 ; set OK = $status ; echo $OK for test 1
+> docker exec test_003 ./script.csh RUN em_real 34 em_chem 1 NP=3 ; set OK = $status ; echo $OK for test 1
 0 for test 1
 ```
+
+Remember to stop and remove the containers, and remove the images.
