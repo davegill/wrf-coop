@@ -12,7 +12,7 @@ This has the libs, data, directory, etc. This uses the `Dockerfile-first_part`.
 ```
 
 
-Here's the first image (wrf-coop). A coop is the thing surrounding the area that we actually care about.
+Here's the first image (wrf-coop). A coop is the structure surrounding the actual things that we care about.
 ```
 > docker images
 REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
