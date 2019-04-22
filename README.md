@@ -5,7 +5,7 @@ Build a container without WRF, then use that to build a container with WRF.
 It takes too long to always rebuild the container from scratch.
 
 ### Build first image. 
-This has the libs, data, directory, etc. This uses the `Dockerfile-first_part`.
+This image has the libs, data, directory structure, etc inside. The construction of this image uses the `Dockerfile-first_part` from this repository. This Docker setup was testied at https://github.com/davegill/travis_test. In the docker branch are the Dockerfile-template and the .travis.yml files.
 ```
 > cp Dockerfile-first_part Dockerfile
 > docker build -t wrf-coop --build-arg argname=regtest .
