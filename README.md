@@ -181,7 +181,7 @@ On a single desktop, a reasonable run-time command would be:
 > date ; ( ./single.csh ; ./test_001s.csh ; ./test_001o.csh ; ./test_001m.csh ; ./test_002s.csh ; ./test_002m.csh ) >& output ; date
 ```
 
-To view how the status of the testing after the command is complete, search for `SUCCESS`. There should be four `SUCCESS` messages:
+To view how the status of the testing after the command is complete, search for `SUCCESS`. There should be four `SUCCESS` messages for each test conducted (in this example, we did five tests):
 1. From inside of the WRF model print out
 2. Build the executable
 3. Run the preprocessor (real or ideal)
