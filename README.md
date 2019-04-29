@@ -210,7 +210,7 @@ d01 2008-01-11_00:15:00 wrf: SUCCESS COMPLETE WRF
 0 -rw-r--r-- 1 wrfuser wrf 0 Apr 29 15:49 SUCCESS_RUN_WRF_d01_nmm_real_34_01
 ```
 
-When running on multiple nodes, `build.csh` would generate:
+When intending to run on multiple nodes, with the appropriate modifications, the `build.csh` would generate:
 ```
 > build.csh
 Run ./single.csh
