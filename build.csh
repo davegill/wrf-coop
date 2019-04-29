@@ -7,7 +7,7 @@ set TEST_GEN = SOME
 
 #	How many procs do we play with: used for parallel build, openmp threads, mpi ranks
 
-set PROCS = 3
+set PROCS = 8
 
 #	Sequential jobs, or all independent. Basically, do we remove the images?
 
