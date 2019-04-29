@@ -99,11 +99,20 @@ foreach n ( $NUMBER )
 				endif
 				set string = ( $string $str )
 
+				echo "echo Build container" >> $fname
 				echo "docker run -d -t --name test_0${n}${test_suffix} wrf_regtest" >> $fname
 				echo "date" >> $fname
+				echo "echo Build WRF executable" >> $fname
 				echo $string >> $fname
 				echo "date" >> $fname
 				echo "docker exec test_0${n}${test_suffix} ls -ls WRF/main/wrf.exe" >> $fname
+				if      ( $COMPILE[$COUNT] == nmm_real ) then
+					echo "docker exec test_0${n}${test_suffix} ls -ls WRF/main/real_nmm.exe" >> $fname
+				else if ( $COMPILE[$COUNT] == em_real ) then
+					echo "docker exec test_0${n}${test_suffix} ls -ls WRF/main/real.exe" >> $fname
+				else
+					echo "docker exec test_0${n}${test_suffix} ls -ls WRF/main/ideal.exe" >> $fname
+				endif
 				echo "date" >> $fname
 				echo " " >> $fname
 
@@ -111,6 +120,7 @@ foreach n ( $NUMBER )
 				echo "foreach t ( $TEST[$COUNT] )" >> $fname
 				echo "	date" >> $fname
 				echo '	if ( $TCOUNT == 1 ) ' "goto SKIP_test_0${n}${test_suffix}" >> $fname
+				echo "	echo RUN WRF test_0${n}${test_suffix} for $COMPILE[$COUNT] $SERIAL_OPT $RUNDIR[$COUNT], NML = " '$t' >> $fname
 				echo "	docker exec test_0${n}${test_suffix} ./script.csh RUN $COMPILE[$COUNT] $SERIAL_OPT $RUNDIR[$COUNT]" '$t' >> $fname
         			echo '	set OK = $status' >> $fname
 				echo '	echo $OK for test $t' >> $fname
@@ -129,7 +139,7 @@ foreach n ( $NUMBER )
 				echo "date" >> $fname
 				echo "docker rm test_0${n}${test_suffix}" >> $fname
 				echo "date" >> $fname
-				echo "echo docker rmi wrf_regtest" >> $fname
+				echo "docker rmi wrf_regtest" >> $fname
 				echo "date" >> $fname
 				echo "#####################   END OF JOB    #####################" >> $fname
 
@@ -169,11 +179,20 @@ foreach n ( $NUMBER )
 				endif
 				set string = ( $string $str )
 
+				echo "echo Build container" >> $fname
 				echo "docker run -d -t --name test_0${n}${test_suffix} wrf_regtest" >> $fname
 				echo "date" >> $fname
+				echo "echo Build WRF executable" >> $fname
 				echo $string >> $fname
 				echo "date" >> $fname
 				echo "docker exec test_0${n}${test_suffix} ls -ls WRF/main/wrf.exe" >> $fname
+				if      ( $COMPILE[$COUNT] == nmm_real ) then
+					echo "docker exec test_0${n}${test_suffix} ls -ls WRF/main/real_nmm.exe" >> $fname
+				else if ( $COMPILE[$COUNT] == em_real ) then
+					echo "docker exec test_0${n}${test_suffix} ls -ls WRF/main/real.exe" >> $fname
+				else
+					echo "docker exec test_0${n}${test_suffix} ls -ls WRF/main/ideal.exe" >> $fname
+				endif
 				echo "date" >> $fname
 				echo " " >> $fname
 
@@ -181,6 +200,7 @@ foreach n ( $NUMBER )
 				echo "foreach t ( $TEST[$COUNT] )" >> $fname
 				echo "	date" >> $fname
 				echo '	if ( $TCOUNT == 1 ) ' "goto SKIP_test_0${n}${test_suffix}" >> $fname
+				echo "	echo RUN WRF test_0${n}${test_suffix} for $COMPILE[$COUNT] $OPENMP_OPT $RUNDIR[$COUNT], NML = " '$t' >> $fname
 				echo "	docker exec test_0${n}${test_suffix} ./script.csh RUN $COMPILE[$COUNT] $OPENMP_OPT $RUNDIR[$COUNT]" '$t' "OMP_NUM_THREADS=$NP[$COUNT]" >> $fname
         			echo '	set OK = $status' >> $fname
 				echo '	echo $OK for test $t' >> $fname
@@ -199,7 +219,7 @@ foreach n ( $NUMBER )
 				echo "date" >> $fname
 				echo "docker rm test_0${n}${test_suffix}" >> $fname
 				echo "date" >> $fname
-				echo "echo docker rmi wrf_regtest" >> $fname
+				echo "docker rmi wrf_regtest" >> $fname
 				echo "date" >> $fname
 				echo "#####################   END OF JOB    #####################" >> $fname
 
@@ -239,11 +259,20 @@ foreach n ( $NUMBER )
 				endif
 				set string = ( $string $str )
 
+				echo "echo Build container" >> $fname
 				echo "docker run -d -t --name test_0${n}${test_suffix} wrf_regtest" >> $fname
 				echo "date" >> $fname
+				echo "echo Build WRF executable" >> $fname
 				echo $string >> $fname
 				echo "date" >> $fname
 				echo "docker exec test_0${n}${test_suffix} ls -ls WRF/main/wrf.exe" >> $fname
+				if      ( $COMPILE[$COUNT] == nmm_real ) then
+					echo "docker exec test_0${n}${test_suffix} ls -ls WRF/main/real_nmm.exe" >> $fname
+				else if ( $COMPILE[$COUNT] == em_real ) then
+					echo "docker exec test_0${n}${test_suffix} ls -ls WRF/main/real.exe" >> $fname
+				else
+					echo "docker exec test_0${n}${test_suffix} ls -ls WRF/main/ideal.exe" >> $fname
+				endif
 				echo "date" >> $fname
 				echo " " >> $fname
 
@@ -251,6 +280,7 @@ foreach n ( $NUMBER )
 				echo "foreach t ( $TEST[$COUNT] )" >> $fname
 				echo "	date" >> $fname
 				echo '	if ( $TCOUNT == 1 ) ' "goto SKIP_test_0${n}${test_suffix}" >> $fname
+				echo "	echo RUN WRF test_0${n}${test_suffix} for $COMPILE[$COUNT] $MPI_OPT $RUNDIR[$COUNT], NML = " '$t' >> $fname
 				echo "	docker exec test_0${n}${test_suffix} ./script.csh RUN $COMPILE[$COUNT] $MPI_OPT $RUNDIR[$COUNT]" '$t' "NP=$NP[$COUNT]" >> $fname
         			echo '	set OK = $status' >> $fname
 				echo '	echo $OK for test $t' >> $fname
@@ -269,7 +299,7 @@ foreach n ( $NUMBER )
 				echo "date" >> $fname
 				echo "docker rm test_0${n}${test_suffix}" >> $fname
 				echo "date" >> $fname
-				echo "echo docker rmi wrf_regtest" >> $fname
+				echo "docker rmi wrf_regtest" >> $fname
 				echo "date" >> $fname
 				echo "#####################   END OF JOB    #####################" >> $fname
 
