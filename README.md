@@ -134,6 +134,35 @@ On a single desktop, a reasonable run-time command would be:
 > date ; ( ./single.csh ; ./test_001s.csh ; ./test_001o.csh ; ./test_001m.csh ; ./test_002s.csh ; ./test_002m.csh ) >& output ; date
 ```
 
+To view how the status of the testing after the command is complete, search for `SUCCESS`. There should be four `SUCCESS` messages:
+1. From inside of the WRF model print out
+2. Build the executable
+3. Run the preprocessor (real or ideal)
+4. Run the WRF model (correct number of time periods, no NaNs, correct number of output files)
+```
+> grep SUCCESS OUTPUT
+d01 2000-01-24_12:30:00 wrf: SUCCESS COMPLETE WRF
+0 -rw-r--r-- 1 wrfuser wrf 0 Apr 29 15:32 SUCCESS_BUILD_WRF_em_real_32
+0 -rw-r--r-- 1 wrfuser wrf 0 Apr 29 15:32 SUCCESS_RUN_REAL_em_real_32_03DF
+0 -rw-r--r-- 1 wrfuser wrf 0 Apr 29 15:35 SUCCESS_RUN_WRF_d01_em_real_32_03DF
+wrf: SUCCESS COMPLETE WRF
+0 -rw-r--r-- 1 wrfuser wrf 0 Apr 29 15:38 SUCCESS_BUILD_WRF_em_real_33
+0 -rw-r--r-- 1 wrfuser wrf 0 Apr 29 15:38 SUCCESS_RUN_REAL_em_real_33_03DF
+0 -rw-r--r-- 1 wrfuser wrf 0 Apr 29 15:39 SUCCESS_RUN_WRF_d01_em_real_33_03DF
+d01 2000-01-24_12:30:00 wrf: SUCCESS COMPLETE WRF
+0 -rw-r--r-- 1 wrfuser wrf 0 Apr 29 15:43 SUCCESS_BUILD_WRF_em_real_34
+0 -rw-r--r-- 1 wrfuser wrf 0 Apr 29 15:43 SUCCESS_RUN_REAL_em_real_34_03DF
+0 -rw-r--r-- 1 wrfuser wrf 0 Apr 29 15:44 SUCCESS_RUN_WRF_d01_em_real_34_03DF
+d01 2008-01-11_00:15:00 wrf: SUCCESS COMPLETE WRF
+0 -rw-r--r-- 1 wrfuser wrf 0 Apr 29 15:46 SUCCESS_BUILD_WRF_nmm_real_32
+0 -rw-r--r-- 1 wrfuser wrf 0 Apr 29 15:46 SUCCESS_RUN_REAL_nmm_real_32_01
+0 -rw-r--r-- 1 wrfuser wrf 0 Apr 29 15:47 SUCCESS_RUN_WRF_d01_nmm_real_32_01
+d01 2008-01-11_00:15:00 wrf: SUCCESS COMPLETE WRF
+0 -rw-r--r-- 1 wrfuser wrf 0 Apr 29 15:48 SUCCESS_BUILD_WRF_nmm_real_34
+0 -rw-r--r-- 1 wrfuser wrf 0 Apr 29 15:48 SUCCESS_RUN_REAL_nmm_real_34_01
+0 -rw-r--r-- 1 wrfuser wrf 0 Apr 29 15:49 SUCCESS_RUN_WRF_d01_nmm_real_34_01
+```
+
 When running on multiple nodes, `build.csh` would generate:
 ```
 > build.csh
@@ -164,7 +193,7 @@ Run ./test_009m.csh
 Run ./test_010s.csh
 ```
 
-The correct usage would be to assign each test to a separate node:
+The correct usage would be to assign each test to a separate node.
 ```
 > date ; ( ./single.csh ; ./test_001s.csh ) >& output ; date
 ```
