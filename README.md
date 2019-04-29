@@ -100,3 +100,79 @@ Run a single test in each container, takes less than a minute for each.
 ```
 
 Remember to stop and remove the containers, and remove the images.
+
+
+### A script is available to run through all of the available tests that are possible from inside the container. The `build.csh` script has a few user-definable options. These options are mostly to allow the script to be used on a single desktop machine (where jobs would need to be procesed sequentially), or on multiple machines.
+
+Single machine, with 3 available processors
+```
+set TEST_GEN = SOME
+set PROCS = 3
+set JOB = SEQUENTIAL
+```
+
+Multiple machines, each with 8 (non-hyperthreaded) processors
+```
+set TEST_GEN = ALL
+set PROCS = 8
+set JOB = INDEPENDENT
+```
+
+The script `build.csh` generates executables files. The `build.csh` does not run any test.
+```
+> build.csh
+Run ./single.csh
+Run ./test_001s.csh
+Run ./test_001o.csh
+Run ./test_001m.csh
+Run ./test_002s.csh
+Run ./test_002m.csh
+```
+
+On a single desktop, a reasonable run-time command would be:
+```
+> date ; ( ./single.csh ; ./test_001s.csh ; ./test_001o.csh ; ./test_001m.csh ; ./test_002s.csh ; ./test_002m.csh ) >& output ; date
+```
+
+When running on multiple nodes, `build.csh` would generate:
+```
+> build.csh
+Run ./single.csh
+Run ./test_001s.csh
+Run ./test_001o.csh
+Run ./test_001m.csh
+Run ./test_002s.csh
+Run ./test_002m.csh
+Run ./test_003s.csh
+Run ./test_003m.csh
+Run ./test_004s.csh
+Run ./test_004o.csh
+Run ./test_004m.csh
+Run ./test_005s.csh
+Run ./test_005o.csh
+Run ./test_005m.csh
+Run ./test_006s.csh
+Run ./test_006o.csh
+Run ./test_006m.csh
+Run ./test_007s.csh
+Run ./test_007o.csh
+Run ./test_007m.csh
+Run ./test_008m.csh
+Run ./test_009s.csh
+Run ./test_009o.csh
+Run ./test_009m.csh
+Run ./test_010s.csh
+```
+
+The correct usage would be to assign each test to a separate node:
+```
+> date ; ( ./single.csh ; ./test_001s.csh ) >& output ; date
+```
+```
+> date ; ( ./single.csh ; ./test_001o.csh ) >& output ; date
+```
+```
+> date ; ( ./single.csh ; ./test_001s.csh ) >& output ; date
+```
+
+
