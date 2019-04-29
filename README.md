@@ -102,11 +102,11 @@ Run a single test in each container, takes less than a minute for each.
 Remember to stop and remove the containers, and remove the images.
 
 
-### Using the `build.csh script`
+### Using the `build.csh` script
 
-A script is available to run through all of the available tests that are possible from inside the container. The `build.csh` script has a few user-definable options. These options are mostly to allow the script to be used on a single desktop machine (where jobs would need to be procesed sequentially), or on multiple machines.
+A script is available to run through all of the available tests that are possible from inside the container. The `build.csh` script has a few user-definable options. These options are mostly to allow the script to be used on a single desktop machine (where jobs would need to be procesed sequentially), or on multiple machines (where the assumption is that each build uses a single node, and no other build uses that node).
 
-Single machine, with 3 available processors
+Single machine, with 3 available processors (the available processors determine how many threads to use with parallel Make, how many OpenMP threads for the WRF model, and how many MPI ranks for the WRF model).
 ```
 set TEST_GEN = SOME
 set PROCS = 3
@@ -129,6 +129,51 @@ Run ./test_001o.csh
 Run ./test_001m.csh
 Run ./test_002s.csh
 Run ./test_002m.csh
+```
+
+Each manufactured job script looks similar to this:
+```
+#!/bin/csh
+#####################   TOP OF JOB    #####################
+echo TEST CASE = test_001s
+date
+#	Build: case = em, SERIAL
+echo Build container
+docker run -d -t --name test_001s wrf_regtest
+date
+echo Build WRF executable
+docker exec test_001s ./script.csh BUILD CLEAN 32 1 em_real -d J=-j@3
+date
+docker exec test_001s ls -ls WRF/main/wrf.exe
+docker exec test_001s ls -ls WRF/main/real.exe
+date
+ 
+set TCOUNT = 1
+foreach t ( em_real        03DF   )
+	date
+	if ( $TCOUNT == 1 )  goto SKIP_test_001s
+	echo RUN WRF test_001s for em_real 32 em_real, NML =  $t
+	docker exec test_001s ./script.csh RUN em_real 32 em_real $t
+	set OK = $status
+	echo $OK for test $t
+	date
+	
+	docker exec test_001s cat WRF/test/em_real/wrf.print.out 
+	
+	docker exec test_001s ls -ls WRF/test/em_real | grep wrfout 
+	docker exec test_001s ls -ls wrfoutput
+	date
+SKIP_test_001s:
+	@ TCOUNT ++
+end
+date
+docker stop test_001s
+date
+docker rm test_001s
+date
+echo docker rmi wrf_regtest
+date
+#####################   END OF JOB    #####################
 ```
 
 On a single desktop, a reasonable run-time command would be:
