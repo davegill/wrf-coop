@@ -5,8 +5,17 @@
 set TEST_GEN = ALL
 set TEST_GEN = SOME
 
+#	How many procs do we play with: used for parallel build, openmp threads, mpi ranks
+
+set PROCS = 3
+
+#	Sequential jobs, or all independent. Basically, do we remove the images?
+
+set JOB = INDEPENDENT
+set JOB = SEQUENTIAL
+
 if      ( $TEST_GEN == ALL ) then
-	set NUMBER    = ( 01      02             03         04            05        06       07             08      09      10          )
+	set NUMBER    = ( 01 02 03 04 05 06 07 08 09 10 )
 
 	set TEST      = ( \
 	                  "em_real        03DF 03FD 07 07NE 10 11 14 16 16DF 17 17AD 18 20 20NE 31 31AD 38 52DF 52FD 60NE 71 78 " \
@@ -23,7 +32,7 @@ if      ( $TEST_GEN == ALL ) then
 
 else if ( $TEST_GEN == SOME ) then
 
-	set NUMBER    = ( 01 02 03 ) # Logic is not set up to choose random (out of order) options
+	set NUMBER    = ( 01 02 ) # Logic is not set up to choose random (out of order) options
 
 	set TEST      = ( \
 	                  "em_real        03DF  " \
@@ -42,18 +51,18 @@ endif
 
 #	Options that are used for all test generation settings. 
 
-set SERIAL    = ( T       T              T          T             T         T        T              F       T       T           )
-set OPENMP    = ( T       F              F          T             T         T        T              F       T       F           )
-set MPI       = ( T       T              T          T             T         T        T              T       T       F           )
-set NEST      = ( 1       1              1          1             1         1        1              3       1       0           )
-set NAME      = ( em      nmm            chem       qss           bwave     real8    qss8           move    fire    hill        )
-set COMPILE   = ( em_real nmm_real       em_real    em_quarter_ss em_b_wave em_real  em_quarter_ss  em_real em_fire em_hill2d_x )
-set RUNDIR    = ( em_real nmm_nest       em_chem    em_quarter_ss em_b_wave em_real8 em_quarter_ss8 em_move em_fire em_hill2d_x )
-set DASHOPT1  = ( -d      -d             -d         -d            -d        -d       -d             -d      -d      -d          )
-set DASHOPT2  = ( F       F              F          F             F         -r8      -r8            F       F       F           )
-set BUILDENV1 = ( F       WRF_NMM_CORE=1 WRF_CHEM=1 F             F         F        F              F       F       F           )
-set BUILDENV2 = ( J=-j@4  J=-j@4         J=-j@4     J=-j@4        J=-j@4    J=-j@4   J=-j@4         J=-j@4  J=-j@4  J=-j@4      )
-set NP        = ( 4       4              4          4             4         4        4              4       4       4           )
+set SERIAL    = ( T           T              T           T             T           T           T              F           T           T           )
+set OPENMP    = ( T           F              F           T             T           T           T              F           T           F           )
+set MPI       = ( T           T              T           T             T           T           T              T           T           F           )
+set NEST      = ( 1           1              1           1             1           1           1              3           1           0           )
+set NAME      = ( em          nmm            chem        qss           bwave       real8       qss8           move        fire        hill        )
+set COMPILE   = ( em_real     nmm_real       em_real     em_quarter_ss em_b_wave   em_real     em_quarter_ss  em_real     em_fire     em_hill2d_x )
+set RUNDIR    = ( em_real     nmm_nest       em_chem     em_quarter_ss em_b_wave   em_real8    em_quarter_ss8 em_move     em_fire     em_hill2d_x )
+set DASHOPT1  = ( -d          -d             -d          -d            -d          -d          -d             -d          -d          -d          )
+set DASHOPT2  = ( F           F              F           F             F           -r8         -r8            F           F           F           )
+set BUILDENV1 = ( F           WRF_NMM_CORE=1 WRF_CHEM=1  F             F           F           F              F           F           F           )
+set BUILDENV2 = ( J=-j@$PROCS J=-j@$PROCS    J=-j@$PROCS J=-j@$PROCS   J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS    J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS )
+set NP        = ( $PROCS      $PROCS         $PROCS      $PROCS        $PROCS      $PROCS      $PROCS         $PROCS      $PROCS      $PROCS      )
 
 set SERIAL_OPT = 32
 set OPENMP_OPT = 33
@@ -150,7 +159,11 @@ foreach n ( $NUMBER )
 				echo "date" >> $fname
 				echo "docker rm test_0${n}${test_suffix}" >> $fname
 				echo "date" >> $fname
-				echo "docker rmi wrf_regtest" >> $fname
+				if      ( $JOB == INDEPENDENT ) then
+					echo "docker rmi wrf_regtest" >> $fname
+				else if ( $JOB == SEQUENTIAL  ) then
+					echo "echo docker rmi wrf_regtest" >> $fname
+				endif
 				echo "date" >> $fname
 				echo "#####################   END OF JOB    #####################" >> $fname
 
@@ -230,7 +243,11 @@ foreach n ( $NUMBER )
 				echo "date" >> $fname
 				echo "docker rm test_0${n}${test_suffix}" >> $fname
 				echo "date" >> $fname
-				echo "docker rmi wrf_regtest" >> $fname
+				if      ( $JOB == INDEPENDENT ) then
+					echo "docker rmi wrf_regtest" >> $fname
+				else if ( $JOB == SEQUENTIAL  ) then
+					echo "echo docker rmi wrf_regtest" >> $fname
+				endif
 				echo "date" >> $fname
 				echo "#####################   END OF JOB    #####################" >> $fname
 
@@ -310,7 +327,11 @@ foreach n ( $NUMBER )
 				echo "date" >> $fname
 				echo "docker rm test_0${n}${test_suffix}" >> $fname
 				echo "date" >> $fname
-				echo "docker rmi wrf_regtest" >> $fname
+				if      ( $JOB == INDEPENDENT ) then
+					echo "docker rmi wrf_regtest" >> $fname
+				else if ( $JOB == SEQUENTIAL  ) then
+					echo "echo docker rmi wrf_regtest" >> $fname
+				endif
 				echo "date" >> $fname
 				echo "#####################   END OF JOB    #####################" >> $fname
 
