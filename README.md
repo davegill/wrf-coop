@@ -102,7 +102,9 @@ Run a single test in each container, takes less than a minute for each.
 Remember to stop and remove the containers, and remove the images.
 
 
-### A script is available to run through all of the available tests that are possible from inside the container. The `build.csh` script has a few user-definable options. These options are mostly to allow the script to be used on a single desktop machine (where jobs would need to be procesed sequentially), or on multiple machines.
+### Using the `build.csh script`
+
+A script is available to run through all of the available tests that are possible from inside the container. The `build.csh` script has a few user-definable options. These options are mostly to allow the script to be used on a single desktop machine (where jobs would need to be procesed sequentially), or on multiple machines.
 
 Single machine, with 3 available processors
 ```
