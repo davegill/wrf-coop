@@ -33,6 +33,7 @@ if      ( $TEST_GEN == ALL ) then
 else if ( $TEST_GEN == SOME ) then
 
 	set NUMBER    = ( 01 02 ) # Logic is not set up to choose random (out of order) options
+	set NUMBER    = ( 01 02 03 04 05 06 07 08 09 10 )
 
 	set TEST      = ( \
 	                  "em_real        03DF  " \
@@ -161,9 +162,13 @@ foreach n ( $NUMBER )
 				echo "date" >> $fname
 				if      ( $JOB == INDEPENDENT ) then
 					echo "docker rmi wrf_regtest" >> $fname
+					echo "docker rmi --force `docker images | grep davegill | awk '{print $3}'`" >> $fname
 				else if ( $JOB == SEQUENTIAL  ) then
 					echo "echo docker rmi wrf_regtest" >> $fname
+					echo "echo docker rmi --force `docker images | grep davegill | awk '{print $3}'`" >> $fname
 				endif
+				echo "docker volume prune -f" >> $fname
+				echo "docker system df" >> $fname
 				echo "date" >> $fname
 				echo "#####################   END OF JOB    #####################" >> $fname
 
@@ -245,9 +250,13 @@ foreach n ( $NUMBER )
 				echo "date" >> $fname
 				if      ( $JOB == INDEPENDENT ) then
 					echo "docker rmi wrf_regtest" >> $fname
+					echo "docker rmi --force `docker images | grep davegill | awk '{print $3}'`" >> $fname
 				else if ( $JOB == SEQUENTIAL  ) then
 					echo "echo docker rmi wrf_regtest" >> $fname
+					echo "echo docker rmi --force `docker images | grep davegill | awk '{print $3}'`" >> $fname
 				endif
+				echo "docker volume prune -f" >> $fname
+				echo "docker system df" >> $fname
 				echo "date" >> $fname
 				echo "#####################   END OF JOB    #####################" >> $fname
 
@@ -329,9 +338,13 @@ foreach n ( $NUMBER )
 				echo "date" >> $fname
 				if      ( $JOB == INDEPENDENT ) then
 					echo "docker rmi wrf_regtest" >> $fname
+					echo "docker rmi --force `docker images | grep davegill | awk '{print $3}'`" >> $fname
 				else if ( $JOB == SEQUENTIAL  ) then
 					echo "echo docker rmi wrf_regtest" >> $fname
+					echo "echo docker rmi --force `docker images | grep davegill | awk '{print $3}'`" >> $fname
 				endif
+				echo "docker volume prune -f" >> $fname
+				echo "docker system df" >> $fname
 				echo "date" >> $fname
 				echo "#####################   END OF JOB    #####################" >> $fname
 
