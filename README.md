@@ -99,7 +99,11 @@ Run a single test in each container, takes less than a minute for each.
 0 for test 1
 ```
 
-Remember to stop and remove the containers, and remove the images.
+Remember to stop and remove the containers, and remove the images. There likely are volumes that need to be pruned, also.
+```
+> docker system df
+> docker volume prune -f
+```
 
 
 ### Using the `build.csh` script
