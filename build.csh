@@ -162,10 +162,12 @@ foreach n ( $NUMBER )
 				echo "date" >> $fname
 				if      ( $JOB == INDEPENDENT ) then
 					echo "docker rmi wrf_regtest" >> $fname
-					echo "docker rmi --force `docker images | grep davegill | awk '{print $3}'`" >> $fname
+					set hash = `docker images | grep davegill | awk '{print $3}'`
+					echo "docker rmi --force $hash" >> $fname
 				else if ( $JOB == SEQUENTIAL  ) then
 					echo "echo docker rmi wrf_regtest" >> $fname
-					echo "echo docker rmi --force `docker images | grep davegill | awk '{print $3}'`" >> $fname
+					set hash = `docker images | grep davegill | awk '{print $3}'`
+					echo "echo docker rmi --force $hash" >> $fname
 				endif
 				echo "docker volume prune -f" >> $fname
 				echo "docker system df" >> $fname
@@ -250,10 +252,12 @@ foreach n ( $NUMBER )
 				echo "date" >> $fname
 				if      ( $JOB == INDEPENDENT ) then
 					echo "docker rmi wrf_regtest" >> $fname
-					echo "docker rmi --force `docker images | grep davegill | awk '{print $3}'`" >> $fname
+					set hash = `docker images | grep davegill | awk '{print $3}'`
+					echo "docker rmi --force $hash" >> $fname
 				else if ( $JOB == SEQUENTIAL  ) then
 					echo "echo docker rmi wrf_regtest" >> $fname
-					echo "echo docker rmi --force `docker images | grep davegill | awk '{print $3}'`" >> $fname
+					set hash = `docker images | grep davegill | awk '{print $3}'`
+					echo "echo docker rmi --force $hash" >> $fname
 				endif
 				echo "docker volume prune -f" >> $fname
 				echo "docker system df" >> $fname
@@ -338,10 +342,12 @@ foreach n ( $NUMBER )
 				echo "date" >> $fname
 				if      ( $JOB == INDEPENDENT ) then
 					echo "docker rmi wrf_regtest" >> $fname
-					echo "docker rmi --force `docker images | grep davegill | awk '{print $3}'`" >> $fname
+					set hash = `docker images | grep davegill | awk '{print $3}'`
+					echo "docker rmi --force $hash" >> $fname
 				else if ( $JOB == SEQUENTIAL  ) then
 					echo "echo docker rmi wrf_regtest" >> $fname
-					echo "echo docker rmi --force `docker images | grep davegill | awk '{print $3}'`" >> $fname
+					set hash = `docker images | grep davegill | awk '{print $3}'`
+					echo "echo docker rmi --force $hash" >> $fname
 				endif
 				echo "docker volume prune -f" >> $fname
 				echo "docker system df" >> $fname
