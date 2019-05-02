@@ -54,14 +54,14 @@ RUN source /opt/rh/devtoolset-8/enable \
  && git clone https://bitbucket.hdfgroup.org/scm/hdffv/hdf5.git \
  && cd hdf5 \
  && git checkout hdf5-1_10_4 \
- && ./configure --enable-fortran --enable-cxx --prefix=/usr/local/ &> /wrf/libs/build_log_hdf5_config \
+ && ./configure --enable-fortran --enable-cxx --enable-shared --prefix=/usr/local/ &> /wrf/libs/build_log_hdf5_config \
  && echo dummy printout to keep travis happy hdf5 config \
  && make install &> /wrf/libs/build_log_hdf5_make \
  && echo dummy printout to keep travis happy hdf5 make \
  && rm -rf /wrf/libs/hdf5/BUILD_DIR
 ENV LD_LIBRARY_PATH /usr/local/lib
 
-# Build netCDF C and Fortran libraries
+# Build netCDF C libraries
 RUN yum -y install libcurl-devel zlib-devel
 ENV NETCDF /wrf/libs/netcdf
 RUN mkdir -p ${NETCDF}/BUILD_DIR
@@ -69,22 +69,52 @@ RUN source /opt/rh/devtoolset-8/enable \
  && cd ${NETCDF}/BUILD_DIR \
  && curl -L -O https://github.com/Unidata/netcdf-c/archive/v4.6.2.tar.gz \
  && curl -L -O https://github.com/Unidata/netcdf-fortran/archive/v4.4.5.tar.gz \
+ && curl -L -O https://github.com/Unidata/netcdf4-python/archive/v1.5.1rel.tar.gz \
  && tar -xf v4.6.2.tar.gz \
  && cd netcdf-c-4.6.2 \
- && ./configure --prefix=${NETCDF} &> /wrf/libs/build_log_ncc_config \
+ && ./configure --enable-shared --prefix=${NETCDF} &> /wrf/libs/build_log_ncc_config \
  && echo dummy printout to keep travis happy ncc config \
  && make install &> /wrf/libs/build_log_ncc_make \
  && echo dummy printout to keep travis happy ncc make
+
+# Build netCDF Fortran libraries
 RUN source /opt/rh/devtoolset-8/enable \
  && env \
  && cd ${NETCDF}/BUILD_DIR \
  && tar -xf v4.4.5.tar.gz \
  && cd netcdf-fortran-4.4.5/ \
  && export LD_LIBRARY_PATH=${NETCDF}/lib:${LD_LIBRARY_PATH} \
- && CPPFLAGS=-I${NETCDF}/include LDFLAGS=-L${NETCDF}/lib ./configure --prefix=${NETCDF} &> /wrf/libs/build_log_ncf_config \
+ && CPPFLAGS=-I${NETCDF}/include LDFLAGS=-L${NETCDF}/lib ./configure --enable-shared --prefix=${NETCDF} &> /wrf/libs/build_log_ncf_config \
  && echo dummy printout to keep travis happy ncf config \
  && make install &> /wrf/libs/build_log_ncf_make \
  && echo dummy printout to keep travis happy ncf make
+
+#RUN yum -y install python-pip python-setuptools
+RUN yum -y install python-pip
+RUN yum -y install python-devel
+#RUN pip install Cython
+#RUN echo pip istalled Cython
+RUN pip install --upgrade pip \
+ && pip install numpy \
+ && echo pip istalled numpy
+#RUN pip install cython \
+# && echo pip istalled cython
+RUN pip install --upgrade setuptools \
+ && echo pip istalled setuptools
+RUN ldconfig -v
+
+# Build netCDF4-python libraries
+RUN source /opt/rh/devtoolset-8/enable \
+ && cd ${NETCDF}/BUILD_DIR \
+ && tar -xf v1.5.1rel.tar.gz \
+ && cd netcdf4-python-1.5.1rel/ \
+ && export LD_LIBRARY_PATH=${NETCDF}/lib:${LD_LIBRARY_PATH} \
+ && export NETCDF4_DIR=${NETCDF} \
+ && export HDF5_DIR=/usr/local \
+ && python setup.py build \
+ && CPPFLAGS="-I${NETCDF}/include -I/usr/local/include" LDFLAGS="-L${NETCDF}/lib -L/usr/local/lib" python setup.py install \
+ && echo dummy printout to keep travis happy ncf4-python install
+#&& python setup.py build &> /wrf/libs/build_log_ncf4-python_build
 
 RUN mkdir -p /var/run/sshd \
     && ssh-keygen -A \
@@ -151,3 +181,4 @@ RUN ssh-keygen -f /wrf/.ssh/id_rsa -t rsa -N '' \
     && chmod 600 /wrf/.ssh/config \
     && chmod 700 /wrf/.ssh \
     && cp /wrf/.ssh/id_rsa.pub /wrf/.ssh/authorized_keys
+#
