@@ -169,7 +169,7 @@ foreach n ( $NUMBER )
 				else
 					echo "docker exec test_0${n}${test_suffix} ls -ls WRF/main/ideal.exe" >> $fname
 				endif
-				echo "docker exec test_0${n}${test_suffix} ls -ls wrfoutput | grep _BUILD_ | grep $COMPILE[$COUNT]_$SERIAL_OPT " >> $fname
+				echo "docker exec test_0${n}${test_suffix} ls -ls wrfoutput | grep _BUILD_ | grep $COMPILE[$COUNT]_${SERIAL_OPT} " >> $fname
 				echo "date" >> $fname
 				echo " " >> $fname
 
@@ -186,7 +186,7 @@ foreach n ( $NUMBER )
 				echo "	docker exec test_0${n}${test_suffix} cat WRF/test/$COMPILE[$COUNT]/wrf.print.out " >> $fname
 				echo "	" >> $fname
 				echo "	docker exec test_0${n}${test_suffix} ls -ls WRF/test/$COMPILE[$COUNT] | grep wrfout " >> $fname
-				echo "	docker exec test_0${n}${test_suffix} ls -ls wrfoutput | grep _RUN_ | grep $COMPILE[$COUNT]_$SERIAL_OPT_$RUNDIR[$COUNT]_$t " >> $fname
+				echo "	docker exec test_0${n}${test_suffix} ls -ls wrfoutput | grep _RUN_ | grep $COMPILE[$COUNT]_${SERIAL_OPT}_$RUNDIR[$COUNT]_"'$t ' >> $fname
 				echo "	date" >> $fname
 				echo "SKIP_test_0${n}${test_suffix}:" >> $fname
 				echo '	@ TCOUNT ++' >> $fname
@@ -261,7 +261,7 @@ foreach n ( $NUMBER )
 				else
 					echo "docker exec test_0${n}${test_suffix} ls -ls WRF/main/ideal.exe" >> $fname
 				endif
-				echo "docker exec test_0${n}${test_suffix} ls -ls wrfoutput | grep _BUILD_ | grep $COMPILE[$COUNT]_$OPENMP_OPT " >> $fname
+				echo "docker exec test_0${n}${test_suffix} ls -ls wrfoutput | grep _BUILD_ | grep $COMPILE[$COUNT]_${OPENMP_OPT} " >> $fname
 				echo "date" >> $fname
 				echo " " >> $fname
 
@@ -278,7 +278,7 @@ foreach n ( $NUMBER )
 				echo "	docker exec test_0${n}${test_suffix} cat WRF/test/$COMPILE[$COUNT]/wrf.print.out " >> $fname
 				echo "	" >> $fname
 				echo "	docker exec test_0${n}${test_suffix} ls -ls WRF/test/$COMPILE[$COUNT] | grep wrfout " >> $fname
-				echo "	docker exec test_0${n}${test_suffix} ls -ls wrfoutput | grep _RUN_ | grep $COMPILE[$COUNT]_$OPENMP_OPT_$RUNDIR[$COUNT]_$t " >> $fname
+				echo "	docker exec test_0${n}${test_suffix} ls -ls wrfoutput | grep _RUN_ | grep $COMPILE[$COUNT]_${OPENMP_OPT}_$RUNDIR[$COUNT]_"'$t ' >> $fname
 				echo "	date" >> $fname
 				echo "SKIP_test_0${n}${test_suffix}:" >> $fname
 				echo '	@ TCOUNT ++' >> $fname
@@ -353,7 +353,7 @@ foreach n ( $NUMBER )
 				else
 					echo "docker exec test_0${n}${test_suffix} ls -ls WRF/main/ideal.exe" >> $fname
 				endif
-				echo "docker exec test_0${n}${test_suffix} ls -ls wrfoutput | grep _BUILD_ | grep $COMPILE[$COUNT]_$MPI_OPT " >> $fname
+				echo "docker exec test_0${n}${test_suffix} ls -ls wrfoutput | grep _BUILD_ | grep $COMPILE[$COUNT]_${MPI_OPT} " >> $fname
 				echo "date" >> $fname
 				echo " " >> $fname
 
@@ -370,7 +370,7 @@ foreach n ( $NUMBER )
 				echo "	docker exec test_0${n}${test_suffix} cat WRF/test/$COMPILE[$COUNT]/rsl.out.0000 " >> $fname
 				echo "	" >> $fname
 				echo "	docker exec test_0${n}${test_suffix} ls -ls WRF/test/$COMPILE[$COUNT] | grep wrfout " >> $fname
-				echo "	docker exec test_0${n}${test_suffix} ls -ls wrfoutput | grep _RUN_ | grep $COMPILE[$COUNT]_$MPI_OPT_$RUNDIR[$COUNT]_$t " >> $fname
+				echo "	docker exec test_0${n}${test_suffix} ls -ls wrfoutput | grep _RUN_ | grep $COMPILE[$COUNT]_${MPI_OPT}_$RUNDIR[$COUNT]_"'$t ' >> $fname
 				echo "	date" >> $fname
 				echo "SKIP_test_0${n}${test_suffix}:" >> $fname
 				echo '	@ TCOUNT ++' >> $fname
@@ -407,6 +407,13 @@ SKIP_THIS_ONE:
 end
 
 #	The last script to run, only once.
+if ( ( -e SUCCESS_RUN_WRF_d01_em_real_32_03FD ) && ( -e SUCCESS_RUN_WRF_d01_em_real_33_03FD ) ) then
+        diff -q SUCCESS_RUN_WRF_d01_em_real_32_03FD SUCCESS_RUN_WRF_d01_em_real_33_03FD
+        set OK = $status
+        echo SUCCESS_RUN_WRF_d01_em_real_32_03FD vs SUCCESS_RUN_WRF_d01_em_real_33_03FD status = $OK
+endif
+
+
 
 if ( -e last_only_once.csh ) rm last_only_once.csh
 touch last_only_once.csh
@@ -430,16 +437,16 @@ foreach n ( $NUMBER )
 
 	set root1_file = SUCCESS_RUN_WRF
 
-	set root2_file_s = $RUNDIR[$COUNT]_${SERIAL_OPT}
-	set root2_file_o = $RUNDIR[$COUNT]_${OPENMP_OPT}
-	set root2_file_m = $RUNDIR[$COUNT]_${MPI_OPT}
+	set root2_file_s = $COMPILE[$COUNT]_${SERIAL_OPT}_$RUNDIR[$COUNT]
+	set root2_file_o = $COMPILE[$COUNT]_${OPENMP_OPT}_$RUNDIR[$COUNT]
+	set root2_file_m = $COMPILE[$COUNT]_${MPI_OPT}_$RUNDIR[$COUNT]
 
 	set TCOUNT = 0
 	foreach t ( $TEST[$COUNT] )
 		@ TCOUNT ++
 		if ( $TCOUNT == 1 ) goto SKIP_THIS_TEST
 		if ( ( $SERIAL[$COUNT] == T ) && ( $OPENMP[$COUNT] == T ) ) then
-			foreach d ( d01 d02 )
+			foreach d ( d01 d02 d03 )
 				set file1 = ${root1_file}_${d}_${root2_file_s}_$t
 				set file2 = ${root1_file}_${d}_${root2_file_o}_$t
 				echo "if ( ( -e $file1 ) && ( -e $file2 ) ) then" >> last_only_once.csh
@@ -452,7 +459,7 @@ foreach n ( $NUMBER )
 		endif
 
 		if ( ( $SERIAL[$COUNT] == T ) && (    $MPI[$COUNT] == T ) ) then
-			foreach d ( d01 d02 )
+			foreach d ( d01 d02 d03 )
 				set file1 = ${root1_file}_${d}_${root2_file_s}_$t
 				set file2 = ${root1_file}_${d}_${root2_file_m}_$t
 				echo "if ( ( -e $file1 ) && ( -e $file2 ) ) then" >> last_only_once.csh
