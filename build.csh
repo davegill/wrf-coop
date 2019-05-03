@@ -110,8 +110,8 @@ chmod +x single.csh
 echo "#	This builds the docker image. " >> single.csh
 echo "date" >> single.csh
 echo "set SHARED = $SHARED" >> single.csh
-echo "docker build -t wrf_regtest ." >> single.csh
 echo 'if ( ! -d ${SHARED}/OUTPUT ) mkdir ${SHARED}/OUTPUT' >> single.csh
+echo "docker build -t wrf_regtest ." >> single.csh
 echo "date" >> single.csh
 echo "Run ./single.csh"
 
