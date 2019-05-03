@@ -169,6 +169,7 @@ foreach n ( $NUMBER )
 				else
 					echo "docker exec test_0${n}${test_suffix} ls -ls WRF/main/ideal.exe" >> $fname
 				endif
+				echo "docker exec test_0${n}${test_suffix} ls -ls wrfoutput | grep _BUILD_ | grep $COMPILE[$COUNT]_$SERIAL_OPT " >> $fname
 				echo "date" >> $fname
 				echo " " >> $fname
 
@@ -185,7 +186,7 @@ foreach n ( $NUMBER )
 				echo "	docker exec test_0${n}${test_suffix} cat WRF/test/$COMPILE[$COUNT]/wrf.print.out " >> $fname
 				echo "	" >> $fname
 				echo "	docker exec test_0${n}${test_suffix} ls -ls WRF/test/$COMPILE[$COUNT] | grep wrfout " >> $fname
-				echo "	docker exec test_0${n}${test_suffix} ls -ls wrfoutput" >> $fname
+				echo "	docker exec test_0${n}${test_suffix} ls -ls wrfoutput | grep _RUN_ | grep $COMPILE[$COUNT]_$SERIAL_OPT_$RUNDIR[$COUNT]_$t " >> $fname
 				echo "	date" >> $fname
 				echo "SKIP_test_0${n}${test_suffix}:" >> $fname
 				echo '	@ TCOUNT ++' >> $fname
@@ -260,6 +261,7 @@ foreach n ( $NUMBER )
 				else
 					echo "docker exec test_0${n}${test_suffix} ls -ls WRF/main/ideal.exe" >> $fname
 				endif
+				echo "docker exec test_0${n}${test_suffix} ls -ls wrfoutput | grep _BUILD_ | grep $COMPILE[$COUNT]_$OPENMP_OPT " >> $fname
 				echo "date" >> $fname
 				echo " " >> $fname
 
@@ -276,7 +278,7 @@ foreach n ( $NUMBER )
 				echo "	docker exec test_0${n}${test_suffix} cat WRF/test/$COMPILE[$COUNT]/wrf.print.out " >> $fname
 				echo "	" >> $fname
 				echo "	docker exec test_0${n}${test_suffix} ls -ls WRF/test/$COMPILE[$COUNT] | grep wrfout " >> $fname
-				echo "	docker exec test_0${n}${test_suffix} ls -ls wrfoutput" >> $fname
+				echo "	docker exec test_0${n}${test_suffix} ls -ls wrfoutput | grep _RUN_ | grep $COMPILE[$COUNT]_$OPENMP_OPT_$RUNDIR[$COUNT]_$t " >> $fname
 				echo "	date" >> $fname
 				echo "SKIP_test_0${n}${test_suffix}:" >> $fname
 				echo '	@ TCOUNT ++' >> $fname
@@ -351,6 +353,7 @@ foreach n ( $NUMBER )
 				else
 					echo "docker exec test_0${n}${test_suffix} ls -ls WRF/main/ideal.exe" >> $fname
 				endif
+				echo "docker exec test_0${n}${test_suffix} ls -ls wrfoutput | grep _BUILD_ | grep $COMPILE[$COUNT]_$MPI_OPT " >> $fname
 				echo "date" >> $fname
 				echo " " >> $fname
 
@@ -367,7 +370,7 @@ foreach n ( $NUMBER )
 				echo "	docker exec test_0${n}${test_suffix} cat WRF/test/$COMPILE[$COUNT]/rsl.out.0000 " >> $fname
 				echo "	" >> $fname
 				echo "	docker exec test_0${n}${test_suffix} ls -ls WRF/test/$COMPILE[$COUNT] | grep wrfout " >> $fname
-				echo "	docker exec test_0${n}${test_suffix} ls -ls wrfoutput" >> $fname
+				echo "	docker exec test_0${n}${test_suffix} ls -ls wrfoutput | grep _RUN_ | grep $COMPILE[$COUNT]_$MPI_OPT_$RUNDIR[$COUNT]_$t " >> $fname
 				echo "	date" >> $fname
 				echo "SKIP_test_0${n}${test_suffix}:" >> $fname
 				echo '	@ TCOUNT ++' >> $fname
