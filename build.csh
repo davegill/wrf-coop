@@ -74,7 +74,8 @@ set    MPI_OPT = 34
 if ( -e single.csh ) rm single.csh
 touch single.csh
 chmod +x single.csh
-echo "#	Do this once" >> single.csh
+echo "#	This builds the docker image. " >> single.csh
+echo "#	Do this once per shared memory image on machine" >> single.csh
 echo "date" >> single.csh
 echo "docker build -t wrf_regtest ." >> single.csh
 echo "wait" >> single.csh
@@ -368,3 +369,72 @@ SKIP_THIS_ONE:
 
 	@ COUNT ++
 end
+
+#	The last script to run, only once.
+
+if ( -e last_only_once.csh ) rm last_only_once.csh
+touch last_only_once.csh
+chmod +x last_only_once.csh
+echo '#\!/bin/csh' >> last_only_once.csh
+echo "" >> last_only_once.csh
+echo "#####################   TOP OF JOB    #####################" >> last_only_once.csh
+echo "" >> last_only_once.csh
+echo "date" >> last_only_once.csh
+echo "" >> last_only_once.csh
+echo "#	This compares serial vs openmp and serial vs mpi results" >> last_only_once.csh
+echo "#	Run this script ONLY once" >> last_only_once.csh
+echo "#	This job runs outside of a container" >> last_only_once.csh
+echo "#	All test cases of all builds must finish first" >> last_only_once.csh
+echo "" >> last_only_once.csh
+echo 'pushd OUTPUT >& /dev/null' >> last_only_once.csh
+echo "" >> last_only_once.csh
+set COUNT = 1
+foreach n ( $NUMBER )
+
+	set root1_file = SUCCESS_RUN_WRF
+
+	set root2_file_s = $RUNDIR[$COUNT]_${SERIAL_OPT}
+	set root2_file_o = $RUNDIR[$COUNT]_${OPENMP_OPT}
+	set root2_file_m = $RUNDIR[$COUNT]_${MPI_OPT}
+
+	set TCOUNT = 0
+	foreach t ( $TEST[$COUNT] )
+		@ TCOUNT ++
+		if ( $TCOUNT == 1 ) goto SKIP_THIS_TEST
+		if ( ( $SERIAL[$COUNT] == T ) && ( $OPENMP[$COUNT] == T ) ) then
+			foreach d ( d01 d02 )
+				set file1 = ${root1_file}_${d}_${root2_file_s}_$t
+				set file2 = ${root1_file}_${d}_${root2_file_o}_$t
+				echo "if ( ( -e $file1 ) && ( -e $file2 ) ) then" >> last_only_once.csh
+				echo "	diff -q $file1 $file2" >> last_only_once.csh
+				echo '	set OK = $status' >> last_only_once.csh
+				echo "	echo $file1 vs $file2 status =" '$OK' >> last_only_once.csh
+				echo "endif" >> last_only_once.csh
+				echo "" >> last_only_once.csh
+			end
+		endif
+
+		if ( ( $SERIAL[$COUNT] == T ) && (    $MPI[$COUNT] == T ) ) then
+			foreach d ( d01 d02 )
+				set file1 = ${root1_file}_${d}_${root2_file_s}_$t
+				set file2 = ${root1_file}_${d}_${root2_file_m}_$t
+				echo "if ( ( -e $file1 ) && ( -e $file2 ) ) then" >> last_only_once.csh
+				echo "	diff -q $file1 $file2" >> last_only_once.csh
+				echo '	set OK = $status' >> last_only_once.csh
+				echo "	echo $file1 vs $file2 status =" '$OK' >> last_only_once.csh
+				echo "endif" >> last_only_once.csh
+				echo "" >> last_only_once.csh
+			end
+		endif
+SKIP_THIS_TEST:
+	end
+
+	@ COUNT ++
+end
+echo 'popd >& /dev/null' >> last_only_once.csh
+echo "" >> last_only_once.csh
+echo "date" >> last_only_once.csh
+echo "" >> last_only_once.csh
+echo "#####################   END OF JOB    #####################" >> last_only_once.csh
+echo "Run ./last_only_once.csh"
+
