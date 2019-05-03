@@ -156,7 +156,7 @@ foreach n ( $NUMBER )
 				set string = ( $string $str )
 
 				echo "echo Build container" >> $fname
-				echo "docker run -d -t --name test_0${n}${test_suffix} " '-v $HERE/OUTPUT:/wrf/wrfoutput wrf_regtest' >> $fname
+				echo "docker run -d -t --name test_0${n}${test_suffix} " '-v $SHARED/OUTPUT:/wrf/wrfoutput wrf_regtest' >> $fname
 				echo "date" >> $fname
 				echo "echo Build WRF executable" >> $fname
 				echo $string >> $fname
@@ -247,7 +247,7 @@ foreach n ( $NUMBER )
 				set string = ( $string $str )
 
 				echo "echo Build container" >> $fname
-				echo "docker run -d -t --name test_0${n}${test_suffix} " '-v $HERE/OUTPUT:/wrf/wrfoutput wrf_regtest' >> $fname
+				echo "docker run -d -t --name test_0${n}${test_suffix} " '-v $SHARED/OUTPUT:/wrf/wrfoutput wrf_regtest' >> $fname
 				echo "date" >> $fname
 				echo "echo Build WRF executable" >> $fname
 				echo $string >> $fname
@@ -338,7 +338,7 @@ foreach n ( $NUMBER )
 				set string = ( $string $str )
 
 				echo "echo Build container" >> $fname
-				echo "docker run -d -t --name test_0${n}${test_suffix} " '-v $HERE/OUTPUT:/wrf/wrfoutput wrf_regtest' >> $fname
+				echo "docker run -d -t --name test_0${n}${test_suffix} " '-v $SHARED/OUTPUT:/wrf/wrfoutput wrf_regtest' >> $fname
 				echo "date" >> $fname
 				echo "echo Build WRF executable" >> $fname
 				echo $string >> $fname
