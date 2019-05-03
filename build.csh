@@ -7,12 +7,45 @@ set TEST_GEN = SOME
 
 #	How many procs do we play with: used for parallel build, openmp threads, mpi ranks
 
-set PROCS = 3
+set PROCS = 8
 
 #	Sequential jobs, or all independent. Basically, do we remove the images?
 
 set JOB = INDEPENDENT
 set JOB = SEQUENTIAL
+
+#	Only input arg is the location where the OUTPUT (shared) volume for
+#	docker should be located.
+
+if ( ${#argv} == 1 ) then
+	set SHARED = $1
+	if ( ! -d $SHARED ) then
+		echo " "
+		echo "Usage: $0 _directory_"
+		echo "where _directory_ is full path to where the OUTPUT directory will exist, or does exist"
+		echo "_directory_/OUTPUT is the host-machine's shared volume location that docker will use"
+		echo The '"'$SHARED'"' directory does not exist
+		echo " "
+		exit ( 1 )
+	else if ( `echo $SHARED | cut -c 1` != "/" ) then
+		echo " "
+		echo "Usage: $0 _directory_"
+		echo "where _directory_ is full path to where the OUTPUT directory will exist, or does exist"
+		echo "_directory_/OUTPUT is the host-machine's shared volume location that docker will use"
+		echo The '"'$SHARED'"' directory is not an absolute path to a directory
+		echo " "
+		exit ( 2 )
+	endif
+endif
+
+if ( ${#argv} == 0 ) then
+	echo " "
+	echo "Usage: $0 _directory_"
+	echo "where _directory_ is full path to where the OUTPUT directory will exist, or does exist"
+	echo "_directory_/OUTPUT is the host-machine's shared volume location that docker will use"
+	echo " "
+	exit ( 3 )
+endif
 
 if      ( $TEST_GEN == ALL ) then
 	set NUMBER    = ( 01 02 03 04 05 06 07 08 09 10 )
@@ -75,10 +108,10 @@ if ( -e single.csh ) rm single.csh
 touch single.csh
 chmod +x single.csh
 echo "#	This builds the docker image. " >> single.csh
-echo "#	Do this once per shared memory image on machine" >> single.csh
 echo "date" >> single.csh
+echo "set SHARED = $SHARED" >> single.csh
 echo "docker build -t wrf_regtest ." >> single.csh
-echo "wait" >> single.csh
+echo 'if ( ! -d ${SHARED}/OUTPUT ) mkdir ${SHARED}/OUTPUT' >> single.csh
 echo "date" >> single.csh
 echo "Run ./single.csh"
 
@@ -100,7 +133,7 @@ foreach n ( $NUMBER )
 				echo "#####################   TOP OF JOB    #####################" >> $fname
 				echo "echo TEST CASE = test_0${n}${test_suffix}" >> $fname
 				echo "date" >> $fname
-				echo 'set HERE = `pwd`' >> $fname
+				echo "set SHARED = $SHARED" >> $fname
 				echo "#	Build: case = $NAME[$COUNT], SERIAL" >> $fname
 				set string = ( $string test_0${n}${test_suffix} ./script.csh BUILD CLEAN $SERIAL_OPT $NEST[$COUNT] $COMPILE[$COUNT] )
 				if ( "$DASHOPT1[$COUNT]" == "F" ) then
@@ -191,7 +224,7 @@ foreach n ( $NUMBER )
 				echo "#####################   TOP OF JOB    #####################" >> $fname
 				echo "echo TEST CASE = test_0${n}${test_suffix}" >> $fname
 				echo "date" >> $fname
-				echo 'set HERE = `pwd`' >> $fname
+				echo "set SHARED = $SHARED" >> $fname
 				echo "#	Build: case = $NAME[$COUNT], OPENMP" >> $fname
 				set string = ( $string test_0${n}${test_suffix} ./script.csh BUILD CLEAN $OPENMP_OPT $NEST[$COUNT] $COMPILE[$COUNT] )
 				if ( "$DASHOPT1[$COUNT]" == "F" ) then
@@ -282,7 +315,7 @@ foreach n ( $NUMBER )
 				echo "#####################   TOP OF JOB    #####################" >> $fname
 				echo "echo TEST CASE = test_0${n}${test_suffix}" >> $fname
 				echo "date" >> $fname
-				echo 'set HERE = `pwd`' >> $fname
+				echo "set SHARED = $SHARED" >> $fname
 				echo "#	Build: case = $NAME[$COUNT], MPI" >> $fname
 				set string = ( $string test_0${n}${test_suffix} ./script.csh BUILD CLEAN    $MPI_OPT $NEST[$COUNT] $COMPILE[$COUNT] )
 				if ( "$DASHOPT1[$COUNT]" == "F" ) then
@@ -386,7 +419,8 @@ echo "#	Run this script ONLY once" >> last_only_once.csh
 echo "#	This job runs outside of a container" >> last_only_once.csh
 echo "#	All test cases of all builds must finish first" >> last_only_once.csh
 echo "" >> last_only_once.csh
-echo 'pushd OUTPUT >& /dev/null' >> last_only_once.csh
+echo "set SHARED = $SHARED" >> last_only_once.csh
+echo 'pushd ${SHARED}/OUTPUT >& /dev/null' >> last_only_once.csh
 echo "" >> last_only_once.csh
 set COUNT = 1
 foreach n ( $NUMBER )
