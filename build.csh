@@ -7,7 +7,7 @@ set TEST_GEN = SOME
 
 #	How many procs do we play with: used for parallel build, openmp threads, mpi ranks
 
-set PROCS = 8
+set PROCS = 3
 
 #	Sequential jobs, or all independent. Basically, do we remove the images?
 
@@ -36,7 +36,7 @@ else if ( $TEST_GEN == SOME ) then
 	set NUMBER    = ( 01 02 03 04 05 06 07 08 09 10 )
 
 	set TEST      = ( \
-	                  "em_real        03DF  " \
+	                  "em_real        03FD  " \
 	                  "nmm_nest       01  " \
 	                  "em_chem        1   " \
 	                  "em_quarter_ss  02  " \
@@ -99,6 +99,7 @@ foreach n ( $NUMBER )
 				echo "#####################   TOP OF JOB    #####################" >> $fname
 				echo "echo TEST CASE = test_0${n}${test_suffix}" >> $fname
 				echo "date" >> $fname
+				echo 'set HERE = `pwd`' >> $fname
 				echo "#	Build: case = $NAME[$COUNT], SERIAL" >> $fname
 				set string = ( $string test_0${n}${test_suffix} ./script.csh BUILD CLEAN $SERIAL_OPT $NEST[$COUNT] $COMPILE[$COUNT] )
 				if ( "$DASHOPT1[$COUNT]" == "F" ) then
@@ -121,7 +122,7 @@ foreach n ( $NUMBER )
 				set string = ( $string $str )
 
 				echo "echo Build container" >> $fname
-				echo "docker run -d -t --name test_0${n}${test_suffix} wrf_regtest" >> $fname
+				echo "docker run -d -t --name test_0${n}${test_suffix} " '-v $HERE/OUTPUT:/wrf/wrfoutput wrf_regtest' >> $fname
 				echo "date" >> $fname
 				echo "echo Build WRF executable" >> $fname
 				echo $string >> $fname
@@ -189,6 +190,7 @@ foreach n ( $NUMBER )
 				echo "#####################   TOP OF JOB    #####################" >> $fname
 				echo "echo TEST CASE = test_0${n}${test_suffix}" >> $fname
 				echo "date" >> $fname
+				echo 'set HERE = `pwd`' >> $fname
 				echo "#	Build: case = $NAME[$COUNT], OPENMP" >> $fname
 				set string = ( $string test_0${n}${test_suffix} ./script.csh BUILD CLEAN $OPENMP_OPT $NEST[$COUNT] $COMPILE[$COUNT] )
 				if ( "$DASHOPT1[$COUNT]" == "F" ) then
@@ -211,7 +213,7 @@ foreach n ( $NUMBER )
 				set string = ( $string $str )
 
 				echo "echo Build container" >> $fname
-				echo "docker run -d -t --name test_0${n}${test_suffix} wrf_regtest" >> $fname
+				echo "docker run -d -t --name test_0${n}${test_suffix} " '-v $HERE/OUTPUT:/wrf/wrfoutput wrf_regtest' >> $fname
 				echo "date" >> $fname
 				echo "echo Build WRF executable" >> $fname
 				echo $string >> $fname
@@ -279,6 +281,7 @@ foreach n ( $NUMBER )
 				echo "#####################   TOP OF JOB    #####################" >> $fname
 				echo "echo TEST CASE = test_0${n}${test_suffix}" >> $fname
 				echo "date" >> $fname
+				echo 'set HERE = `pwd`' >> $fname
 				echo "#	Build: case = $NAME[$COUNT], MPI" >> $fname
 				set string = ( $string test_0${n}${test_suffix} ./script.csh BUILD CLEAN    $MPI_OPT $NEST[$COUNT] $COMPILE[$COUNT] )
 				if ( "$DASHOPT1[$COUNT]" == "F" ) then
@@ -301,7 +304,7 @@ foreach n ( $NUMBER )
 				set string = ( $string $str )
 
 				echo "echo Build container" >> $fname
-				echo "docker run -d -t --name test_0${n}${test_suffix} wrf_regtest" >> $fname
+				echo "docker run -d -t --name test_0${n}${test_suffix} " '-v $HERE/OUTPUT:/wrf/wrfoutput wrf_regtest' >> $fname
 				echo "date" >> $fname
 				echo "echo Build WRF executable" >> $fname
 				echo $string >> $fname
