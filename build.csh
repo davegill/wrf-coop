@@ -2,8 +2,8 @@
 
 #	Choose which scripts to manufacture
 
-set TEST_GEN = ALL
 set TEST_GEN = SOME
+set TEST_GEN = ALL
 
 #	How many procs do we play with: used for parallel build, openmp threads, mpi ranks
 
@@ -11,8 +11,8 @@ set PROCS = 8
 
 #	Sequential jobs, or all independent. Basically, do we remove the images?
 
-set JOB = INDEPENDENT
 set JOB = SEQUENTIAL
+set JOB = INDEPENDENT
 
 #	Only input arg is the location where the OUTPUT (shared) volume for
 #	docker should be located.
@@ -198,8 +198,8 @@ foreach n ( $NUMBER )
 				echo "date" >> $fname
 				if      ( $JOB == INDEPENDENT ) then
 					echo "docker rmi wrf_regtest" >> $fname
-					set hash = `docker images | grep davegill | awk '{print $3}'`
-					echo "docker rmi --force $hash" >> $fname
+					echo 'set hash = `docker images | grep davegill | ' "awk '{print " '$3' "}' " '`' >> $fname
+					echo 'docker rmi --force $hash' >> $fname
 				else if ( $JOB == SEQUENTIAL  ) then
 					echo "echo docker rmi wrf_regtest" >> $fname
 					set hash = `docker images | grep davegill | awk '{print $3}'`
@@ -290,8 +290,8 @@ foreach n ( $NUMBER )
 				echo "date" >> $fname
 				if      ( $JOB == INDEPENDENT ) then
 					echo "docker rmi wrf_regtest" >> $fname
-					set hash = `docker images | grep davegill | awk '{print $3}'`
-					echo "docker rmi --force $hash" >> $fname
+					echo 'set hash = `docker images | grep davegill | ' "awk '{print " '$3' "}' " '`' >> $fname
+					echo 'docker rmi --force $hash' >> $fname
 				else if ( $JOB == SEQUENTIAL  ) then
 					echo "echo docker rmi wrf_regtest" >> $fname
 					set hash = `docker images | grep davegill | awk '{print $3}'`
@@ -382,8 +382,8 @@ foreach n ( $NUMBER )
 				echo "date" >> $fname
 				if      ( $JOB == INDEPENDENT ) then
 					echo "docker rmi wrf_regtest" >> $fname
-					set hash = `docker images | grep davegill | awk '{print $3}'`
-					echo "docker rmi --force $hash" >> $fname
+					echo 'set hash = `docker images | grep davegill | ' "awk '{print " '$3' "}' " '`' >> $fname
+					echo 'docker rmi --force $hash' >> $fname
 				else if ( $JOB == SEQUENTIAL  ) then
 					echo "echo docker rmi wrf_regtest" >> $fname
 					set hash = `docker images | grep davegill | awk '{print $3}'`
