@@ -17,8 +17,9 @@ set JOB = INDEPENDENT
 #	Only input arg is the location where the OUTPUT (shared) volume for
 #	docker should be located.
 
-if ( ${#argv} == 1 ) then
-	set SHARED = $1
+if ( ${#argv} == 2 ) then
+	set DROPIT = $1
+	set SHARED = $2
 	if ( ! -d $SHARED ) then
 		echo " "
 		echo "Usage: $0 _directory_"
@@ -40,9 +41,10 @@ endif
 
 if ( ${#argv} == 0 ) then
 	echo " "
-	echo "Usage: $0 _directory_"
-	echo "where _directory_ is full path to where the OUTPUT directory will exist, or does exist"
-	echo "_directory_/OUTPUT is the host-machine's shared volume location that docker will use"
+	echo "Usage: $0 _dir_drop_ _dir_out_"
+	echo "1. where _dir_drop_ is full path to where the RUN file will be plaeced"
+	echo "2. where _dir_out_ is full path to where the OUTPUT directory will exist, or does exist"
+	echo "example: _dir_out_/OUTPUT is the host-machine's shared volume location that docker will use"
 	echo " "
 	exit ( 3 )
 endif
@@ -131,6 +133,7 @@ foreach n ( $NUMBER )
 				echo "Run ./$fname"
 				echo '#\!/bin/csh' >> $fname
 				echo "#####################   TOP OF JOB    #####################" >> $fname
+				echo "touch $DROPIT/DOING_NOW_test_0${n}${test_suffix}" >> $fname
 				echo "echo TEST CASE = test_0${n}${test_suffix}" >> $fname
 				echo "date" >> $fname
 				echo "set SHARED = $SHARED" >> $fname
@@ -208,6 +211,7 @@ foreach n ( $NUMBER )
 				echo "docker volume prune -f" >> $fname
 				echo "docker system df" >> $fname
 				echo "date" >> $fname
+				echo "mv $DROPIT/DOING_NOW_test_0${n}${test_suffix} $DROPIT/COMPLETE_test_0${n}${test_suffix}" >> $fname
 				echo "#####################   END OF JOB    #####################" >> $fname
 
 			else
@@ -223,6 +227,7 @@ foreach n ( $NUMBER )
 				echo "Run ./$fname"
 				echo '#\!/bin/csh' >> $fname
 				echo "#####################   TOP OF JOB    #####################" >> $fname
+				echo "touch $DROPIT/DOING_NOW_test_0${n}${test_suffix}" >> $fname
 				echo "echo TEST CASE = test_0${n}${test_suffix}" >> $fname
 				echo "date" >> $fname
 				echo "set SHARED = $SHARED" >> $fname
@@ -300,6 +305,7 @@ foreach n ( $NUMBER )
 				echo "docker volume prune -f" >> $fname
 				echo "docker system df" >> $fname
 				echo "date" >> $fname
+				echo "mv $DROPIT/DOING_NOW_test_0${n}${test_suffix} $DROPIT/COMPLETE_test_0${n}${test_suffix}" >> $fname
 				echo "#####################   END OF JOB    #####################" >> $fname
 
 			else
@@ -315,6 +321,7 @@ foreach n ( $NUMBER )
 				echo "Run ./$fname"
 				echo '#\!/bin/csh' >> $fname
 				echo "#####################   TOP OF JOB    #####################" >> $fname
+				echo "touch $DROPIT/DOING_NOW_test_0${n}${test_suffix}" >> $fname
 				echo "echo TEST CASE = test_0${n}${test_suffix}" >> $fname
 				echo "date" >> $fname
 				echo "set SHARED = $SHARED" >> $fname
@@ -392,6 +399,7 @@ foreach n ( $NUMBER )
 				echo "docker volume prune -f" >> $fname
 				echo "docker system df" >> $fname
 				echo "date" >> $fname
+				echo "mv $DROPIT/DOING_NOW_test_0${n}${test_suffix} $DROPIT/COMPLETE_test_0${n}${test_suffix}" >> $fname
 				echo "#####################   END OF JOB    #####################" >> $fname
 
 			else
