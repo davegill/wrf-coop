@@ -2,8 +2,8 @@
 
 #	Choose which scripts to manufacture
 
-set TEST_GEN = SOME
 set TEST_GEN = ALL
+set TEST_GEN = SOME
 
 #	How many procs do we play with: used for parallel build, openmp threads, mpi ranks
 
@@ -81,6 +81,18 @@ else if ( $TEST_GEN == SOME ) then
 	                  "em_move        01  " \
 	                  "em_fire        01  " \
 	                  "em_hill2d_x    01  " \
+	                )
+	set TEST      = ( \
+	                  "em_real        03FD 07 07NE 10 11 " \
+	                  "nmm_nest       01 01c 03 04a 06 " \
+	                  "em_chem        1 2 5 " \
+	                  "em_quarter_ss  02 02NE 03 03NE 04 " \
+	                  "em_b_wave      1 1NE 2 2NE 3 " \
+	                  "em_real8       74 75 76 77 78 " \
+	                  "em_quarter_ss8 05 06 08 09 10 " \
+	                  "em_move        01 02 " \
+	                  "em_fire        01 " \
+	                  "em_hill2d_x    01 " \
 	                )
 
 endif
