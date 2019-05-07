@@ -383,7 +383,7 @@ foreach n ( $NUMBER )
 				echo "	echo RUN WRF test_0${n}${test_suffix} for $COMPILE[$COUNT] $MPI_OPT $RUNDIR[$COUNT], NML = " '$t' >> $fname
 				if ( $RUNDIR[$COUNT] == em_real ) then
 				echo '	set is_nest = `echo $t | rev | cut -c 1-2 | rev`' >> $fname
-				echo '	if ( ( $is_nest == NE ) then' >> $fname
+				echo '	if ( $is_nest == NE ) then' >> $fname
 				echo "		docker exec test_0${n}${test_suffix} ./script.csh RUN $COMPILE[$COUNT] $MPI_OPT $RUNDIR[$COUNT]" '$t' "NP=9" >> $fname
         			echo '		set OK = $status' >> $fname
 				echo '	else' >> $fname
