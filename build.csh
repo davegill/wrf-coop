@@ -11,8 +11,8 @@ set PROCS = 8
 
 #	Sequential jobs, or all independent. Basically, do we remove the images?
 
-set JOB = SEQUENTIAL
 set JOB = INDEPENDENT
+set JOB = SEQUENTIAL
 
 #	Only input arg is the location where the OUTPUT (shared) volume for
 #	docker should be located.
@@ -71,18 +71,6 @@ else if ( $TEST_GEN == SOME ) then
 	set NUMBER    = ( 01 02 03 04 05 06 07 08 09 10 )
 
 	set TEST      = ( \
-	                  "em_real        03FD  " \
-	                  "nmm_nest       01  " \
-	                  "em_chem        1   " \
-	                  "em_quarter_ss  02  " \
-	                  "em_b_wave      1   " \
-	                  "em_real8       14  " \
-	                  "em_quarter_ss8 02  " \
-	                  "em_move        01  " \
-	                  "em_fire        01  " \
-	                  "em_hill2d_x    01  " \
-	                )
-	set TEST      = ( \
 	                  "em_real        03FD 07NE 10 11 " \
 	                  "nmm_nest       01 03 04a 06 " \
 	                  "em_chem        1 2 5 " \
@@ -93,6 +81,18 @@ else if ( $TEST_GEN == SOME ) then
 	                  "em_move        01 02 " \
 	                  "em_fire        01 " \
 	                  "em_hill2d_x    01 " \
+	                )
+	set TEST      = ( \
+	                  "em_real        03FD  " \
+	                  "nmm_nest       01  " \
+	                  "em_chem        1   " \
+	                  "em_quarter_ss  02  " \
+	                  "em_b_wave      1   " \
+	                  "em_real8       14  " \
+	                  "em_quarter_ss8 02  " \
+	                  "em_move        01  " \
+	                  "em_fire        01  " \
+	                  "em_hill2d_x    01  " \
 	                )
 
 endif
