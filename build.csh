@@ -121,12 +121,20 @@ set    MPI_OPT = 34
 if ( -e single.csh ) rm single.csh
 touch single.csh
 chmod +x single.csh
-echo "#	This builds the docker image. " >> single.csh
+echo '#\!/bin/csh' >> single.csh
+echo "#####################   TOP OF JOB    #####################" >> single.csh
+echo "" >> single.csh
+echo "#	This script builds the docker image for the rest of the testing harness " >> single.csh
+echo "" >> single.csh
 echo "date" >> single.csh
 echo "set SHARED = $SHARED" >> single.csh
 echo 'if ( ! -d ${SHARED}/OUTPUT ) mkdir ${SHARED}/OUTPUT' >> single.csh
+echo "" >> single.csh
+echo "date" >> single.csh
 echo "docker build -t wrf_regtest ." >> single.csh
 echo "date" >> single.csh
+echo "" >> single.csh
+echo "#####################   END OF JOB    #####################" >> single.csh
 echo "Run ./single.csh"
 
 #	Build each of the scripts: serial, openmp, then mpi.
