@@ -11,7 +11,7 @@ MAINTAINER Dave Gill <gill@ucar.edu>
 #  && mv WRF /wrf/WRF
 #RUN echo _HERE2_
 
-RUN git clone _REPO_/_FORK_.git WRF \
+RUN git clone _FORK_/_REPO_.git WRF \
   && cd WRF \
   && git checkout _BRANCH_ \
   && cd ..
