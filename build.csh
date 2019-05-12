@@ -11,8 +11,8 @@ set PROCS = 8
 
 #	Sequential jobs, or all independent. Basically, do we remove the images?
 
-set JOB = INDEPENDENT
 set JOB = SEQUENTIAL
+set JOB = INDEPENDENT
 
 #	Only input arg is the location where the OUTPUT (shared) volume for
 #	docker should be located.
@@ -71,18 +71,6 @@ else if ( $TEST_GEN == SOME ) then
 	set NUMBER    = ( 01 02 03 04 05 06 07 08 09 10 )
 
 	set TEST      = ( \
-	                  "em_real        03FD 07NE 10 11 " \
-	                  "nmm_nest       01 03 04a 06 " \
-	                  "em_chem        1 2 5 " \
-	                  "em_quarter_ss  02NE 03 03NE 04 " \
-	                  "em_b_wave      1NE 2 2NE 3 " \
-	                  "em_real8       75 76 77 78 " \
-	                  "em_quarter_ss8 06 08 09 10 " \
-	                  "em_move        01 02 " \
-	                  "em_fire        01 " \
-	                  "em_hill2d_x    01 " \
-	                )
-	set TEST      = ( \
 	                  "em_real        03FD  " \
 	                  "nmm_nest       01  " \
 	                  "em_chem        1   " \
@@ -93,6 +81,18 @@ else if ( $TEST_GEN == SOME ) then
 	                  "em_move        01  " \
 	                  "em_fire        01  " \
 	                  "em_hill2d_x    01  " \
+	                )
+	set TEST      = ( \
+	                  "em_real        03FD 07NE 10 11 " \
+	                  "nmm_nest       01 03 04a 06 " \
+	                  "em_chem        1 2 5 " \
+	                  "em_quarter_ss  02NE 03 03NE 04 " \
+	                  "em_b_wave      1NE 2 2NE 3 " \
+	                  "em_real8       75 76 77 78 " \
+	                  "em_quarter_ss8 06 08 09 10 " \
+	                  "em_move        01 02 " \
+	                  "em_fire        01 " \
+	                  "em_hill2d_x    01 " \
 	                )
 
 endif
@@ -110,6 +110,7 @@ set DASHOPT1  = ( -d          -d             -d          -d            -d       
 set DASHOPT2  = ( F           F              F           F             F           -r8         -r8            F           F           F           )
 set BUILDENV1 = ( F           WRF_NMM_CORE=1 WRF_CHEM=1  F             F           F           F              F           F           F           )
 set BUILDENV2 = ( J=-j@$PROCS J=-j@$PROCS    J=-j@$PROCS J=-j@$PROCS   J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS    J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS )
+set SERIALBG  = ( T           T              F           T             T           T           T              F           F           F           )
 set NP        = ( $PROCS      $PROCS         $PROCS      $PROCS        $PROCS      $PROCS      $PROCS         $PROCS      $PROCS      $PROCS      )
 
 set SERIAL_OPT = 32
@@ -144,7 +145,121 @@ foreach n ( $NUMBER )
 	foreach p ( SERIAL OPENMP MPI )
 		set string = ( docker exec )
 		if      ( $p == SERIAL ) then
-			if ( $SERIAL[$COUNT] == T ) then
+			if      ( ( $SERIAL[$COUNT] == T ) && ( $SERIALBG[$COUNT] == T ) ) then
+				set test_suffix = s
+				set fname = test_0${n}${test_suffix}.csh
+				if ( -e $fname ) rm $fname
+				touch $fname
+				chmod +x $fname
+				echo "Run ./$fname"
+
+				echo '#\!/bin/csh' >> $fname
+				echo "#####################   TOP OF JOB    #####################" >> $fname
+				echo "touch $DROPIT/DOING_NOW_test_0${n}${test_suffix}" >> $fname
+				echo "echo TEST CASE = test_0${n}${test_suffix}" >> $fname
+				echo "date" >> $fname
+				echo "set SHARED = $SHARED" >> $fname
+				echo "#	Build: case = $NAME[$COUNT], SERIAL" >> $fname
+				set string = ( $string '$test' ./script.csh BUILD CLEAN $SERIAL_OPT $NEST[$COUNT] $COMPILE[$COUNT] )
+				if ( "$DASHOPT1[$COUNT]" == "F" ) then
+					set str = ""
+				else
+					set str = $DASHOPT1[$COUNT]
+				endif
+				if ( "$DASHOPT2[$COUNT]" != "F" ) then
+					set str = ( $str $DASHOPT2[$COUNT] )
+				endif
+				set string = ( $string $str )
+				if ( $BUILDENV1[$COUNT] == F ) then
+					set str = ""
+				else
+					set str = $BUILDENV1[$COUNT]
+				endif
+				set string = ( $string $str )
+
+				echo "set TCOUNT = 1" >> $fname
+				echo "foreach t ( $TEST[$COUNT] )" >> $fname
+				echo "	set test = test_0${n}${test_suffix}"'_$t' >> $fname
+				echo "	date" >> $fname
+				echo '	if ( $TCOUNT == 1 ) ' "goto aSKIP_test_0${n}${test_suffix}" >> $fname
+				echo "	date" >> $fname
+				echo "	echo Build container for" '$test' >> $fname
+				echo "	docker run -d -t --name" '$test -v $SHARED/OUTPUT:/wrf/wrfoutput wrf_regtest' >> $fname
+				echo "	date" >> $fname
+				echo "	echo Build WRF executable for" '$test' >> $fname
+				echo "	( $string"' ) &' >> $fname
+				echo "	date" >> $fname
+				echo "aSKIP_test_0${n}${test_suffix}:" >> $fname
+				echo '	@ TCOUNT ++' >> $fname
+				echo "end" >> $fname
+				echo "date" >> $fname
+				echo "echo waiting on BUILDs" >> $fname
+				echo "wait" >> $fname
+				echo "date" >> $fname
+
+				echo "set TCOUNT = 1" >> $fname
+				echo "foreach t ( $TEST[$COUNT] )" >> $fname
+				echo "	set test = test_0${n}${test_suffix}"'_$t' >> $fname
+				echo "	date" >> $fname
+				echo '	if ( $TCOUNT == 1 ) ' "goto bSKIP_test_0${n}${test_suffix}" >> $fname
+				echo "	date" >> $fname
+				echo "	echo RUN WRF" '$test' "for $COMPILE[$COUNT] $SERIAL_OPT $RUNDIR[$COUNT], NML = " '$t' >> $fname
+				echo "	( docker exec" '$test' "./script.csh RUN $COMPILE[$COUNT] $SERIAL_OPT $RUNDIR[$COUNT]" '$t ) &' >> $fname
+				echo "bSKIP_test_0${n}${test_suffix}:" >> $fname
+				echo '	@ TCOUNT ++' >> $fname
+				echo "end" >> $fname
+				echo "date" >> $fname
+				echo "echo waiting on RUNs" >> $fname
+				echo "wait" >> $fname
+				echo "date" >> $fname
+
+				echo "set TCOUNT = 1" >> $fname
+				echo "foreach t ( $TEST[$COUNT] )" >> $fname
+				echo "	set test = test_0${n}${test_suffix}"'_$t' >> $fname
+				echo '	if ( $TCOUNT == 1 ) ' "goto cSKIP_test_0${n}${test_suffix}" >> $fname
+				echo "	date" >> $fname
+
+				echo "	docker exec" '$test ls -ls WRF/main/wrf.exe' >> $fname
+				if      ( $COMPILE[$COUNT] == nmm_real ) then
+					echo "	docker exec" '$test ls -ls WRF/main/real_nmm.exe' >> $fname
+				else if ( $COMPILE[$COUNT] == em_real ) then
+					echo "	docker exec" '$test ls -ls WRF/main/real.exe' >> $fname
+				else
+					echo "	docker exec" '$test ls -ls WRF/main/ideal.exe' >> $fname
+				endif
+				echo "	docker exec" '$test' "ls -ls wrfoutput | grep _BUILD_ | grep $COMPILE[$COUNT]_${SERIAL_OPT} " >> $fname
+				echo "	date" >> $fname
+
+				echo "	docker exec" '$test' "cat WRF/test/$COMPILE[$COUNT]/wrf.print.out " >> $fname
+				echo "	docker exec" '$test' "ls -ls WRF/test/$COMPILE[$COUNT] | grep wrfout " >> $fname
+				echo "	docker exec" '$test' "ls -ls wrfoutput | grep _RUN_ | grep $COMPILE[$COUNT]_${SERIAL_OPT}_$RUNDIR[$COUNT]_"'$t ' >> $fname
+				echo "	" >> $fname
+
+				echo "	docker stop" '$test' >> $fname
+				echo "	date" >> $fname
+				echo "	docker rm" '$test' >> $fname
+				echo "	date" >> $fname
+				echo "cSKIP_test_0${n}${test_suffix}:" >> $fname
+				echo '	@ TCOUNT ++' >> $fname
+				echo "end" >> $fname
+				echo "date" >> $fname
+
+				if      ( $JOB == INDEPENDENT ) then
+					echo "docker rmi wrf_regtest" >> $fname
+					echo 'set hash = `docker images | grep davegill | ' "awk '{print " '$3' "}' " '`' >> $fname
+					echo 'docker rmi --force $hash' >> $fname
+				else if ( $JOB == SEQUENTIAL  ) then
+					echo "echo docker rmi wrf_regtest" >> $fname
+					set hash = `docker images | grep davegill | awk '{print $3}'`
+					echo "echo docker rmi --force $hash" >> $fname
+				endif
+				echo "docker volume prune -f" >> $fname
+				echo "docker system df" >> $fname
+				echo "date" >> $fname
+				echo "mv $DROPIT/DOING_NOW_test_0${n}${test_suffix} $DROPIT/COMPLETE_test_0${n}${test_suffix}" >> $fname
+				echo "#####################   END OF JOB    #####################" >> $fname
+
+			else if ( ( $SERIAL[$COUNT] == T ) && ( $SERIALBG[$COUNT] == F ) ) then
 				set test_suffix = s
 				set fname = test_0${n}${test_suffix}.csh
 				if ( -e $fname ) rm $fname
@@ -237,6 +352,7 @@ foreach n ( $NUMBER )
 			else
 				goto SKIP_THIS_ONE
 			endif
+
 		else if ( $p == OPENMP ) then
 			if ( $OPENMP[$COUNT] == T ) then
 				set test_suffix = o
@@ -331,6 +447,7 @@ foreach n ( $NUMBER )
 			else
 				goto SKIP_THIS_ONE
 			endif
+
 		else if ( $p == MPI    ) then
 			if (    $MPI[$COUNT] == T ) then
 				set test_suffix = m
