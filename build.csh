@@ -156,7 +156,7 @@ foreach n ( $NUMBER )
 				echo '#\!/bin/csh' >> $fname
 				echo "#####################   TOP OF JOB    #####################" >> $fname
 				echo "touch $DROPIT/DOING_NOW_test_0${n}${test_suffix}" >> $fname
-				echo "chmod 777 $DROPIT/DOING_NOW_test_0${n}${test_suffix}" >> $fname
+				echo "chmod 666 $DROPIT/DOING_NOW_test_0${n}${test_suffix}" >> $fname
 				echo "echo TEST CASE = test_0${n}${test_suffix}" >> $fname
 				echo "date" >> $fname
 				echo "set SHARED = $SHARED" >> $fname
@@ -258,7 +258,7 @@ foreach n ( $NUMBER )
 				echo "docker system df" >> $fname
 				echo "date" >> $fname
 				echo "touch $DROPIT/COMPLETE_test_0${n}${test_suffix}" >> $fname
-				echo "chmod 777 $DROPIT/COMPLETE_test_0${n}${test_suffix}" >> $fname
+				echo "chmod 666 $DROPIT/COMPLETE_test_0${n}${test_suffix}" >> $fname
 				echo "mv $DROPIT/DOING_NOW_test_0${n}${test_suffix} $DROPIT/COMPLETE_test_0${n}${test_suffix}" >> $fname
 				echo "#####################   END OF JOB    #####################" >> $fname
 
@@ -272,7 +272,7 @@ foreach n ( $NUMBER )
 				echo '#\!/bin/csh' >> $fname
 				echo "#####################   TOP OF JOB    #####################" >> $fname
 				echo "touch $DROPIT/DOING_NOW_test_0${n}${test_suffix}" >> $fname
-				echo "chmod 777 $DROPIT/DOING_NOW_test_0${n}${test_suffix}" >> $fname
+				echo "chmod 666 $DROPIT/DOING_NOW_test_0${n}${test_suffix}" >> $fname
 				echo "echo TEST CASE = test_0${n}${test_suffix}" >> $fname
 				echo "date" >> $fname
 				echo "set SHARED = $SHARED" >> $fname
@@ -351,7 +351,7 @@ foreach n ( $NUMBER )
 				echo "docker system df" >> $fname
 				echo "date" >> $fname
 				echo "touch $DROPIT/COMPLETE_test_0${n}${test_suffix}" >> $fname
-				echo "chmod 777 $DROPIT/COMPLETE_test_0${n}${test_suffix}" >> $fname
+				echo "chmod 666 $DROPIT/COMPLETE_test_0${n}${test_suffix}" >> $fname
 				echo "mv $DROPIT/DOING_NOW_test_0${n}${test_suffix} $DROPIT/COMPLETE_test_0${n}${test_suffix}" >> $fname
 				echo "#####################   END OF JOB    #####################" >> $fname
 
@@ -370,7 +370,7 @@ foreach n ( $NUMBER )
 				echo '#\!/bin/csh' >> $fname
 				echo "#####################   TOP OF JOB    #####################" >> $fname
 				echo "touch $DROPIT/DOING_NOW_test_0${n}${test_suffix}" >> $fname
-				echo "chmod 777 $DROPIT/DOING_NOW_test_0${n}${test_suffix}" >> $fname
+				echo "chmod 666 $DROPIT/DOING_NOW_test_0${n}${test_suffix}" >> $fname
 				echo "echo TEST CASE = test_0${n}${test_suffix}" >> $fname
 				echo "date" >> $fname
 				echo "set SHARED = $SHARED" >> $fname
@@ -449,7 +449,7 @@ foreach n ( $NUMBER )
 				echo "docker system df" >> $fname
 				echo "date" >> $fname
 				echo "touch $DROPIT/COMPLETE_test_0${n}${test_suffix}" >> $fname
-				echo "chmod 777 $DROPIT/COMPLETE_test_0${n}${test_suffix}" >> $fname
+				echo "chmod 666 $DROPIT/COMPLETE_test_0${n}${test_suffix}" >> $fname
 				echo "mv $DROPIT/DOING_NOW_test_0${n}${test_suffix} $DROPIT/COMPLETE_test_0${n}${test_suffix}" >> $fname
 				echo "#####################   END OF JOB    #####################" >> $fname
 
@@ -468,6 +468,7 @@ foreach n ( $NUMBER )
 				echo '#\!/bin/csh' >> $fname
 				echo "#####################   TOP OF JOB    #####################" >> $fname
 				echo "touch $DROPIT/DOING_NOW_test_0${n}${test_suffix}" >> $fname
+				echo "chmod 666 $DROPIT/DOING_NOW_test_0${n}${test_suffix}" >> $fname
 				echo "echo TEST CASE = test_0${n}${test_suffix}" >> $fname
 				echo "date" >> $fname
 				echo "set SHARED = $SHARED" >> $fname
@@ -557,7 +558,7 @@ foreach n ( $NUMBER )
 				echo "docker system df" >> $fname
 				echo "date" >> $fname
 				echo "touch $DROPIT/COMPLETE_test_0${n}${test_suffix}" >> $fname
-				echo "chmod 777 $DROPIT/COMPLETE_test_0${n}${test_suffix}" >> $fname
+				echo "chmod 666 $DROPIT/COMPLETE_test_0${n}${test_suffix}" >> $fname
 				echo "mv $DROPIT/DOING_NOW_test_0${n}${test_suffix} $DROPIT/COMPLETE_test_0${n}${test_suffix}" >> $fname
 				echo "#####################   END OF JOB    #####################" >> $fname
 
