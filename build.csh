@@ -53,7 +53,7 @@ if      ( $TEST_GEN == ALL ) then
 	set NUMBER    = ( 01 02 03 04 05 06 07 08 09 10 )
 
 	set TEST      = ( \
-	                  "em_real        03DF 03FD 07 07NE 10 11 14 16 16DF 17 17AD 18 20 20NE 31 31AD 38 52DF 52FD 60NE 71 78 " \
+	                  "em_real        03DF 03FD 07 10 11 14 16 16DF 17 17AD 18 20 20NE 31 31AD 38 52DF 52FD 60NE 71 78 " \
 	                  "nmm_nest       01 01c 03 04a 06 07 15 " \
 	                  "em_chem        1 2 5 " \
 	                  "em_quarter_ss  02 02NE 03 03NE 04 04NE 05 05NE 06 06NE 08 09 10 11NE 12NE 13NE 14NE " \
@@ -83,7 +83,7 @@ else if ( $TEST_GEN == SOME ) then
 	                  "em_hill2d_x    01  " \
 	                )
 	set TEST      = ( \
-	                  "em_real        03FD 07NE 10 11 " \
+	                  "em_real        03FD 10 11 20NE " \
 	                  "nmm_nest       01 03 04a 06 " \
 	                  "em_chem        1 2 5 " \
 	                  "em_quarter_ss  02NE 03 03NE 04 " \
