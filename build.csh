@@ -110,7 +110,8 @@ set DASHOPT1  = ( -d          -d             -d          -d            -d       
 set DASHOPT2  = ( F           F              F           F             F           -r8         -r8            F           F           F           )
 set BUILDENV1 = ( F           WRF_NMM_CORE=1 WRF_CHEM=1  F             F           F           F              F           F           F           )
 set BUILDENV2 = ( J=-j@$PROCS J=-j@$PROCS    J=-j@$PROCS J=-j@$PROCS   J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS    J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS )
-set SERIALBG  = ( T           T              F           T             T           T           T              F           F           F           )
+#set SERIALBG  = ( T           T              F           T             T           T           T              F           F           F           )
+set SERIALBG  = ( F           F              F           F             F           F           F              F           F           F           )
 set NP        = ( $PROCS      $PROCS         $PROCS      $PROCS        $PROCS      $PROCS      $PROCS         $PROCS      $PROCS      $PROCS      )
 
 set SERIAL_OPT = 32
