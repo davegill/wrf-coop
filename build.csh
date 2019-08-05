@@ -133,16 +133,16 @@ echo "set SHARED = $SHARED" >> single.csh
 echo 'if ( ! -d ${SHARED}/OUTPUT ) mkdir ${SHARED}/OUTPUT' >> single.csh
 echo "" >> single.csh
 echo "date" >> single.csh
-echo "set num_containers = `docker ps -a | wc -l`" >> single.csh
+echo 'set num_containers = `docker ps -a | wc -l`' >> single.csh
 echo 'if ( $num_containers > 1 ) then' >> single.csh
-echo '	set hash = `docker ps -a | sed -n 2,${num_containers}p | ' "awk '{print " '$1}' "'`" >>  single.csh
-echo '	docker rm $hash' >> single.csh
+echo '  set hash = `docker ps -a | sed -n 2,${num_containers}p | ' "awk '{print " '$1}' "'" '`' >>  single.csh
+echo '  docker rm $hash' >> single.csh
 echo "endif" >> single.csh
 echo "" >> single.csh
 echo "set num_images = `docker images | wc -l`" >> single.csh
 echo 'if ( $num_images > 1 ) then' >> single.csh
-echo '	set hash = `docker images | sed -n 2,${num_images}p | ' "awk '{print " '$3}' "'`" >>  single.csh
-echo '	docker rmi --force $hash' >> single.csh
+echo '  set hash = `docker images | sed -n 2,${num_images}p | ' "awk '{print " '$3}' "'" '`' >>  single.csh
+echo '  docker rmi --force $hash' >> single.csh
 echo "endif" >> single.csh
 echo "" >> single.csh
 echo "date" >> single.csh
