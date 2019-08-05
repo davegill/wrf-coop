@@ -139,7 +139,7 @@ echo '  set hash = `docker ps -a | sed -n 2,${num_containers}p | ' "awk '{print 
 echo '  docker rm $hash' >> single.csh
 echo "endif" >> single.csh
 echo "" >> single.csh
-echo "set num_images = `docker images | wc -l`" >> single.csh
+echo 'set num_images = `docker images | wc -l`' >> single.csh
 echo 'if ( $num_images > 1 ) then' >> single.csh
 echo '  set hash = `docker images | sed -n 2,${num_images}p | ' "awk '{print " '$3}' "'" '`' >>  single.csh
 echo '  docker rmi --force $hash' >> single.csh
