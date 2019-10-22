@@ -199,6 +199,7 @@ foreach n ( $NUMBER )
 				echo '	if ( $TCOUNT == 1 ) ' "goto aSKIP_test_0${n}${test_suffix}" >> $fname
 				echo "	date" >> $fname
 				echo "	echo Build container for" '$test' >> $fname
+				echo "	#docker run -it --name" '$test -v $SHARED/OUTPUT:/wrf/wrfoutput wrf_regtest /bin/tcsh' >> $fname
 				echo "	docker run -d -t --name" '$test -v $SHARED/OUTPUT:/wrf/wrfoutput wrf_regtest' >> $fname
 				echo "	date" >> $fname
 				echo "	echo Build WRF executable for" '$test' >> $fname
@@ -313,6 +314,7 @@ foreach n ( $NUMBER )
 				set string = ( $string $str )
 
 				echo "echo Build container" >> $fname
+				echo "#docker run -it --name test_0${n}${test_suffix} " '-v $SHARED/OUTPUT:/wrf/wrfoutput wrf_regtest /bin/tcsh' >> $fname
 				echo "docker run -d -t --name test_0${n}${test_suffix} " '-v $SHARED/OUTPUT:/wrf/wrfoutput wrf_regtest' >> $fname
 				echo "date" >> $fname
 				echo "echo Build WRF executable" >> $fname
@@ -412,6 +414,7 @@ foreach n ( $NUMBER )
 				set string = ( $string $str )
 
 				echo "echo Build container" >> $fname
+				echo "#docker run -it --name test_0${n}${test_suffix} " '-v $SHARED/OUTPUT:/wrf/wrfoutput wrf_regtest /bin/tcsh' >> $fname
 				echo "docker run -d -t --name test_0${n}${test_suffix} " '-v $SHARED/OUTPUT:/wrf/wrfoutput wrf_regtest' >> $fname
 				echo "date" >> $fname
 				echo "echo Build WRF executable" >> $fname
@@ -511,6 +514,7 @@ foreach n ( $NUMBER )
 				set string = ( $string $str )
 
 				echo "echo Build container" >> $fname
+				echo "#docker run -it --name test_0${n}${test_suffix} " '-v $SHARED/OUTPUT:/wrf/wrfoutput wrf_regtest /bin/tcsh' >> $fname
 				echo "docker run -d -t --name test_0${n}${test_suffix} " '-v $SHARED/OUTPUT:/wrf/wrfoutput wrf_regtest' >> $fname
 				echo "date" >> $fname
 				echo "echo Build WRF executable" >> $fname
