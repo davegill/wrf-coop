@@ -218,6 +218,7 @@ foreach n ( $NUMBER )
 				echo "	date" >> $fname
 				echo '	if ( $TCOUNT == 1 ) ' "goto bSKIP_test_0${n}${test_suffix}" >> $fname
 				echo "	date" >> $fname
+				echo "	echo '======================================================================'" >> $fname
 				echo "	echo RUN WRF" '$test' "for $COMPILE[$COUNT] $SERIAL_OPT $RUNDIR[$COUNT], NML = " '$t' >> $fname
 				echo "	( docker exec" '$test' "./script.csh RUN $COMPILE[$COUNT] $SERIAL_OPT $RUNDIR[$COUNT]" '$t ) &' >> $fname
 				echo "bSKIP_test_0${n}${test_suffix}:" >> $fname
@@ -333,6 +334,7 @@ foreach n ( $NUMBER )
 				echo "foreach t ( $TEST[$COUNT] )" >> $fname
 				echo "	date" >> $fname
 				echo '	if ( $TCOUNT == 1 ) ' "goto SKIP_test_0${n}${test_suffix}" >> $fname
+				echo "	echo '======================================================================'" >> $fname
 				echo "	echo RUN WRF test_0${n}${test_suffix} for $COMPILE[$COUNT] $SERIAL_OPT $RUNDIR[$COUNT], NML = " '$t' >> $fname
 				echo "	docker exec test_0${n}${test_suffix} ./script.csh RUN $COMPILE[$COUNT] $SERIAL_OPT $RUNDIR[$COUNT]" '$t' >> $fname
         			echo '	set OK = $status' >> $fname
@@ -431,6 +433,7 @@ foreach n ( $NUMBER )
 				echo "foreach t ( $TEST[$COUNT] )" >> $fname
 				echo "	date" >> $fname
 				echo '	if ( $TCOUNT == 1 ) ' "goto SKIP_test_0${n}${test_suffix}" >> $fname
+				echo "	echo '======================================================================'" >> $fname
 				echo "	echo RUN WRF test_0${n}${test_suffix} for $COMPILE[$COUNT] $OPENMP_OPT $RUNDIR[$COUNT], NML = " '$t' >> $fname
 				echo "	docker exec test_0${n}${test_suffix} ./script.csh RUN $COMPILE[$COUNT] $OPENMP_OPT $RUNDIR[$COUNT]" '$t' "OMP_NUM_THREADS=$NP[$COUNT]" >> $fname
         			echo '	set OK = $status' >> $fname
@@ -529,6 +532,7 @@ foreach n ( $NUMBER )
 				echo "foreach t ( $TEST[$COUNT] )" >> $fname
 				echo "	date" >> $fname
 				echo '	if ( $TCOUNT == 1 ) ' "goto SKIP_test_0${n}${test_suffix}" >> $fname
+				echo "	echo '======================================================================'" >> $fname
 				echo "	echo RUN WRF test_0${n}${test_suffix} for $COMPILE[$COUNT] $MPI_OPT $RUNDIR[$COUNT], NML = " '$t' >> $fname
 				if ( $RUNDIR[$COUNT] == em_real ) then
 				echo '	set is_nest = `echo $t | rev | cut -c 1-2 | rev`' >> $fname
