@@ -19,7 +19,6 @@ RUN git clone _FORK_/_REPO_.git WRF \
 RUN curl -SL http://www2.mmm.ucar.edu/wrf/dave/script.tar | tar -xC /wrf
 
 #ADD nml.tar /wrf
-#RUN chmod -R 777 /wrf/Namelists
 
 VOLUME /wrf
 CMD ["/bin/tcsh"]

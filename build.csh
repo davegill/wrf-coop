@@ -149,7 +149,7 @@ echo "date" >> single.csh
 echo "if ( -d ${DROPIT}/Namelists ) then" >> single.csh
 echo "	cp -pr ${DROPIT}/Namelists ." >> single.csh
 echo "	tar -cf nml.tar Namelists" >> single.csh
-echo "	sed -e 's/#ADD/ADD/' -e 's/#RUN chmod/RUN chmod/' Dockerfile > .foo" >> single.csh
+echo "	sed -e 's/#ADD/ADD/' Dockerfile > .foo" >> single.csh
 echo "	mv .foo Dockerfile" >> single.csh
 echo "endif" >> single.csh
 echo "docker build -t wrf_regtest ." >> single.csh
