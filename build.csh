@@ -42,7 +42,7 @@ endif
 if ( ${#argv} == 0 ) then
 	echo " "
 	echo "Usage: $0 _dir_drop_ _dir_out_"
-	echo "1. where _dir_drop_ is full path to where the RUN file will be plaeced"
+	echo "1. where _dir_drop_ is full path to where the RUN file will be placed"
 	echo "2. where _dir_out_ is full path to where the OUTPUT directory will exist, or does exist"
 	echo "example: _dir_out_/OUTPUT is the host-machine's shared volume location that docker will use"
 	echo " "
@@ -146,6 +146,12 @@ echo '  docker rmi --force $hash' >> single.csh
 echo "endif" >> single.csh
 echo "" >> single.csh
 echo "date" >> single.csh
+echo "if ( -d ${DROPIT}/Namelists ) then" >> single.csh
+echo "	cp -pr ${DROPIT}/Namelists ." >> single.csh
+echo "	tar -cf nml.tar Namelists" >> single.csh
+echo "	sed -e 's/#ADD/ADD/' -e 's/#RUN chmod/RUN chmod/' Dockerfile > .foo" >> single.csh
+echo "	mv .foo Dockerfile" >> single.csh
+echo "endif" >> single.csh
 echo "docker build -t wrf_regtest ." >> single.csh
 echo "date" >> single.csh
 echo "" >> single.csh
