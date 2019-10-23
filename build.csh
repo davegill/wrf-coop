@@ -332,8 +332,16 @@ foreach n ( $NUMBER )
 				echo "date" >> $fname
 				echo " " >> $fname
 
+				set D = $DROPIT/Namelists/weekly/$RUNDIR[$COUNT]
+				if ( -d $D ) then
+				        find $D -name namelist.input\* -exec ls -1 {} \; >& .foo1
+	        			set EXTRAS = `cat .foo1 | sed 's/^.*\.//' | sort -u`
+					rm .foo1
+				else
+				        set EXTRAS = " "
+				endif
 				echo "set TCOUNT = 1" >> $fname
-				echo "foreach t ( $TEST[$COUNT] )" >> $fname
+				echo "foreach t ( $TEST[$COUNT] $EXTRAS )" >> $fname
 				echo "	date" >> $fname
 				echo '	if ( $TCOUNT == 1 ) ' "goto SKIP_test_0${n}${test_suffix}" >> $fname
 				echo "	echo '======================================================================'" >> $fname
@@ -432,8 +440,16 @@ foreach n ( $NUMBER )
 				echo "date" >> $fname
 				echo " " >> $fname
 
+				set D = $DROPIT/Namelists/weekly/$RUNDIR[$COUNT]
+				if ( -d $D ) then
+				        find $D -name namelist.input\* -exec ls -1 {} \; >& .foo1
+	        			set EXTRAS = `cat .foo1 | sed 's/^.*\.//' | sort -u`
+					rm .foo1
+				else
+				        set EXTRAS = " "
+				endif
 				echo "set TCOUNT = 1" >> $fname
-				echo "foreach t ( $TEST[$COUNT] )" >> $fname
+				echo "foreach t ( $TEST[$COUNT] $EXTRAS )" >> $fname
 				echo "	date" >> $fname
 				echo '	if ( $TCOUNT == 1 ) ' "goto SKIP_test_0${n}${test_suffix}" >> $fname
 				echo "	echo '======================================================================'" >> $fname
@@ -532,8 +548,16 @@ foreach n ( $NUMBER )
 				echo "date" >> $fname
 				echo " " >> $fname
 
+				set D = $DROPIT/Namelists/weekly/$RUNDIR[$COUNT]
+				if ( -d $D ) then
+				        find $D -name namelist.input\* -exec ls -1 {} \; >& .foo1
+	        			set EXTRAS = `cat .foo1 | sed 's/^.*\.//' | sort -u`
+					rm .foo1
+				else
+				        set EXTRAS = " "
+				endif
 				echo "set TCOUNT = 1" >> $fname
-				echo "foreach t ( $TEST[$COUNT] )" >> $fname
+				echo "foreach t ( $TEST[$COUNT] $EXTRAS )" >> $fname
 				echo "	date" >> $fname
 				echo '	if ( $TCOUNT == 1 ) ' "goto SKIP_test_0${n}${test_suffix}" >> $fname
 				echo "	echo '======================================================================'" >> $fname
@@ -631,8 +655,16 @@ foreach n ( $NUMBER )
 	set root2_file_o = $COMPILE[$COUNT]_${OPENMP_OPT}_$RUNDIR[$COUNT]
 	set root2_file_m = $COMPILE[$COUNT]_${MPI_OPT}_$RUNDIR[$COUNT]
 
+	set D = $DROPIT/Namelists/weekly/$RUNDIR[$COUNT]
+	if ( -d $D ) then
+	        find $D -name namelist.input\* -exec ls -1 {} \; >& .foo1
+	        set EXTRAS = `cat .foo1 | sed 's/^.*\.//' | sort -u`
+		rm .foo1
+	else
+	        set EXTRAS = " "
+	endif
 	set TCOUNT = 0
-	foreach t ( $TEST[$COUNT] )
+	foreach t ( $TEST[$COUNT] $EXTRAS )
 		@ TCOUNT ++
 		if ( $TCOUNT == 1 ) goto SKIP_THIS_TEST
 		if ( ( $SERIAL[$COUNT] == T ) && ( $OPENMP[$COUNT] == T ) ) then
