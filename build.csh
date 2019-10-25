@@ -652,6 +652,9 @@ echo "" >> last_only_once.csh
 echo "set SHARED = $SHARED" >> last_only_once.csh
 echo 'pushd ${SHARED}/OUTPUT >& /dev/null' >> last_only_once.csh
 echo "" >> last_only_once.csh
+echo "echo 'LISTING OF FILES'" >> last_only_once.csh
+echo "ls -ls" >> last_only_once.csh
+echo "" >> last_only_once.csh
 set COUNT = 1
 foreach n ( $NUMBER )
 
