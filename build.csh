@@ -626,15 +626,6 @@ SKIP_THIS_ONE:
 	@ COUNT ++
 end
 
-#	The last script to run, only once.
-if ( ( -e SUCCESS_RUN_WRF_d01_em_real_32_03FD ) && ( -e SUCCESS_RUN_WRF_d01_em_real_33_03FD ) ) then
-        diff -q SUCCESS_RUN_WRF_d01_em_real_32_03FD SUCCESS_RUN_WRF_d01_em_real_33_03FD
-        set OK = $status
-        echo SUCCESS_RUN_WRF_d01_em_real_32_03FD vs SUCCESS_RUN_WRF_d01_em_real_33_03FD status = $OK
-endif
-
-
-
 if ( -e last_only_once.csh ) rm last_only_once.csh
 touch last_only_once.csh
 chmod +x last_only_once.csh
@@ -649,11 +640,11 @@ echo "#	Run this script ONLY once" >> last_only_once.csh
 echo "#	This job runs outside of a container" >> last_only_once.csh
 echo "#	All test cases of all builds must finish first" >> last_only_once.csh
 echo "" >> last_only_once.csh
+echo "echo 'LISTING OF FILES'" >> last_only_once.csh
+echo "ls -lsR" >> last_only_once.csh
+echo "" >> last_only_once.csh
 echo "set SHARED = $SHARED" >> last_only_once.csh
 echo 'pushd ${SHARED}/OUTPUT >& /dev/null' >> last_only_once.csh
-echo "" >> last_only_once.csh
-echo "echo 'LISTING OF FILES'" >> last_only_once.csh
-echo "ls -ls" >> last_only_once.csh
 echo "" >> last_only_once.csh
 set COUNT = 1
 foreach n ( $NUMBER )
