@@ -253,7 +253,11 @@ foreach n ( $NUMBER )
 				echo "	docker exec" '$test' "ls -ls wrfoutput | grep _BUILD_ | grep $COMPILE[$COUNT]_${SERIAL_OPT} " >> $fname
 				echo "	date" >> $fname
 
+				echo "	echo 'PRE-PROC OUTPUT' " >> $fname
+				echo "	docker exec" '$test' "cat WRF/test/$COMPILE[$COUNT]/real.print.out " >> $fname
+				echo "	echo 'MODEL OUTPUT' " >> $fname
 				echo "	docker exec" '$test' "cat WRF/test/$COMPILE[$COUNT]/wrf.print.out " >> $fname
+				echo "	" >> $fname
 				echo "	docker exec" '$test' "ls -ls WRF/test/$COMPILE[$COUNT] | grep wrfout " >> $fname
 				echo "	docker exec" '$test' "ls -ls wrfoutput | grep _RUN_ | grep $COMPILE[$COUNT]_${SERIAL_OPT}_$RUNDIR[$COUNT]_"'$t ' >> $fname
 				echo "	" >> $fname
@@ -357,6 +361,9 @@ foreach n ( $NUMBER )
 				echo '	echo $OK for test $t' >> $fname
 				echo "	date" >> $fname
 				echo "	" >> $fname
+				echo "	echo 'PRE-PROC OUTPUT' " >> $fname
+				echo "	docker exec test_0${n}${test_suffix} cat WRF/test/$COMPILE[$COUNT]/real.print.out " >> $fname
+				echo "	echo 'MODEL OUTPUT' " >> $fname
 				echo "	docker exec test_0${n}${test_suffix} cat WRF/test/$COMPILE[$COUNT]/wrf.print.out " >> $fname
 				echo "	" >> $fname
 				echo "	docker exec test_0${n}${test_suffix} ls -ls WRF/test/$COMPILE[$COUNT] | grep wrfout " >> $fname
@@ -465,6 +472,9 @@ foreach n ( $NUMBER )
 				echo '	echo $OK for test $t' >> $fname
 				echo "	date" >> $fname
 				echo "	" >> $fname
+				echo "	echo 'PRE-PROC OUTPUT' " >> $fname
+				echo "	docker exec test_0${n}${test_suffix} cat WRF/test/$COMPILE[$COUNT]/real.print.out " >> $fname
+				echo "	echo 'MODEL OUTPUT' " >> $fname
 				echo "	docker exec test_0${n}${test_suffix} cat WRF/test/$COMPILE[$COUNT]/wrf.print.out " >> $fname
 				echo "	" >> $fname
 				echo "	docker exec test_0${n}${test_suffix} ls -ls WRF/test/$COMPILE[$COUNT] | grep wrfout " >> $fname
@@ -584,6 +594,9 @@ foreach n ( $NUMBER )
 				echo '	echo $OK for test $t' >> $fname
 				echo "	date" >> $fname
 				echo "	" >> $fname
+				echo "	echo 'PRE-PROC OUTPUT' " >> $fname
+				echo "	docker exec test_0${n}${test_suffix} cat WRF/test/$COMPILE[$COUNT]/real.print.out " >> $fname
+				echo "	echo 'MODEL OUTPUT' " >> $fname
 				echo "	docker exec test_0${n}${test_suffix} cat WRF/test/$COMPILE[$COUNT]/rsl.out.0000 " >> $fname
 				echo "	" >> $fname
 				echo "	docker exec test_0${n}${test_suffix} ls -ls WRF/test/$COMPILE[$COUNT] | grep wrfout " >> $fname
