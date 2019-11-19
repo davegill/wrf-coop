@@ -358,7 +358,7 @@ foreach n ( $NUMBER )
 				echo "	echo RUN WRF test_0${n}${test_suffix} for $COMPILE[$COUNT] $SERIAL_OPT $RUNDIR[$COUNT], NML = " '$t' >> $fname
 				echo "	docker exec test_0${n}${test_suffix} ./script.csh RUN $COMPILE[$COUNT] $SERIAL_OPT $RUNDIR[$COUNT]" '$t' >> $fname
         			echo '	set OK = $status' >> $fname
-				echo '	echo $OK for test $t' >> $fname
+				echo '	echo $OK = STATUS test_0${n}${test_suffix} $NAME[$COUNT] $COMPILE[$COUNT] $SERIAL_OPT $t' >> $fname
 				echo "	date" >> $fname
 				echo "	" >> $fname
 				echo "	echo 'PRE-PROC OUTPUT' " >> $fname
@@ -469,7 +469,7 @@ foreach n ( $NUMBER )
 				echo "	echo RUN WRF test_0${n}${test_suffix} for $COMPILE[$COUNT] $OPENMP_OPT $RUNDIR[$COUNT], NML = " '$t' >> $fname
 				echo "	docker exec test_0${n}${test_suffix} ./script.csh RUN $COMPILE[$COUNT] $OPENMP_OPT $RUNDIR[$COUNT]" '$t' "OMP_NUM_THREADS=$NP[$COUNT]" >> $fname
         			echo '	set OK = $status' >> $fname
-				echo '	echo $OK for test $t' >> $fname
+				echo '	echo $OK = STATUS test_0${n}${test_suffix} $NAME[$COUNT] $COMPILE[$COUNT] $OPENMP_OPT $t' >> $fname
 				echo "	date" >> $fname
 				echo "	" >> $fname
 				echo "	echo 'PRE-PROC OUTPUT' " >> $fname
@@ -591,7 +591,7 @@ foreach n ( $NUMBER )
 				echo "	docker exec test_0${n}${test_suffix} ./script.csh RUN $COMPILE[$COUNT] $MPI_OPT $RUNDIR[$COUNT]" '$t' "NP=$NP[$COUNT]" >> $fname
         			echo '	set OK = $status' >> $fname
 				endif
-				echo '	echo $OK for test $t' >> $fname
+				echo '	echo $OK = STATUS test_0${n}${test_suffix} $NAME[$COUNT] $COMPILE[$COUNT] $MPI_OPT $t' >> $fname
 				echo "	date" >> $fname
 				echo "	" >> $fname
 				echo "	echo 'PRE-PROC OUTPUT' " >> $fname
