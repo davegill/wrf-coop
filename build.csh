@@ -653,6 +653,9 @@ echo "#	Run this script ONLY once" >> last_only_once.csh
 echo "#	This job runs outside of a container" >> last_only_once.csh
 echo "#	All test cases of all builds must finish first" >> last_only_once.csh
 echo "" >> last_only_once.csh
+echo "echo 'Current Working Directory'" >> last_only_once.csh
+echo "pwd" >> last_only_once.csh
+echo "" >> last_only_once.csh
 echo "echo 'LISTING OF FILES'" >> last_only_once.csh
 echo "ls -lsR" >> last_only_once.csh
 echo "" >> last_only_once.csh
