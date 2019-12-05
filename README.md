@@ -80,7 +80,7 @@ Build the specific containers: em_real, NMM, Chem. These are 5-10 minutes each.
 > docker exec test_002 ./script.csh BUILD CLEAN 34 1 nmm_real -d J=-j@3 WRF_NMM_CORE=1
 > docker exec test_003 ./script.csh BUILD CLEAN 34 1 em_real -d J=-j@3 WRF_CHEM=1
 ```
-If your machine is _beefy_ enough, put these build jobs (as in "build a wrf executable") in the background, and ru them all at the same time.
+If your machine is _beefy_ enough, put these build jobs (as in "build a wrf executable") in the background, and run them all at the same time.
 ```
 > docker exec test_001 ./script.csh BUILD CLEAN 34 1 em_real -d J=-j@3 &
 > docker exec test_002 ./script.csh BUILD CLEAN 34 1 nmm_real -d J=-j@3 WRF_NMM_CORE=1 &
