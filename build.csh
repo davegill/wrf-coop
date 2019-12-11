@@ -131,6 +131,7 @@ echo "" >> single.csh
 echo "date" >> single.csh
 echo "set SHARED = $SHARED" >> single.csh
 echo 'if ( ! -d ${SHARED}/OUTPUT ) mkdir ${SHARED}/OUTPUT' >> single.csh
+echo 'chmod -R 777 ${SHARED}/OUTPUT' >> single.csh
 echo "" >> single.csh
 echo "date" >> single.csh
 echo 'set num_containers = `docker ps -a | wc -l`' >> single.csh
