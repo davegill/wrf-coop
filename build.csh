@@ -118,6 +118,101 @@ set SERIAL_OPT = 32
 set OPENMP_OPT = 33
 set    MPI_OPT = 34
 
+#	Info to determine if we eventually accomplish what we originally intended.
+
+set NUM_TESTS = ${#TEST}
+
+set NUM_BUILDS = 0
+set count = 0
+while ( $count < $NUM_TESTS )
+	@ count ++
+	if ( $SERIAL[$count] == T ) @ NUM_BUILDS ++
+	if ( $OPENMP[$count] == T ) @ NUM_BUILDS ++
+	if (    $MPI[$count] == T ) @ NUM_BUILDS ++
+end
+
+set NUM_COMPARISONS = 0
+set count = 0
+while ( $count < $NUM_TESTS )
+	@ count ++
+	if ( ( $SERIAL[$count] == T ) && ( $OPENMP[$count] == T ) ) then
+		set temp = `echo $TEST[$count] | wc -w`
+		@ temp --
+		@ NUM_COMPARISONS = $NUM_COMPARISONS + $temp
+	endif
+	if ( ( $SERIAL[$count] == T ) && (    $MPI[$count] == T ) ) then
+		set temp = `echo $TEST[$count] | wc -w`
+		@ temp --
+		@ NUM_COMPARISONS = $NUM_COMPARISONS + $temp
+	endif
+end
+
+set NUM_SIMS = 0
+set count = 0
+while ( $count < $NUM_TESTS )
+	@ count ++
+	if ( $SERIAL[$count] == T ) then
+		set temp = `echo $TEST[$count] | wc -w`
+		@ temp --
+		@ NUM_SIMS = $NUM_SIMS + $temp
+	endif
+	if ( $OPENMP[$count] == T ) then
+		set temp = `echo $TEST[$count] | wc -w`
+		@ temp --
+		@ NUM_SIMS = $NUM_SIMS + $temp
+	endif
+	if (    $MPI[$count] == T ) then
+		set temp = `echo $TEST[$count] | wc -w`
+		@ temp --
+		@ NUM_SIMS = $NUM_SIMS + $temp
+	endif
+end
+
+echo "                                                           " >  email_01.txt
+echo " WRF Scala Jenkins AWS Automated GitHub Testing            " >> email_01.txt
+echo " ==============================================            " >> email_01.txt
+echo " Number of Tests        : $NUM_TESTS                       " >> email_01.txt
+echo " Number of Builds       : $NUM_BUILDS                      " >> email_01.txt
+echo " Number of Simulations  : $NUM_SIMS                        " >> email_01.txt
+echo " Number of Comparisons  : $NUM_COMPARISONS                 " >> email_01.txt
+echo "                                                           " >> email_01.txt
+echo " 1. Download wrf_output.zip                                " >> email_01.txt
+echo "                                                           " >> email_01.txt
+echo " 2. Remove previous output_testcase directory              " >> email_01.txt
+echo "                                                           " >> email_01.txt
+echo " 3. Decompress file:                                       " >> email_01.txt
+echo "      unzip wrf_output.zip                                 " >> email_01.txt
+echo "                                                           " >> email_01.txt
+echo " 4. Go to output_testcase directory                        " >> email_01.txt
+echo "                                                           " >> email_01.txt
+echo " 5. Check files for Number of Tests                        " >> email_01.txt
+echo '      ls -1 | grep output_ | wc -l                         ' >> email_01.txt
+echo "                                                           " >> email_01.txt
+echo " 6. Check files for Number of Builds                       " >> email_01.txt
+echo '      grep -a " START" * | grep -av "CLEAN START" | wc -l  ' >> email_01.txt
+echo "                                                           " >> email_01.txt
+echo ' 7. Check files for Number of Executables (2 * # Builds)   ' >> email_01.txt
+echo '      grep -aw wrfuser * | grep -aw wrf | grep -a "WRF/main/" | grep -a ".exe" | wc -l' >> email_01.txt
+echo "                                                           " >> email_01.txt
+echo " 8. Check files for Number of Simulations                  " >> email_01.txt
+echo '      grep -a " = STATUS" * | wc -l                        ' >> email_01.txt
+echo "                                                           " >> email_01.txt
+echo " 9. Number of FAILed Simulations (should = 0)              " >> email_01.txt
+echo '      grep -a " = STATUS" * | grep -av "0 = STATUS" | wc -l' >> email_01.txt
+echo "    If there is a FAILed Simulation, which FAILed?         " >> email_01.txt
+echo '      grep -a " = STATUS" * | grep -av "0 = STATUS"        ' >> email_01.txt
+echo "    What are the namelist specifics of a FAILed case?      " >> email_01.txt
+echo '      wget https://www2.mmm.ucar.edu/wrf/dave/nml.tar      ' >> email_01.txt
+echo "                                                           " >> email_01.txt
+echo "10. Check files for Number of Comparisons                  " >> email_01.txt
+echo '      grep -a "status = " * | wc -l                        ' >> email_01.txt
+echo "                                                           " >> email_01.txt
+echo "11. Number of Comparisons not bit-for-bit (should = 0)     " >> email_01.txt
+echo '      grep -a "status = " * | grep -av "status = 0" | wc -l' >> email_01.txt
+echo "    If there is a FAILed bit-for bit, which FAILed?        " >> email_01.txt
+echo '      grep -a "status = " * | grep -av "status = 0"        ' >> email_01.txt
+echo "                                                           " >> email_01.txt
+
 #	The docker image needs to be constructed. 
 
 if ( -e single.csh ) rm single.csh
