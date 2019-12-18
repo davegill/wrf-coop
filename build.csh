@@ -189,7 +189,7 @@ echo " 5. Check files for Number of Tests                        " >> email_01.t
 echo '      ls -1 | grep output_ | wc -l                         ' >> email_01.txt
 echo "                                                           " >> email_01.txt
 echo " 6. Check files for Number of Builds                       " >> email_01.txt
-echo '      grep -a " START" * | grep -av "CLEAN START" | wc -l  ' >> email_01.txt
+echo '      grep -a " START" * | grep -av "CLEAN START" | grep -av "SIMULATION START" | wc -l  ' >> email_01.txt
 echo "                                                           " >> email_01.txt
 echo ' 7. Check files for Number of Executables (2 * # Builds)   ' >> email_01.txt
 echo '      grep -aw wrfuser * | grep -aw wrf | grep -a "WRF/main/" | grep -a ".exe" | wc -l' >> email_01.txt
