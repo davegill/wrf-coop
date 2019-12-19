@@ -339,14 +339,25 @@ foreach n ( $NUMBER )
 				echo "	date" >> $fname
 
 				echo "	docker exec" '$test ls -ls WRF/main/wrf.exe' >> $fname
+				echo '	set OK_WRF = $status' >> $fname
 				if      ( $COMPILE[$COUNT] == nmm_real ) then
 					echo "	docker exec" '$test ls -ls WRF/main/real_nmm.exe' >> $fname
+					echo '	set OK_PRE = $status' >> $fname
 				else if ( $COMPILE[$COUNT] == em_real ) then
 					echo "	docker exec" '$test ls -ls WRF/main/real.exe' >> $fname
+					echo '	set OK_PRE = $status' >> $fname
 				else
 					echo "	docker exec" '$test ls -ls WRF/main/ideal.exe' >> $fname
+					echo '	set OK_PRE = $status' >> $fname
 				endif
-				echo "	docker exec" '$test' "ls -ls wrfoutput | grep _BUILD_ | grep $COMPILE[$COUNT]_${SERIAL_OPT} " >> $fname
+				echo '	if ( ( $OK_WRF == 0 ) && ( $OK_PRE == 0 ) && ( $TCOUNT == 2 ) ) then' >> $fname
+				echo '		echo "SUCCESSFUL BUILD"' >> $fname
+				echo "		docker exec" '$test' "ls -ls wrfoutput | grep _BUILD_ | grep $COMPILE[$COUNT]_${SERIAL_OPT} " >> $fname
+				echo '	else if ( $TCOUNT == 2 ) then' >> $fname
+				echo '		echo "FAILED BUILD LOG START"' >> $fname
+				echo "		docker exec test_0${n}${test_suffix} cat WRF/compile.log.$COMPILE[$COUNT].${SERIAL_OPT}" >> $fname
+				echo '		echo "FAILED BUILD LOG END"' >> $fname
+				echo '	endif' >> $fname
 				echo "	date" >> $fname
 
 				echo "	echo 'PRE-PROC OUTPUT' " >> $fname
@@ -427,14 +438,25 @@ foreach n ( $NUMBER )
 				echo $string >> $fname
 				echo "date" >> $fname
 				echo "docker exec test_0${n}${test_suffix} ls -ls WRF/main/wrf.exe" >> $fname
+				echo 'set OK_WRF = $status' >> $fname
 				if      ( $COMPILE[$COUNT] == nmm_real ) then
 					echo "docker exec test_0${n}${test_suffix} ls -ls WRF/main/real_nmm.exe" >> $fname
+					echo 'set OK_PRE = $status' >> $fname
 				else if ( $COMPILE[$COUNT] == em_real ) then
 					echo "docker exec test_0${n}${test_suffix} ls -ls WRF/main/real.exe" >> $fname
+					echo 'set OK_PRE = $status' >> $fname
 				else
 					echo "docker exec test_0${n}${test_suffix} ls -ls WRF/main/ideal.exe" >> $fname
+					echo 'set OK_PRE = $status' >> $fname
 				endif
-				echo "docker exec test_0${n}${test_suffix} ls -ls wrfoutput | grep _BUILD_ | grep $COMPILE[$COUNT]_${SERIAL_OPT} " >> $fname
+				echo 'if ( ( $OK_WRF == 0 ) && ( $OK_PRE == 0 ) ) then' >> $fname
+				echo '	echo "SUCCESSFUL BUILD"' >> $fname
+				echo "	docker exec test_0${n}${test_suffix} ls -ls wrfoutput | grep _BUILD_ | grep $COMPILE[$COUNT]_${SERIAL_OPT} " >> $fname
+				echo 'else' >> $fname
+				echo '	echo "FAILED BUILD LOG START"' >> $fname
+				echo "	docker exec test_0${n}${test_suffix} cat WRF/compile.log.$COMPILE[$COUNT].${SERIAL_OPT}" >> $fname
+				echo '	echo "FAILED BUILD LOG END"' >> $fname
+				echo 'endif' >> $fname
 				echo "date" >> $fname
 				echo " " >> $fname
 
@@ -538,14 +560,25 @@ foreach n ( $NUMBER )
 				echo $string >> $fname
 				echo "date" >> $fname
 				echo "docker exec test_0${n}${test_suffix} ls -ls WRF/main/wrf.exe" >> $fname
+				echo 'set OK_WRF = $status' >> $fname
 				if      ( $COMPILE[$COUNT] == nmm_real ) then
 					echo "docker exec test_0${n}${test_suffix} ls -ls WRF/main/real_nmm.exe" >> $fname
+					echo 'set OK_PRE = $status' >> $fname
 				else if ( $COMPILE[$COUNT] == em_real ) then
 					echo "docker exec test_0${n}${test_suffix} ls -ls WRF/main/real.exe" >> $fname
+					echo 'set OK_PRE = $status' >> $fname
 				else
 					echo "docker exec test_0${n}${test_suffix} ls -ls WRF/main/ideal.exe" >> $fname
+					echo 'set OK_PRE = $status' >> $fname
 				endif
-				echo "docker exec test_0${n}${test_suffix} ls -ls wrfoutput | grep _BUILD_ | grep $COMPILE[$COUNT]_${OPENMP_OPT} " >> $fname
+				echo 'if ( ( $OK_WRF == 0 ) && ( $OK_PRE == 0 ) ) then' >> $fname
+				echo '	echo "SUCCESSFUL BUILD"' >> $fname
+				echo "	docker exec test_0${n}${test_suffix} ls -ls wrfoutput | grep _BUILD_ | grep $COMPILE[$COUNT]_${OPENMP_OPT} " >> $fname
+				echo 'else' >> $fname
+				echo '	echo "FAILED BUILD LOG START"' >> $fname
+				echo "	docker exec test_0${n}${test_suffix} cat WRF/compile.log.$COMPILE[$COUNT].${OPENMP_OPT}" >> $fname
+				echo '	echo "FAILED BUILD LOG END"' >> $fname
+				echo 'endif' >> $fname
 				echo "date" >> $fname
 				echo " " >> $fname
 
@@ -649,14 +682,25 @@ foreach n ( $NUMBER )
 				echo $string >> $fname
 				echo "date" >> $fname
 				echo "docker exec test_0${n}${test_suffix} ls -ls WRF/main/wrf.exe" >> $fname
+				echo 'set OK_WRF = $status' >> $fname
 				if      ( $COMPILE[$COUNT] == nmm_real ) then
 					echo "docker exec test_0${n}${test_suffix} ls -ls WRF/main/real_nmm.exe" >> $fname
+					echo 'set OK_PRE = $status' >> $fname
 				else if ( $COMPILE[$COUNT] == em_real ) then
 					echo "docker exec test_0${n}${test_suffix} ls -ls WRF/main/real.exe" >> $fname
+					echo 'set OK_PRE = $status' >> $fname
 				else
 					echo "docker exec test_0${n}${test_suffix} ls -ls WRF/main/ideal.exe" >> $fname
+					echo 'set OK_PRE = $status' >> $fname
 				endif
-				echo "docker exec test_0${n}${test_suffix} ls -ls wrfoutput | grep _BUILD_ | grep $COMPILE[$COUNT]_${MPI_OPT} " >> $fname
+				echo 'if ( ( $OK_WRF == 0 ) && ( $OK_PRE == 0 ) ) then' >> $fname
+				echo '	echo "SUCCESSFUL BUILD"' >> $fname
+				echo "	docker exec test_0${n}${test_suffix} ls -ls wrfoutput | grep _BUILD_ | grep $COMPILE[$COUNT]_${MPI_OPT} " >> $fname
+				echo 'else' >> $fname
+				echo '	echo "FAILED BUILD LOG START"' >> $fname
+				echo "	docker exec test_0${n}${test_suffix} cat WRF/compile.log.$COMPILE[$COUNT].${MPI_OPT}" >> $fname
+				echo '	echo "FAILED BUILD LOG END"' >> $fname
+				echo 'endif' >> $fname
 				echo "date" >> $fname
 				echo " " >> $fname
 
