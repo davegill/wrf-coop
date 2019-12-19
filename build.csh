@@ -351,7 +351,7 @@ foreach n ( $NUMBER )
 					echo '	set OK_PRE = $status' >> $fname
 				endif
 				echo '	if ( ( $OK_WRF == 0 ) && ( $OK_PRE == 0 ) && ( $TCOUNT == 2 ) ) then' >> $fname
-                                echo '		echo "SUCCESSFUL BUILD"' >> $fname
+				echo '		echo "SUCCESSFUL BUILD"' >> $fname
 				echo "		docker exec" '$test' "ls -ls wrfoutput | grep _BUILD_ | grep $COMPILE[$COUNT]_${SERIAL_OPT} " >> $fname
 				echo '	else if ( $TCOUNT == 2 ) then' >> $fname
 				echo '		echo "FAILED BUILD LOG START"' >> $fname
