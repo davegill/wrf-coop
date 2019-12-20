@@ -2,7 +2,7 @@
 
 Build a container without WRF, then use that to build a container with WRF.
 
-It takes too long to always rebuild the container from scratch.
+It takes too long to always rebuild the container with WRF from scratch.
 
 ### Build first image. 
 This image has the libs, data, directory structure, etc inside. The construction of this image uses the `Dockerfile-first_part` from this repository. This Docker setup was tested at https://github.com/davegill/travis_test. In the docker branch of the travis_test repo are the original `Dockerfile-template` and the `.travis.yml` files.
@@ -10,7 +10,7 @@ This image has the libs, data, directory structure, etc inside. The construction
 > cp Dockerfile-first_part Dockerfile
 > docker build -t wrf-coop --build-arg argname=regtest .
 ```
-
+The argument `argname=regtest` informs Docker as to how to build the image. With a regression test, we do not need all of the WPS source (and importantly, the large meteorological data and static data).
 
 Here's the first image (wrf-coop). A coop is the structure surrounding the actual things that we care about.
 ```
@@ -20,7 +20,7 @@ wrf-coop            latest              bd2082d1eb7d        19 minutes ago      
 centos              latest              9f38484d220f        5 weeks ago         202MB
 ```
 
-Once we have that image, we want to save it. That is the _WHOLE_ purpose of this exercise. Then we just pull it down and add in the WRF repository, and voi-fricking-la. Note, this is `firsttry`. I am at `fourthtry`.
+Once we have that image, we want to save it. That is the _WHOLE_ purpose of this exercise. Then we just pull it down and add in the WRF repository, and voi-fricking-la. Note, this is `firsttry`. I am at `fifthhtry`.
 ```
 > docker tag bd2082d1eb7d davegill/wrf-coop:firsttry
 
@@ -58,7 +58,7 @@ firsttry: digest: sha256:5ee88699d04e2867ff1bc2c437f604426483968608d6bab031ff721
 ```
 
 ### Build the second image
-The second image is faster (it requires a much shorter time to build), thank you very much. 
+The second image is faster (it requires a much shorter time to build the image), thank you very much. 
 ```
 > cp Dockerfile-second_part Dockerfile
 > docker build -t wrftest .
@@ -80,7 +80,7 @@ Build the specific containers: em_real, NMM, Chem. These are 5-10 minutes each.
 > docker exec test_002 ./script.csh BUILD CLEAN 34 1 nmm_real -d J=-j@3 WRF_NMM_CORE=1
 > docker exec test_003 ./script.csh BUILD CLEAN 34 1 em_real -d J=-j@3 WRF_CHEM=1
 ```
-If your machine is _beefy_ enough, put these build jobs (as in "build a wrf executable") in the background, and run them all at the same time.
+If your machine is _beefy_ enough, put these build jobs (as in "build a wrf executable") in the background, and run them all at the same time. Since each job is asking for `make` to use three parallel threads to speed up the build process of the WRF executables (`J=-j@3`), a _beefy_ enough machine would have more than 9 non-hyperthreaded processors.	
 ```
 > docker exec test_001 ./script.csh BUILD CLEAN 34 1 em_real -d J=-j@3 &
 > docker exec test_002 ./script.csh BUILD CLEAN 34 1 nmm_real -d J=-j@3 WRF_NMM_CORE=1 &
@@ -99,7 +99,20 @@ Run a single test in each container, takes less than a minute for each.
 0 for test 1
 ```
 
-Remember to stop and remove the containers, and remove the images. There likely are volumes that need to be pruned, also.
+Remember to stop and remove the containers, and remove the images. 
+```
+> docker ps -a
+``
+```
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+3f280433fd76        wrf_regtest         "/bin/tcsh"         About an hour ago   Up About an hour                        test_002m
+```
+```
+> docker stop test_002m
+> docker rm test_002m
+```
+
+There likely are volumes that need to be pruned, also.
 ```
 > docker system df
 > docker volume prune -f
