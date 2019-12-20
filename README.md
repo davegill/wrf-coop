@@ -102,8 +102,6 @@ Run a single test in each container, takes less than a minute for each.
 Remember to stop and remove the containers, and remove the images. 
 ```
 > docker ps -a
-``
-```
 CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
 3f280433fd76        wrf_regtest         "/bin/tcsh"         About an hour ago   Up About an hour                        test_002m
 ```
