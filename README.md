@@ -109,6 +109,15 @@ CONTAINER ID        IMAGE               COMMAND             CREATED             
 > docker stop test_002m
 > docker rm test_002m
 ```
+```
+> docker images
+REPOSITORY                    TAG                 IMAGE ID            CREATED             SIZE
+wrf_regtest                   latest              196313365c17        About an hour ago   4.72 GB
+docker.io/davegill/wrf-coop   fifthtry            efc665da99ef        7 months ago        4.28 GB
+```
+```
+docker rmi 196313365c17 efc665da99ef
+```
 
 There likely are volumes that need to be pruned, also.
 ```
