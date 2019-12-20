@@ -116,7 +116,7 @@ wrf_regtest                   latest              196313365c17        About an h
 docker.io/davegill/wrf-coop   fifthtry            efc665da99ef        7 months ago        4.28 GB
 ```
 ```
-docker rmi 196313365c17 efc665da99ef
+> docker rmi 196313365c17 efc665da99ef
 ```
 
 There likely are volumes that need to be pruned, also.
