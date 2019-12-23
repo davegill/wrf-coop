@@ -162,11 +162,12 @@ RUN if [ "$argname" = "tutorial" ] ; then curl -SL https://www2.mmm.ucar.edu/wrf
 RUN if [ "$argname" = "tutorial" ] ; then curl -SL https://www2.mmm.ucar.edu/wrf/src/namelists_v$NML_VERSION.tar.gz  | tar -xzC /wrf/wrfinput ; fi
 RUN if [ "$argname" = "tutorial" ] ; then curl -SL https://www2.mmm.ucar.edu/wrf/TUTORIAL_DATA/WRF_NCL_scripts.tar.gz | tar -xzC /wrf ; fi
 #RUN if [ "$argname" = "regtest" ]  ; then curl -SL https://www2.mmm.ucar.edu/wrf/dave/DATA/Data_small/data_SMALL.tar.gz | tar -xzC /wrf ; fi
-COPY data_smaller.tar /wrf/data_smaller.tar
-RUN tar -xf /wrf/data_smaller.tar \
-    && rm /wrf/data_smaller.tar
+RUN if [ "$argname" = "regtest" ]  ; then curl -SL https://www2.mmm.ucar.edu/wrf/dave/data_smaller.tar.gz | tar -xzC /wrf ; fi
+#COPY data_smaller.tar /wrf/data_smaller.tar
+#RUN tar -xf /wrf/data_smaller.tar \
+#    && rm /wrf/data_smaller.tar
 #RUN if [ "$argname" = "regtest" ]  ; then curl -SL https://www2.mmm.ucar.edu/wrf/dave/nml.tar.gz | tar -xzC /wrf ; fi
-RUN if [ "$argname" = "regtest" ]  ; then curl -SL https://www2.mmm.ucar.edu/wrf/dave/script.tar | tar -xC /wrf ; fi
+#RUN if [ "$argname" = "regtest" ]  ; then curl -SL https://www2.mmm.ucar.edu/wrf/dave/script.tar | tar -xC /wrf ; fi
 
 # Download wps source
 RUN if [ "$argname" = "tutorial" ] ; then git clone https://github.com/wrf-model/WPS.git WPS ; fi
