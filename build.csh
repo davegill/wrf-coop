@@ -54,7 +54,7 @@ if      ( $TEST_GEN == ALL ) then
 
 	set TEST      = ( \
 	                  "em_real        03DF 03FD 07 10 11 14 16 16DF 17 17AD 18 20 20NE 31 31AD 38 52DF 52FD 60NE 71 78 " \
-	                  "nmm_nest       01 01c 03 04a 06 07 15 " \
+	                  "nmm_hwrf       1NE 2NE 3NE 4 " \
 	                  "em_chem        1 2 5 " \
 	                  "em_quarter_ss  02 02NE 03 03NE 04 04NE 05 05NE 06 06NE 08 09 10 11NE 12NE 13NE 14NE " \
 	                  "em_b_wave      1 1NE 2 2NE 3 3NE 4 4NE 5 5NE " \
@@ -72,7 +72,7 @@ else if ( $TEST_GEN == SOME ) then
 
 	set TEST      = ( \
 	                  "em_real        03FD  " \
-	                  "nmm_nest       01  " \
+	                  "nmm_hwrf       1NE  " \
 	                  "em_chem        1   " \
 	                  "em_quarter_ss  02  " \
 	                  "em_b_wave      1   " \
@@ -84,7 +84,7 @@ else if ( $TEST_GEN == SOME ) then
 	                )
 	set TEST      = ( \
 	                  "em_real        03FD 10 11 20NE " \
-	                  "nmm_nest       01 03 04a 06 " \
+	                  "nmm_hwrf       1NE 2NE 3NE " \
 	                  "em_chem        1 2 5 " \
 	                  "em_quarter_ss  02NE 03 03NE 04 " \
 	                  "em_b_wave      1NE 2 2NE 3 " \
@@ -99,18 +99,19 @@ endif
 
 #	Options that are used for all test generation settings. 
 
-set SERIAL    = ( T           T              T           T             T           T           T              F           T           T           )
+set SERIAL    = ( T           F              T           T             T           T           T              F           T           T           )
 set OPENMP    = ( T           F              F           T             T           T           T              F           T           F           )
 set MPI       = ( T           T              T           T             T           T           T              T           T           F           )
-set NEST      = ( 1           1              1           1             1           1           1              3           1           0           )
-set NAME      = ( em          nmm            chem        qss           bwave       real8       qss8           move        fire        hill        )
+set NEST      = ( 1           3              1           1             1           1           1              3           1           0           )
+set NAME      = ( em          hwrf           chem        qss           bwave       real8       qss8           move        fire        hill        )
 set COMPILE   = ( em_real     nmm_real       em_real     em_quarter_ss em_b_wave   em_real     em_quarter_ss  em_real     em_fire     em_hill2d_x )
-set RUNDIR    = ( em_real     nmm_nest       em_chem     em_quarter_ss em_b_wave   em_real8    em_quarter_ss8 em_move     em_fire     em_hill2d_x )
+set RUNDIR    = ( em_real     nmm_hwrf       em_chem     em_quarter_ss em_b_wave   em_real8    em_quarter_ss8 em_move     em_fire     em_hill2d_x )
 set DASHOPT1  = ( -d          -d             -d          -d            -d          -d          -d             -d          -d          -d          )
 set DASHOPT2  = ( F           F              F           F             F           -r8         -r8            F           F           F           )
 set BUILDENV1 = ( F           WRF_NMM_CORE=1 WRF_CHEM=1  F             F           F           F              F           F           F           )
 set BUILDENV2 = ( J=-j@$PROCS J=-j@$PROCS    J=-j@$PROCS J=-j@$PROCS   J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS    J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS )
-#set SERIALBG  = ( T           T              F           T             T           T           T              F           F           F           )
+set BUILDENV3 = ( F           HWRF=1         F           F             F           F           F              F           F           F           )
+#set SERIALBG  = ( T           F              F           T             T           T           T              F           F           F           )
 set SERIALBG  = ( F           F              F           F             F           F           F              F           F           F           )
 set NP        = ( $PROCS      $PROCS         $PROCS      $PROCS        $PROCS      $PROCS      $PROCS         $PROCS      $PROCS      $PROCS      )
 
@@ -429,6 +430,10 @@ foreach n ( $NUMBER )
 					set str = ( $str $BUILDENV2[$COUNT] )
 				endif
 				set string = ( $string $str )
+				if ( $BUILDENV3[$COUNT] != F ) then
+					set str = ( $str $BUILDENV3[$COUNT] )
+				endif
+				set string = ( $string $str )
 
 				echo "echo Build container" >> $fname
 				echo "#docker run -it --name test_0${n}${test_suffix} " '-v $SHARED/OUTPUT:/wrf/wrfoutput wrf_regtest /bin/tcsh' >> $fname
@@ -551,6 +556,10 @@ foreach n ( $NUMBER )
 					set str = ( $str $BUILDENV2[$COUNT] )
 				endif
 				set string = ( $string $str )
+				if ( $BUILDENV3[$COUNT] != F ) then
+					set str = ( $str $BUILDENV3[$COUNT] )
+				endif
+				set string = ( $string $str )
 
 				echo "echo Build container" >> $fname
 				echo "#docker run -it --name test_0${n}${test_suffix} " '-v $SHARED/OUTPUT:/wrf/wrfoutput wrf_regtest /bin/tcsh' >> $fname
@@ -671,6 +680,10 @@ foreach n ( $NUMBER )
 				endif
 				if ( $BUILDENV2[$COUNT] != F ) then
 					set str = ( $str $BUILDENV2[$COUNT] )
+				endif
+				set string = ( $string $str )
+				if ( $BUILDENV3[$COUNT] != F ) then
+					set str = ( $str $BUILDENV3[$COUNT] )
 				endif
 				set string = ( $string $str )
 
