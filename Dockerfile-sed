@@ -10,7 +10,8 @@ RUN git clone _GIT_URL_ WRF \
   && git checkout _GIT_BRANCH_ \
   && cd ..
 
-RUN curl -SL https://www2.mmm.ucar.edu/wrf/dave/script.tar | tar -xC /wrf
+RUN curl -SL https://www2.mmm.ucar.edu/wrf/dave/script.tar | tar -xC /wrf \
+  && curl -SL https://www2.mmm.ucar.edu/wrf/dave/nml.tar.gz | tar -xzC /wrf
 
 VOLUME /wrf
 CMD ["/bin/tcsh"]

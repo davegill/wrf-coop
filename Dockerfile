@@ -16,7 +16,8 @@ RUN git clone _FORK_/_REPO_.git WRF \
   && git checkout _BRANCH_ \
   && cd ..
 
-RUN curl -SL https://www2.mmm.ucar.edu/wrf/dave/script.tar | tar -xC /wrf
+RUN curl -SL https://www2.mmm.ucar.edu/wrf/dave/script.tar | tar -xC /wrf \
+  && curl -SL https://www2.mmm.ucar.edu/wrf/dave/nml.tar.gz | tar -xzC /wrf
 
 #ADD nml.tar /wrf
 
