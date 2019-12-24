@@ -1,5 +1,5 @@
 #
-FROM davegill/wrf-coop:fifthtry
+FROM davegill/wrf-coop:sixthtry
 MAINTAINER Dave Gill <gill@ucar.edu>
 
 #RUN echo _HERE1_
