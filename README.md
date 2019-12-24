@@ -5,8 +5,6 @@ Build a container without WRF, then use that to build a container with WRF.
 It takes too long to always rebuild the container with WRF from scratch.
 
 ### Build first image. 
-This image has the libs, data, directory structure, etc inside. The construction of this image uses the `Dockerfile-first_part` from this repository. This Docker setup was tested at https://github.com/davegill/travis_test. In the docker branch of the travis_test repo are the original `Dockerfile-template` and the `.travis.yml` files.
-
 As of December 2019, this build / tag / push sequence must take place on a Linux machine. When trying to run this on a Mac, after 45 minutes of build time, you get:
 ```
 etotheipi> docker push davegill/wrf-coop
@@ -49,6 +47,8 @@ bdc7e8c79d1f: Waiting
 77b174a6a187: Waiting 
 denied: requested access to the resource is denied
 ```
+This image has the libs, data, directory structure, etc inside. The construction of this image uses the `Dockerfile-first_part` from this repository. This Docker setup was tested at https://github.com/davegill/travis_test. In the docker branch of the travis_test repo are the original `Dockerfile-template` and the `.travis.yml` files.
+
 ```
 > cp Dockerfile-first_part Dockerfile
 > docker build -t wrf-coop --build-arg argname=regtest .
