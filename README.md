@@ -6,6 +6,49 @@ It takes too long to always rebuild the container with WRF from scratch.
 
 ### Build first image. 
 This image has the libs, data, directory structure, etc inside. The construction of this image uses the `Dockerfile-first_part` from this repository. This Docker setup was tested at https://github.com/davegill/travis_test. In the docker branch of the travis_test repo are the original `Dockerfile-template` and the `.travis.yml` files.
+
+As of December 2019, this build / tag / push sequence must take place on a Linux machine. When trying to run this on a Mac, after 45 minutes of build time, you get:
+```
+etotheipi> docker push davegill/wrf-coop
+The push refers to repository [docker.io/davegill/wrf-coop]
+1c01cbaea4b8: Preparing 
+96dd30e2d9ec: Preparing 
+dbd99cfb48e8: Preparing 
+d2077632857f: Preparing 
+336a0a4ad4f4: Preparing 
+cc575835f8d4: Waiting 
+8844f6dd5393: Waiting 
+ef3923c49da1: Waiting 
+c57ce027abec: Waiting 
+d95b9b793e55: Waiting 
+d3d99b43d791: Waiting 
+987b6f729113: Waiting 
+aaf171c968f9: Waiting 
+38ae20a05bbf: Waiting 
+00cb8d467c5a: Waiting 
+9e8f7cbd1249: Waiting 
+d9767a7f89ec: Waiting 
+3e5c4dab6989: Waiting 
+d6304121d9e9: Waiting 
+2d3c96b16c25: Waiting 
+5239d65fffbc: Waiting 
+efb9e1f528df: Waiting 
+56c191e44487: Waiting 
+5dc1f34a4acf: Waiting 
+25c575725839: Waiting 
+d3709005b6e6: Waiting 
+1b5810566615: Waiting 
+217b19599265: Waiting 
+0e0618c626be: Waiting 
+2f6eb8fce98a: Waiting 
+cfd9822dfbcf: Waiting 
+a4cf543cbf0f: Waiting 
+bdc7e8c79d1f: Waiting 
+9c8f4f160f2a: Waiting 
+913a6c3d7109: Waiting 
+77b174a6a187: Waiting 
+denied: requested access to the resource is denied
+```
 ```
 > cp Dockerfile-first_part Dockerfile
 > docker build -t wrf-coop --build-arg argname=regtest .
@@ -20,7 +63,7 @@ wrf-coop            latest              bd2082d1eb7d        19 minutes ago      
 centos              latest              9f38484d220f        5 weeks ago         202MB
 ```
 
-Once we have that image, we want to save it. That is the _WHOLE_ purpose of this exercise. Then we just pull it down and add in the WRF repository, and voi-fricking-la. Note, this is `firsttry`. I am at `fifthhtry`.
+Once we have that image, we want to save it. That is the _WHOLE_ purpose of this exercise. Then we just pull it down and add in the WRF repository, and voi-fricking-la. Note, this is `firsttry`. I am at `sixthhtry`.
 ```
 > docker tag bd2082d1eb7d davegill/wrf-coop:firsttry
 
