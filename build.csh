@@ -429,7 +429,6 @@ foreach n ( $NUMBER )
 				if ( $BUILDENV2[$COUNT] != F ) then
 					set str = ( $str $BUILDENV2[$COUNT] )
 				endif
-				set string = ( $string $str )
 				if ( $BUILDENV3[$COUNT] != F ) then
 					set str = ( $str $BUILDENV3[$COUNT] )
 				endif
@@ -555,7 +554,6 @@ foreach n ( $NUMBER )
 				if ( $BUILDENV2[$COUNT] != F ) then
 					set str = ( $str $BUILDENV2[$COUNT] )
 				endif
-				set string = ( $string $str )
 				if ( $BUILDENV3[$COUNT] != F ) then
 					set str = ( $str $BUILDENV3[$COUNT] )
 				endif
@@ -681,7 +679,6 @@ foreach n ( $NUMBER )
 				if ( $BUILDENV2[$COUNT] != F ) then
 					set str = ( $str $BUILDENV2[$COUNT] )
 				endif
-				set string = ( $string $str )
 				if ( $BUILDENV3[$COUNT] != F ) then
 					set str = ( $str $BUILDENV3[$COUNT] )
 				endif
