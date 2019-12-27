@@ -84,7 +84,7 @@ else if ( $TEST_GEN == SOME ) then
 	                )
 	set TEST      = ( \
 	                  "em_real        03FD 10 11 20NE " \
-	                  "nmm_hwrf       3NE " \
+	                  "nmm_hwrf       1NE 2NE 3NE " \
 	                  "em_chem        1 2 5 " \
 	                  "em_quarter_ss  02NE 03 03NE 04 " \
 	                  "em_b_wave      1NE 2 2NE 3 " \
