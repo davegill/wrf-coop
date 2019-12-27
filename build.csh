@@ -169,50 +169,51 @@ while ( $count < $NUM_TESTS )
 	endif
 end
 
-echo "                                                           " >  email_01.txt
-echo " WRF Scala Jenkins AWS Automated GitHub Testing            " >> email_01.txt
-echo " ==============================================            " >> email_01.txt
-echo " Number of Tests        : $NUM_TESTS                       " >> email_01.txt
-echo " Number of Builds       : $NUM_BUILDS                      " >> email_01.txt
-echo " Number of Simulations  : $NUM_SIMS                        " >> email_01.txt
-echo " Number of Comparisons  : $NUM_COMPARISONS                 " >> email_01.txt
-echo "                                                           " >> email_01.txt
-echo " 1. Download wrf_output.zip                                " >> email_01.txt
-echo "                                                           " >> email_01.txt
-echo " 2. Remove previous output_testcase directory              " >> email_01.txt
-echo "                                                           " >> email_01.txt
-echo " 3. Decompress file:                                       " >> email_01.txt
-echo "      unzip wrf_output.zip                                 " >> email_01.txt
-echo "                                                           " >> email_01.txt
-echo " 4. Go to output_testcase directory                        " >> email_01.txt
-echo "                                                           " >> email_01.txt
-echo " 5. Check files for Number of Tests                        " >> email_01.txt
-echo '      ls -1 | grep output_ | wc -l                         ' >> email_01.txt
-echo "                                                           " >> email_01.txt
-echo " 6. Check files for Number of Builds                       " >> email_01.txt
-echo '      grep -a " START" * | grep -av "CLEAN START" | grep -av "SIMULATION START" | grep -av "LOG START" | wc -l  ' >> email_01.txt
-echo "                                                           " >> email_01.txt
-echo ' 7. Check files for Number of Executables (2 * # Builds)   ' >> email_01.txt
-echo '      grep -aw wrfuser * | grep -aw wrf | grep -a "WRF/main/" | grep -a ".exe" | wc -l' >> email_01.txt
-echo "                                                           " >> email_01.txt
-echo " 8. Check files for Number of Simulations                  " >> email_01.txt
-echo '      grep -a " = STATUS" * | wc -l                        ' >> email_01.txt
-echo "                                                           " >> email_01.txt
-echo " 9. Number of FAILed Simulations (should = 0)              " >> email_01.txt
-echo '      grep -a " = STATUS" * | grep -av "0 = STATUS" | wc -l' >> email_01.txt
-echo "    If there is a FAILed Simulation, which FAILed?         " >> email_01.txt
-echo '      grep -a " = STATUS" * | grep -av "0 = STATUS"        ' >> email_01.txt
-echo "    What are the namelist specifics of a FAILed case?      " >> email_01.txt
-echo '      wget https://www2.mmm.ucar.edu/wrf/dave/nml.tar      ' >> email_01.txt
-echo "                                                           " >> email_01.txt
-echo "10. Check files for Number of Comparisons                  " >> email_01.txt
-echo '      grep -a "status = " * | wc -l                        ' >> email_01.txt
-echo "                                                           " >> email_01.txt
-echo "11. Number of Comparisons not bit-for-bit (should = 0)     " >> email_01.txt
-echo '      grep -a "status = " * | grep -av "status = 0" | wc -l' >> email_01.txt
-echo "    If there is a FAILed bit-for bit, which FAILed?        " >> email_01.txt
-echo '      grep -a "status = " * | grep -av "status = 0"        ' >> email_01.txt
-echo "                                                           " >> email_01.txt
+echo "                                                                                              " >  email_01.txt
+echo " WRF Scala Jenkins AWS Automated GitHub Testing                                               " >> email_01.txt
+echo " ==============================================                                               " >> email_01.txt
+echo " Number of Tests        : $NUM_TESTS                                                          " >> email_01.txt
+echo " Number of Builds       : $NUM_BUILDS                                                         " >> email_01.txt
+echo " Number of Simulations  : $NUM_SIMS                                                           " >> email_01.txt
+echo " Number of Comparisons  : $NUM_COMPARISONS                                                    " >> email_01.txt
+echo "                                                                                              " >> email_01.txt
+echo " 1. Download wrf_output.zip                                                                   " >> email_01.txt
+echo "                                                                                              " >> email_01.txt
+echo " 2. Remove previous output_testcase directory                                                 " >> email_01.txt
+echo "                                                                                              " >> email_01.txt
+echo " 3. Decompress file:                                                                          " >> email_01.txt
+echo "      unzip wrf_output.zip                                                                    " >> email_01.txt
+echo "                                                                                              " >> email_01.txt
+echo " 4. Go to output_testcase directory                                                           " >> email_01.txt
+echo "                                                                                              " >> email_01.txt
+echo " 5. Check files for Number of Tests                                                           " >> email_01.txt
+echo '      ls -1 | grep output_ | wc -l                                                            ' >> email_01.txt
+echo "                                                                                              " >> email_01.txt
+echo " 6. Check files for Number of Builds                                                          " >> email_01.txt
+echo '      grep -a " START" output_* | grep -av "CLEAN START" | grep -av "SIMULATION START" | grep -av "LOG START" | wc -l  ' >> email_01.txt
+echo "                                                                                              " >> email_01.txt
+echo ' 7. Check files for Number of Executables (2 * # Builds)                                      ' >> email_01.txt
+echo '      grep -aw wrfuser output_* | grep -aw wrf | grep -a "WRF/main/" | grep -a ".exe" | wc -l' >> email_01.txt
+echo "                                                                                              " >> email_01.txt
+echo " 8. Check files for Number of Simulations                                                     " >> email_01.txt
+echo '      grep -a " = STATUS" output_* | wc -l                                                    ' >> email_01.txt
+echo "                                                                                              " >> email_01.txt
+echo " 9. Number of FAILed Simulations (should = 0)                                                 " >> email_01.txt
+echo '      grep -a " = STATUS" output_* | grep -av "0 = STATUS" | wc -l                            ' >> email_01.txt
+echo "    If there is a FAILed Simulation, which FAILed?                                            " >> email_01.txt
+echo '      grep -a " = STATUS" output_* | grep -av "0 = STATUS"                                    ' >> email_01.txt
+echo "    What are the namelist / IC specifics of a FAILed case?                                    " >> email_01.txt
+echo "      wget https://www2.mmm.ucar.edu/wrf/dave/nml.tar                                         " >> email_01.txt
+echo "      wget https://www2.mmm.ucar.edu/wrf/dave/data_smaller.tar.gz                             " >> email_01.txt
+echo "                                                                                              " >> email_01.txt
+echo "10. Check files for Number of Comparisons                                                     " >> email_01.txt
+echo '      grep -a "status = " output_* | wc -l                                                    ' >> email_01.txt
+echo "                                                                                              " >> email_01.txt
+echo "11. Number of Comparisons not bit-for-bit (should = 0)                                        " >> email_01.txt
+echo '      grep -a "status = " output_* | grep -av "status = 0" | wc -l                            ' >> email_01.txt
+echo "    If there is a FAILed bit-for bit, which FAILed?                                           " >> email_01.txt
+echo '      grep -a "status = " output_* | grep -av "status = 0"                                    ' >> email_01.txt
+echo "                                                                                              " >> email_01.txt
 
 #	The docker image needs to be constructed. 
 
