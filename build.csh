@@ -84,7 +84,7 @@ else if ( $TEST_GEN == SOME ) then
 	                )
 	set TEST      = ( \
 	                  "em_real        03FD 10 11 20NE " \
-	                  "nmm_hwrf       1NE 2NE 3NE " \
+	                  "nmm_hwrf       3NE " \
 	                  "em_chem        1 2 5 " \
 	                  "em_quarter_ss  02NE 03 03NE 04 " \
 	                  "em_b_wave      1NE 2 2NE 3 " \
@@ -190,7 +190,7 @@ echo " 5. Check files for Number of Tests                        " >> email_01.t
 echo '      ls -1 | grep output_ | wc -l                         ' >> email_01.txt
 echo "                                                           " >> email_01.txt
 echo " 6. Check files for Number of Builds                       " >> email_01.txt
-echo '      grep -a " START" * | grep -av "CLEAN START" | grep -av "SIMULATION START" | wc -l  ' >> email_01.txt
+echo '      grep -a " START" * | grep -av "CLEAN START" | grep -av "SIMULATION START" | grep -av "LOG START" | wc -l  ' >> email_01.txt
 echo "                                                           " >> email_01.txt
 echo ' 7. Check files for Number of Executables (2 * # Builds)   ' >> email_01.txt
 echo '      grep -aw wrfuser * | grep -aw wrf | grep -a "WRF/main/" | grep -a ".exe" | wc -l' >> email_01.txt
