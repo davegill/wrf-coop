@@ -4,7 +4,7 @@ Build a container without WRF, then use that to build a container with WRF.
 
 It takes too long to always rebuild the container with WRF from scratch.
 
-### Build first image. 
+### Build first image 
 As of December 2019, this build / tag / push sequence must take place on a Linux machine. When trying to run this on a Mac, after 45 minutes of build time, you get:
 ```
 etotheipi> docker push davegill/wrf-coop
