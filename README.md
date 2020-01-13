@@ -120,13 +120,13 @@ We do a few of these containers: real, nmm, chem. These are a few seconds each.
 Build the specific containers: em_real, NMM, Chem. These are 5-10 minutes each.
 ```
 > docker exec test_001 ./script.csh BUILD CLEAN 34 1 em_real -d J=-j@3
-> docker exec test_002 ./script.csh BUILD CLEAN 34 1 nmm_real -d J=-j@3 WRF_NMM_CORE=1
+> docker exec test_002 ./script.csh BUILD CLEAN 34 3 nmm_real -d J=-j@3 WRF_NMM_CORE=1 HWRF=1
 > docker exec test_003 ./script.csh BUILD CLEAN 34 1 em_real -d J=-j@3 WRF_CHEM=1
 ```
 If your machine is _beefy_ enough, put these build jobs (as in "build a wrf executable") in the background, and run them all at the same time. Since each job is asking for `make` to use three parallel threads to speed up the build process of the WRF executables (`J=-j@3`), a _beefy_ enough machine would have more than 9 non-hyperthreaded processors.	
 ```
 > docker exec test_001 ./script.csh BUILD CLEAN 34 1 em_real -d J=-j@3 &
-> docker exec test_002 ./script.csh BUILD CLEAN 34 1 nmm_real -d J=-j@3 WRF_NMM_CORE=1 &
+> docker exec test_002 ./script.csh BUILD CLEAN 34 1 nmm_real -d J=-j@3 WRF_NMM_CORE=1 HWRF=1 &
 > docker exec test_003 ./script.csh BUILD CLEAN 34 1 em_real -d J=-j@3 WRF_CHEM=1 &
 > wait
 ```
@@ -136,8 +136,8 @@ Run a single test in each container, takes less than a minute for each.
 ```
 > docker exec test_001 ./script.csh RUN em_real 34 em_real 01 NP=3 ; set OK = $status ; echo $OK for test 01
 0 for test 01
-> docker exec test_002 ./script.csh RUN nmm_real 34 nmm_nest 01 NP=3 ; set OK = $status ; echo $OK for test 01
-0 for test 01
+> docker exec test_002 ./script.csh RUN nmm_real 34 nmm_hwrf 1NE NP=3 ; set OK = $status ; echo $OK for test 1NE
+0 for test 1NE
 > docker exec test_003 ./script.csh RUN em_real 34 em_chem 1 NP=3 ; set OK = $status ; echo $OK for test 1
 0 for test 1
 ```
@@ -194,8 +194,9 @@ Run ./single.csh
 Run ./test_001s.csh
 Run ./test_001o.csh
 Run ./test_001m.csh
-Run ./test_002s.csh
 Run ./test_002m.csh
+Run ./test_003s.csh
+Run ./test_003m.csh
 ```
 
 Each manufactured job script looks similar to this:
@@ -245,7 +246,7 @@ date
 
 On a single desktop, a reasonable run-time command would be:
 ```
-> date ; ( ./single.csh ; ./test_001s.csh ; ./test_001o.csh ; ./test_001m.csh ; ./test_002s.csh ; ./test_002m.csh ) >& output ; date
+> date ; ( ./single.csh ; ./test_001s.csh ; ./test_001o.csh ; ./test_001m.csh ; ./test_002m.csh ; ./test_003s.csh ; ./test_003m.csh ;) >& output ; date
 ```
 
 To view how the status of the testing after the command is complete, search for `SUCCESS`. There should be four `SUCCESS` messages for each test conducted (in this example, we did five tests):
@@ -268,13 +269,9 @@ d01 2000-01-24_12:30:00 wrf: SUCCESS COMPLETE WRF
 0 -rw-r--r-- 1 wrfuser wrf 0 Apr 29 15:43 SUCCESS_RUN_REAL_em_real_34_03DF
 0 -rw-r--r-- 1 wrfuser wrf 0 Apr 29 15:44 SUCCESS_RUN_WRF_d01_em_real_34_03DF
 d01 2008-01-11_00:15:00 wrf: SUCCESS COMPLETE WRF
-0 -rw-r--r-- 1 wrfuser wrf 0 Apr 29 15:46 SUCCESS_BUILD_WRF_nmm_real_32
-0 -rw-r--r-- 1 wrfuser wrf 0 Apr 29 15:46 SUCCESS_RUN_REAL_nmm_real_32_01
-0 -rw-r--r-- 1 wrfuser wrf 0 Apr 29 15:47 SUCCESS_RUN_WRF_d01_nmm_real_32_01
-d01 2008-01-11_00:15:00 wrf: SUCCESS COMPLETE WRF
 0 -rw-r--r-- 1 wrfuser wrf 0 Apr 29 15:48 SUCCESS_BUILD_WRF_nmm_real_34
-0 -rw-r--r-- 1 wrfuser wrf 0 Apr 29 15:48 SUCCESS_RUN_REAL_nmm_real_34_01
-0 -rw-r--r-- 1 wrfuser wrf 0 Apr 29 15:49 SUCCESS_RUN_WRF_d01_nmm_real_34_01
+0 -rw-r--r-- 1 wrfuser wrf 0 Apr 29 15:48 SUCCESS_RUN_REAL_nmm_real_34_1NE
+0 -rw-r--r-- 1 wrfuser wrf 0 Apr 29 15:49 SUCCESS_RUN_WRF_d01_nmm_real_34_1NE
 ```
 
 When intending to run on multiple nodes, with the appropriate modifications, the `build.csh` would generate:
@@ -284,7 +281,6 @@ Run ./single.csh
 Run ./test_001s.csh
 Run ./test_001o.csh
 Run ./test_001m.csh
-Run ./test_002s.csh
 Run ./test_002m.csh
 Run ./test_003s.csh
 Run ./test_003m.csh
