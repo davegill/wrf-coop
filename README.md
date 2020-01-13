@@ -117,16 +117,16 @@ We construct a few containers from the `wrftest` image: real (test_001), nmm (te
 
 
 ### With those available containers, build the WRF code in three separate ways
-Build the specific containers: em_real, NMM, Chem. These are 5-10 minutes each.
+Build the specific containers: em_real (test_001), NMM (test_002), Chem (test_003). These each require 5-20 minutes each, with most of the time consumed in the compilation of the WRF object files from source.
 ```
 > docker exec test_001 ./script.csh BUILD CLEAN 34 1 em_real -d J=-j@3
 > docker exec test_002 ./script.csh BUILD CLEAN 34 3 nmm_real -d J=-j@3 WRF_NMM_CORE=1 HWRF=1
 > docker exec test_003 ./script.csh BUILD CLEAN 34 1 em_real -d J=-j@3 WRF_CHEM=1
 ```
-If your machine is _beefy_ enough, put these build jobs (as in "build a wrf executable") in the background, and run them all at the same time. Since each job is asking for `make` to use three parallel threads to speed up the build process of the WRF executables (`J=-j@3`), a _beefy_ enough machine would have more than 9 non-hyperthreaded processors.	
+If your machine is _beefy_ enough, put these build jobs (as in "build a wrf executable") in the background, and run them all at the same time. Since each job is asking for `make` to use three parallel threads to speed up the build process of the WRF executables (`J=-j@3`), a _beefy_ enough machine for these three tasks would have nine or more non-hyperthreaded processors.	
 ```
 > docker exec test_001 ./script.csh BUILD CLEAN 34 1 em_real -d J=-j@3 &
-> docker exec test_002 ./script.csh BUILD CLEAN 34 1 nmm_real -d J=-j@3 WRF_NMM_CORE=1 HWRF=1 &
+> docker exec test_002 ./script.csh BUILD CLEAN 34 3 nmm_real -d J=-j@3 WRF_NMM_CORE=1 HWRF=1 &
 > docker exec test_003 ./script.csh BUILD CLEAN 34 1 em_real -d J=-j@3 WRF_CHEM=1 &
 > wait
 ```
@@ -142,7 +142,8 @@ Run a single test in each container, takes less than a minute for each.
 0 for test 1
 ```
 
-Remember to stop and remove the containers, and remove the images. 
+### When the tests are completed
+Remember to stop and remove the containers, remove the images, and remove all local volumes. 
 ```
 > docker ps -a
 CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
@@ -164,8 +165,8 @@ docker.io/davegill/wrf-coop   fifthtry            efc665da99ef        7 months a
 
 There likely are volumes that need to be pruned, also.
 ```
-> docker system df
 > docker volume prune -f
+> docker system df
 ```
 
 
