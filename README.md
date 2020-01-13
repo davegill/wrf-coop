@@ -108,7 +108,7 @@ The second image is faster (it requires a much shorter time to build the image),
 ```
 
 ### With the second image, build three containers
-We do a few of these containers: real, nmm, chem. These are a few seconds each.
+We construct a few containers from the `wrftest` image: real (test_001), nmm (test_002), chem (test_003). These containers take only a few seconds each to create.
 ```
 > docker run -d -t --name test_001 wrftest
 > docker run -d -t --name test_002 wrftest
