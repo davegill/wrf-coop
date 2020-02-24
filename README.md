@@ -63,7 +63,7 @@ wrf-coop            latest              bd2082d1eb7d        19 minutes ago      
 centos              latest              9f38484d220f        5 weeks ago         202MB
 ```
 
-Once we have that image, we want to save it. That is the _WHOLE_ purpose of this exercise. Then we just pull it down and add in the WRF repository, and voi-fricking-la. Note, this is `firsttry`. I am at `seventhtry`.
+Once we have that image, we want to save it. That is the _WHOLE_ purpose of this exercise. Then we just pull it down and add in the WRF repository, and voi-fricking-la. Note, this is `firsttry`. I am at `eighthtry`.
 ```
 > docker tag bd2082d1eb7d davegill/wrf-coop:firsttry
 
