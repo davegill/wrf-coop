@@ -22,13 +22,13 @@ RUN yum -y install file gcc gcc-gfortran gcc-c++ glibc.i686 libgcc.i686 libpng-d
   openssh-clients openssh-server net-tools fontconfig libgfortran libXext libXrender \
   sudo epel-release git
 
-# Newer version 8 of GNU compiler, required for WRF 2008 Fortran constructs
+# Newer version 9 of GNU compiler, required to fix WRF RRTMG-derivative builds
 
 RUN yum -y install centos-release-scl \
- && yum -y install devtoolset-8 \
- && yum -y install devtoolset-8-gcc devtoolset-8-gcc-gfortran devtoolset-8-gcc-c++ \
- && scl enable devtoolset-8 bash \
- && scl enable devtoolset-8 tcsh 
+ && yum -y install devtoolset-9 \
+ && yum -y install devtoolset-9-gcc devtoolset-9-gcc-gfortran devtoolset-9-gcc-c++ \
+ && scl enable devtoolset-9 bash \
+ && scl enable devtoolset-9 tcsh 
 
 RUN yum -y install php-devel php-pear
 RUN yum -y install ImageMagick ImageMagick-devel
@@ -44,7 +44,7 @@ ENV J 4
 
 # Build OpenMPI
 RUN mkdir -p /wrf/libs/openmpi/BUILD_DIR
-RUN source /opt/rh/devtoolset-8/enable \
+RUN source /opt/rh/devtoolset-9/enable \
  && cd /wrf/libs/openmpi/BUILD_DIR \
  && curl -L -O https://download.open-mpi.org/release/open-mpi/v4.0/openmpi-4.0.0.tar.gz \
  && tar -xf openmpi-4.0.0.tar.gz \
@@ -60,7 +60,7 @@ RUN source /opt/rh/devtoolset-8/enable \
 
 # Build HDF5 libraries
 RUN mkdir -p /wrf/libs/hdf5/BUILD_DIR
-RUN source /opt/rh/devtoolset-8/enable \
+RUN source /opt/rh/devtoolset-9/enable \
  && cd /wrf/libs/hdf5/BUILD_DIR \
  && git clone https://bitbucket.hdfgroup.org/scm/hdffv/hdf5.git \
  && cd hdf5 \
@@ -76,7 +76,7 @@ ENV LD_LIBRARY_PATH /usr/local/lib
 RUN yum -y install libcurl-devel zlib-devel
 ENV NETCDF /wrf/libs/netcdf
 RUN mkdir -p ${NETCDF}/BUILD_DIR
-RUN source /opt/rh/devtoolset-8/enable \
+RUN source /opt/rh/devtoolset-9/enable \
  && cd ${NETCDF}/BUILD_DIR \
  && curl -L -O https://github.com/Unidata/netcdf-c/archive/v4.6.2.tar.gz \
  && curl -L -O https://github.com/Unidata/netcdf-fortran/archive/v4.4.5.tar.gz \
@@ -89,7 +89,7 @@ RUN source /opt/rh/devtoolset-8/enable \
  && echo dummy printout to keep travis happy ncc make
 
 # Build netCDF Fortran libraries
-RUN source /opt/rh/devtoolset-8/enable \
+RUN source /opt/rh/devtoolset-9/enable \
  && env \
  && cd ${NETCDF}/BUILD_DIR \
  && tar -xf v4.4.5.tar.gz \
@@ -115,7 +115,7 @@ RUN pip install --upgrade setuptools \
 RUN ldconfig -v
 
 # Build netCDF4-python libraries
-RUN source /opt/rh/devtoolset-8/enable \
+RUN source /opt/rh/devtoolset-9/enable \
  && cd ${NETCDF}/BUILD_DIR \
  && tar -xf v1.5.1rel.tar.gz \
  && cd netcdf4-python-1.5.1rel/ \
@@ -146,15 +146,15 @@ RUN echo export LDFLAGS="-lm" >> /etc/bashrc \
  && echo export NETCDF=${NETCDF} >> /etc/bashrc \
  && echo export JASPERINC=/usr/include/jasper/ >> /etc/bashrc \
  && echo export JASPERLIB=/usr/lib64/ >> /etc/bashrc \
- && echo export LD_LIBRARY_PATH="/opt/rh/devtoolset-8/root/usr/lib/gcc/x86_64-redhat-linux/8:/usr/lib64/openmpi/lib:${NETCDF}/lib:${LD_LIBRARY_PATH}" >> /etc/bashrc  \
- && echo export PATH=".:/opt/rh/devtoolset-8/root/usr/bin:/usr/lib64/openmpi/bin:${NETCDF}/bin:$PATH" >> /etc/bashrc
+ && echo export LD_LIBRARY_PATH="/opt/rh/devtoolset-9/root/usr/lib/gcc/x86_64-redhat-linux/9:/usr/lib64/openmpi/lib:${NETCDF}/lib:${LD_LIBRARY_PATH}" >> /etc/bashrc  \
+ && echo export PATH=".:/opt/rh/devtoolset-9/root/usr/bin:/usr/lib64/openmpi/bin:${NETCDF}/bin:$PATH" >> /etc/bashrc
 
 RUN echo setenv LDFLAGS "-lm" >> /etc/csh.cshrc \
  && echo setenv NETCDF "${NETCDF}" >> /etc/csh.cshrc \
  && echo setenv JASPERINC "/usr/include/jasper/" >> /etc/csh.cshrc \
  && echo setenv JASPERLIB "/usr/lib64/" >> /etc/csh.cshrc \
- && echo setenv LD_LIBRARY_PATH "/opt/rh/devtoolset-8/root/usr/lib/gcc/x86_64-redhat-linux/8:/usr/lib64/openmpi/lib:${NETCDF}/lib:${LD_LIBRARY_PATH}" >> /etc/csh.cshrc \
- && echo setenv PATH ".:/opt/rh/devtoolset-8/root/usr/bin:/usr/lib64/openmpi/bin:${NETCDF}/bin:$PATH" >> /etc/csh.cshrc
+ && echo setenv LD_LIBRARY_PATH "/opt/rh/devtoolset-9/root/usr/lib/gcc/x86_64-redhat-linux/9:/usr/lib64/openmpi/lib:${NETCDF}/lib:${LD_LIBRARY_PATH}" >> /etc/csh.cshrc \
+ && echo setenv PATH ".:/opt/rh/devtoolset-9/root/usr/bin:/usr/lib64/openmpi/bin:${NETCDF}/bin:$PATH" >> /etc/csh.cshrc
 
 RUN mkdir /wrf/.ssh ; echo "StrictHostKeyChecking no" > /wrf/.ssh/config
 COPY default-mca-params.conf /wrf/.openmpi/mca-params.conf
@@ -186,8 +186,8 @@ RUN if [ "$argname" = "tutorial" ] ; then git clone https://github.com/wrf-model
 ENV JASPERINC /usr/include/jasper
 ENV JASPERLIB /usr/lib64
 ENV NETCDF_classic 1
-ENV LD_LIBRARY_PATH /opt/rh/devtoolset-8/root/usr/lib/gcc/x86_64-redhat-linux/8:/usr/lib64/openmpi/lib:${NETCDF}/lib:${LD_LIBRARY_PATH}
-ENV PATH  .:/opt/rh/devtoolset-8/root/usr/bin:/usr/lib64/openmpi/bin:${NETCDF}/bin:$PATH
+ENV LD_LIBRARY_PATH /opt/rh/devtoolset-9/root/usr/lib/gcc/x86_64-redhat-linux/9:/usr/lib64/openmpi/lib:${NETCDF}/lib:${LD_LIBRARY_PATH}
+ENV PATH  .:/opt/rh/devtoolset-9/root/usr/bin:/usr/lib64/openmpi/bin:${NETCDF}/bin:$PATH
 
 RUN ssh-keygen -f /wrf/.ssh/id_rsa -t rsa -N '' \
     && chmod 600 /wrf/.ssh/config \
