@@ -203,7 +203,7 @@ echo '      grep -a " = STATUS" output_* | grep -av "0 = STATUS" | wc -l        
 echo "    If there is a FAILed Simulation, which FAILed?                                            " >> email_01.txt
 echo '      grep -a " = STATUS" output_* | grep -av "0 = STATUS"                                    ' >> email_01.txt
 echo "    What are the namelist / IC specifics of a FAILed case?                                    " >> email_01.txt
-echo "      wget https://www2.mmm.ucar.edu/wrf/dave/nml.tar                                         " >> email_01.txt
+echo "      wget https://www2.mmm.ucar.edu/wrf/dave/nml.tar.gz                                      " >> email_01.txt
 echo "      wget https://www2.mmm.ucar.edu/wrf/dave/data_smaller.tar.gz                             " >> email_01.txt
 echo "                                                                                              " >> email_01.txt
 echo "10. Check files for Number of Comparisons                                                     " >> email_01.txt
