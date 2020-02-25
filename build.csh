@@ -203,7 +203,7 @@ echo '      grep -a " = STATUS" output_* | grep -av "0 = STATUS" | wc -l        
 echo "    If there is a FAILed Simulation, which FAILed?                                            " >> email_01.txt
 echo '      grep -a " = STATUS" output_* | grep -av "0 = STATUS"                                    ' >> email_01.txt
 echo "    What are the namelist / IC specifics of a FAILed case?                                    " >> email_01.txt
-echo "      wget https://www2.mmm.ucar.edu/wrf/dave/nml.tar.gz                                      " >> email_01.txt
+echo "      wget https://www2.mmm.ucar.edu/wrf/dave/nml.tar                                         " >> email_01.txt
 echo "      wget https://www2.mmm.ucar.edu/wrf/dave/data_smaller.tar.gz                             " >> email_01.txt
 echo "                                                                                              " >> email_01.txt
 echo "10. Check files for Number of Comparisons                                                     " >> email_01.txt
@@ -251,6 +251,7 @@ echo "	sed -e 's/#ADD/ADD/' Dockerfile > .foo" >> single.csh
 echo "	mv .foo Dockerfile" >> single.csh
 echo "endif" >> single.csh
 echo "docker build -t wrf_regtest ." >> single.csh
+echo "docker build -f Dockerfile-NMM -t wrf_nmmregtest ." >> single.csh
 echo "date" >> single.csh
 echo "" >> single.csh
 echo "#####################   END OF JOB    #####################" >> single.csh
@@ -303,8 +304,13 @@ foreach n ( $NUMBER )
 				echo '	if ( $TCOUNT == 1 ) ' "goto aSKIP_test_0${n}${test_suffix}" >> $fname
 				echo "	date" >> $fname
 				echo "	echo Build container for" '$test' >> $fname
-				echo "	#docker run -it --name" '$test -v $SHARED/OUTPUT:/wrf/wrfoutput wrf_regtest /bin/tcsh' >> $fname
-				echo "	docker run -d -t --name" '$test -v $SHARED/OUTPUT:/wrf/wrfoutput wrf_regtest' >> $fname
+				if ( $n == 02 ) then
+					echo "	#docker run -it --name" '$test -v $SHARED/OUTPUT:/wrf/wrfoutput wrf_nmmregtest /bin/tcsh' >> $fname
+					echo "	docker run -d -t --name" '$test -v $SHARED/OUTPUT:/wrf/wrfoutput wrf_nmmregtest' >> $fname
+				else
+					echo "	#docker run -it --name" '$test -v $SHARED/OUTPUT:/wrf/wrfoutput wrf_regtest /bin/tcsh' >> $fname
+					echo "	docker run -d -t --name" '$test -v $SHARED/OUTPUT:/wrf/wrfoutput wrf_regtest' >> $fname
+				endif
 				echo "	date" >> $fname
 				echo "	echo Build WRF executable for" '$test' >> $fname
 				echo "	( $string"' ) &' >> $fname
@@ -381,11 +387,19 @@ foreach n ( $NUMBER )
 				echo "date" >> $fname
 
 				if      ( $JOB == INDEPENDENT ) then
-					echo "docker rmi wrf_regtest" >> $fname
+					if ( $n == 02 ) then
+						echo "docker rmi wrf_nmmregtest" >> $fname
+					else
+						echo "docker rmi wrf_regtest" >> $fname
+					endif
 					echo 'set hash = `docker images | grep -v REPOSITORY | ' "awk '{print " '$3' "}' " '`' >> $fname
 					echo 'docker rmi --force $hash' >> $fname
 				else if ( $JOB == SEQUENTIAL  ) then
-					echo "echo docker rmi wrf_regtest" >> $fname
+					if ( $n == 02 ) then
+						echo "echo docker rmi wrf_nmmregtest" >> $fname
+					else
+						echo "echo docker rmi wrf_regtest" >> $fname
+					endif
 					set hash = `docker images | grep -v REPOSITORY | awk '{print $3}'`
 					echo "echo docker rmi --force $hash" >> $fname
 				endif
@@ -436,8 +450,13 @@ foreach n ( $NUMBER )
 				set string = ( $string $str )
 
 				echo "echo Build container" >> $fname
-				echo "#docker run -it --name test_0${n}${test_suffix} " '-v $SHARED/OUTPUT:/wrf/wrfoutput wrf_regtest /bin/tcsh' >> $fname
-				echo "docker run -d -t --name test_0${n}${test_suffix} " '-v $SHARED/OUTPUT:/wrf/wrfoutput wrf_regtest' >> $fname
+				if ( $n == 02 ) then
+					echo "#docker run -it --name test_0${n}${test_suffix} " '-v $SHARED/OUTPUT:/wrf/wrfoutput wrf_nmmregtest /bin/tcsh' >> $fname
+					echo "docker run -d -t --name test_0${n}${test_suffix} " '-v $SHARED/OUTPUT:/wrf/wrfoutput wrf_nmmregtest' >> $fname
+				else
+					echo "#docker run -it --name test_0${n}${test_suffix} " '-v $SHARED/OUTPUT:/wrf/wrfoutput wrf_regtest /bin/tcsh' >> $fname
+					echo "docker run -d -t --name test_0${n}${test_suffix} " '-v $SHARED/OUTPUT:/wrf/wrfoutput wrf_regtest' >> $fname
+				endif
 				echo "date" >> $fname
 				echo "echo Build WRF executable" >> $fname
 				echo $string >> $fname
@@ -501,11 +520,19 @@ foreach n ( $NUMBER )
 				echo "docker rm test_0${n}${test_suffix}" >> $fname
 				echo "date" >> $fname
 				if      ( $JOB == INDEPENDENT ) then
-					echo "docker rmi wrf_regtest" >> $fname
+					if ( $n == 02 ) then
+						echo "docker rmi wrf_nmmregtest" >> $fname
+					else
+						echo "docker rmi wrf_regtest" >> $fname
+					endif
 					echo 'set hash = `docker images | grep davegill | ' "awk '{print " '$3' "}' " '`' >> $fname
 					echo 'docker rmi --force $hash' >> $fname
 				else if ( $JOB == SEQUENTIAL  ) then
-					echo "echo docker rmi wrf_regtest" >> $fname
+					if ( $n == 02 ) then
+						echo "echo docker rmi wrf_nmmregtest" >> $fname
+					else
+						echo "echo docker rmi wrf_regtest" >> $fname
+					endif
 					set hash = `docker images | grep davegill | awk '{print $3}'`
 					echo "echo docker rmi --force $hash" >> $fname
 				endif
@@ -561,8 +588,13 @@ foreach n ( $NUMBER )
 				set string = ( $string $str )
 
 				echo "echo Build container" >> $fname
-				echo "#docker run -it --name test_0${n}${test_suffix} " '-v $SHARED/OUTPUT:/wrf/wrfoutput wrf_regtest /bin/tcsh' >> $fname
-				echo "docker run -d -t --name test_0${n}${test_suffix} " '-v $SHARED/OUTPUT:/wrf/wrfoutput wrf_regtest' >> $fname
+				if ( $n == 02 ) then
+					echo "#docker run -it --name test_0${n}${test_suffix} " '-v $SHARED/OUTPUT:/wrf/wrfoutput wrf_nmmregtest /bin/tcsh' >> $fname
+					echo "docker run -d -t --name test_0${n}${test_suffix} " '-v $SHARED/OUTPUT:/wrf/wrfoutput wrf_nmmregtest' >> $fname
+				else
+					echo "#docker run -it --name test_0${n}${test_suffix} " '-v $SHARED/OUTPUT:/wrf/wrfoutput wrf_regtest /bin/tcsh' >> $fname
+					echo "docker run -d -t --name test_0${n}${test_suffix} " '-v $SHARED/OUTPUT:/wrf/wrfoutput wrf_regtest' >> $fname
+				endif
 				echo "date" >> $fname
 				echo "echo Build WRF executable" >> $fname
 				echo $string >> $fname
@@ -626,11 +658,19 @@ foreach n ( $NUMBER )
 				echo "docker rm test_0${n}${test_suffix}" >> $fname
 				echo "date" >> $fname
 				if      ( $JOB == INDEPENDENT ) then
-					echo "docker rmi wrf_regtest" >> $fname
+					if ( $n == 02 ) then
+						echo "docker rmi wrf_nmmregtest" >> $fname
+					else
+						echo "docker rmi wrf_regtest" >> $fname
+					endif
 					echo 'set hash = `docker images | grep davegill | ' "awk '{print " '$3' "}' " '`' >> $fname
 					echo 'docker rmi --force $hash' >> $fname
 				else if ( $JOB == SEQUENTIAL  ) then
-					echo "echo docker rmi wrf_regtest" >> $fname
+					if ( $n == 02 ) then
+						echo "echo docker rmi wrf_nmmregtest" >> $fname
+					else
+						echo "echo docker rmi wrf_regtest" >> $fname
+					endif
 					set hash = `docker images | grep davegill | awk '{print $3}'`
 					echo "echo docker rmi --force $hash" >> $fname
 				endif
@@ -686,8 +726,13 @@ foreach n ( $NUMBER )
 				set string = ( $string $str )
 
 				echo "echo Build container" >> $fname
-				echo "#docker run -it --name test_0${n}${test_suffix} " '-v $SHARED/OUTPUT:/wrf/wrfoutput wrf_regtest /bin/tcsh' >> $fname
-				echo "docker run -d -t --name test_0${n}${test_suffix} " '-v $SHARED/OUTPUT:/wrf/wrfoutput wrf_regtest' >> $fname
+				if ( $n == 02 ) then
+					echo "#docker run -it --name test_0${n}${test_suffix} " '-v $SHARED/OUTPUT:/wrf/wrfoutput wrf_nmmregtest /bin/tcsh' >> $fname
+					echo "docker run -d -t --name test_0${n}${test_suffix} " '-v $SHARED/OUTPUT:/wrf/wrfoutput wrf_nmmregtest' >> $fname
+				else
+					echo "#docker run -it --name test_0${n}${test_suffix} " '-v $SHARED/OUTPUT:/wrf/wrfoutput wrf_regtest /bin/tcsh' >> $fname
+					echo "docker run -d -t --name test_0${n}${test_suffix} " '-v $SHARED/OUTPUT:/wrf/wrfoutput wrf_regtest' >> $fname
+				endif
 				echo "date" >> $fname
 				echo "echo Build WRF executable" >> $fname
 				echo $string >> $fname
@@ -762,11 +807,19 @@ foreach n ( $NUMBER )
 				echo "docker rm test_0${n}${test_suffix}" >> $fname
 				echo "date" >> $fname
 				if      ( $JOB == INDEPENDENT ) then
-					echo "docker rmi wrf_regtest" >> $fname
+					if ( $n == 02 ) then
+						echo "docker rmi wrf_nmmregtest" >> $fname
+					else
+						echo "docker rmi wrf_regtest" >> $fname
+					endif
 					echo 'set hash = `docker images | grep davegill | ' "awk '{print " '$3' "}' " '`' >> $fname
 					echo 'docker rmi --force $hash' >> $fname
 				else if ( $JOB == SEQUENTIAL  ) then
-					echo "echo docker rmi wrf_regtest" >> $fname
+					if ( $n == 02 ) then
+						echo "echo docker rmi wrf_nmmregtest" >> $fname
+					else
+						echo "echo docker rmi wrf_regtest" >> $fname
+					endif
 					set hash = `docker images | grep davegill | awk '{print $3}'`
 					echo "echo docker rmi --force $hash" >> $fname
 				endif
