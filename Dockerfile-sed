@@ -1,5 +1,5 @@
 #
-FROM davegill/wrf-coop:sixthtry
+FROM davegill/wrf-coop:eighthtry
 MAINTAINER Dave Gill <gill@ucar.edu>
 
 #	DO NOT CHANGE UNDERSCORE GIT STRINGS
