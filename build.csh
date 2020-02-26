@@ -225,6 +225,10 @@ echo "#####################   TOP OF JOB    #####################" >> single.csh
 echo "" >> single.csh
 echo "#	This script builds the docker image for the rest of the testing harness " >> single.csh
 echo "" >> single.csh
+echo "#	The mandatory input argument is the name of the Dockerfile" >> single.csh
+echo '#	If the name is "Dockerfile", the ARW code is run' >> single.csh
+echo '#	If the name is "Dockerfile-NMM", the HWRF code is run' >> single.csh
+echo "" >> single.csh
 echo "date" >> single.csh
 echo "set SHARED = $SHARED" >> single.csh
 echo 'if ( ! -d ${SHARED}/OUTPUT ) mkdir ${SHARED}/OUTPUT' >> single.csh
@@ -249,9 +253,15 @@ echo "	cp -pr ${DROPIT}/Namelists ." >> single.csh
 echo "	tar -cf nml.tar Namelists" >> single.csh
 echo "	sed -e 's/#ADD/ADD/' Dockerfile > .foo" >> single.csh
 echo "	mv .foo Dockerfile" >> single.csh
+echo "	sed -e 's/#ADD/ADD/' Dockerfile-NMM > .foo" >> single.csh
+echo "	mv .foo Dockerfile-NMM" >> single.csh
 echo "endif" >> single.csh
-echo "docker build -t wrf_regtest ." >> single.csh
-echo "docker build -f Dockerfile-NMM -t wrf_nmmregtest ." >> single.csh
+echo "" >> single.csh
+echo 'if ( $1 == Dockerfile ) then' >> single.csh
+echo "	docker build -t wrf_regtest ." >> single.csh
+echo "else" >> single.csh
+echo '	docker build -f $1 -t wrf_nmmregtest .' >> single.csh
+echo "endif" >> single.csh
 echo "date" >> single.csh
 echo "" >> single.csh
 echo "#####################   END OF JOB    #####################" >> single.csh
