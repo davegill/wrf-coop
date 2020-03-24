@@ -16,8 +16,10 @@ RUN git clone _FORK_/_REPO_.git WRF \
   && git checkout _BRANCH_ \
   && cd ..
 
-RUN curl -SL https://www2.mmm.ucar.edu/wrf/dave/script.tar | tar -xC /wrf \
-  && curl -SL https://www2.mmm.ucar.edu/wrf/dave/nml.tar.gz | tar -xzC /wrf
+RUN git clone https://github.com/davegill/SCRIPTS.git SCRIPTS \
+  && cp SCRIPTS/rd_l2_norm.py . && chmod 755 rd_l2_norm.py \
+  && cp SCRIPTS/script.csh .    && chmod 755 script.csh    \
+  && ln -sf SCRIPTS/Namelists . 
 
 #ADD nml.tar /wrf
 
