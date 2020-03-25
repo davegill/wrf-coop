@@ -810,18 +810,25 @@ foreach n ( $NUMBER )
 				echo '	if ( $TCOUNT == 1 ) ' "goto SKIP_test_0${n}${test_suffix}" >> $fname
 				echo "	echo '======================================================================'" >> $fname
 				echo "	echo RUN WRF test_0${n}${test_suffix} for $COMPILE[$COUNT] $MPI_OPT $RUNDIR[$COUNT], NML = " '$t' >> $fname
-				if ( $RUNDIR[$COUNT] == em_real ) then
-				echo '	set is_nest = `echo $t | rev | cut -c 1-2 | rev`' >> $fname
-				echo '	if ( ( $is_nest == NE ) || ( $is_nest == VN ) ) then' >> $fname
-				echo "		docker exec test_0${n}${test_suffix} ./script.csh RUN $COMPILE[$COUNT] $MPI_OPT $RUNDIR[$COUNT]" '$t' "NP=9" >> $fname
-        			echo '		set OK = $status' >> $fname
-				echo '	else' >> $fname
-				echo "		docker exec test_0${n}${test_suffix} ./script.csh RUN $COMPILE[$COUNT] $MPI_OPT $RUNDIR[$COUNT]" '$t' "NP=$NP[$COUNT]" >> $fname
-        			echo '		set OK = $status' >> $fname
-				echo '	endif' >> $fname
+				if ( ( $RUNDIR[$COUNT] == em_real  ) || \
+				     ( $RUNDIR[$COUNT] == em_realA ) || \
+				     ( $RUNDIR[$COUNT] == em_realB ) || \
+				     ( $RUNDIR[$COUNT] == em_realC ) || \
+				     ( $RUNDIR[$COUNT] == em_realD ) || \
+				     ( $RUNDIR[$COUNT] == em_realE ) || \
+				     ( $RUNDIR[$COUNT] == em_realF ) || \
+				     ( $RUNDIR[$COUNT] == em_real8 ) ) then
+					echo '	set is_nest = `echo $t | rev | cut -c 1-2 | rev`' >> $fname
+					echo '	if ( ( $is_nest == NE ) || ( $is_nest == VN ) ) then' >> $fname
+					echo "		docker exec test_0${n}${test_suffix} ./script.csh RUN $COMPILE[$COUNT] $MPI_OPT $RUNDIR[$COUNT]" '$t' "NP=9" >> $fname
+	        			echo '		set OK = $status' >> $fname
+					echo '	else' >> $fname
+					echo "		docker exec test_0${n}${test_suffix} ./script.csh RUN $COMPILE[$COUNT] $MPI_OPT $RUNDIR[$COUNT]" '$t' "NP=$NP[$COUNT]" >> $fname
+	        			echo '		set OK = $status' >> $fname
+					echo '	endif' >> $fname
 				else
-				echo "	docker exec test_0${n}${test_suffix} ./script.csh RUN $COMPILE[$COUNT] $MPI_OPT $RUNDIR[$COUNT]" '$t' "NP=$NP[$COUNT]" >> $fname
-        			echo '	set OK = $status' >> $fname
+					echo "	docker exec test_0${n}${test_suffix} ./script.csh RUN $COMPILE[$COUNT] $MPI_OPT $RUNDIR[$COUNT]" '$t' "NP=$NP[$COUNT]" >> $fname
+					echo '	set OK = $status' >> $fname
 				endif
 				echo '	echo $OK =' "STATUS test_0${n}${test_suffix} $NAME[$COUNT] $COMPILE[$COUNT] $MPI_OPT" '$t' >> $fname
 				echo "	date" >> $fname
