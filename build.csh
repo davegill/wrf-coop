@@ -113,6 +113,25 @@ else if ( $TEST_GEN == SOME ) then
 	                  "em_realF       65DF 66FD 71 78 79 " \
 	                )
 
+	set TEST      = ( \
+	                  "em_real        fail_test fail_comparison " \
+	                  "nmm_hwrf       1NE    " \
+	                  "em_chem        1      " \
+	                  "em_quarter_ss  02     " \
+	                  "em_b_wave      1      " \
+	                  "em_real8       14     " \
+	                  "em_quarter_ss8 02     " \
+	                  "em_move        01     " \
+	                  "em_fire        01     " \
+	                  "em_hill2d_x    01     " \
+	                  "em_realA       03     " \
+	                  "em_realB       10     " \
+	                  "em_realC       17     " \
+	                  "em_realD       38     " \
+	                  "em_realE       52     " \
+	                  "em_realF       65DF   " \
+	                )
+
 endif
 
 #	Options that are used for all test generation settings. 
