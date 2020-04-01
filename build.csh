@@ -3,6 +3,7 @@
 #	Choose which scripts to manufacture
 
 set TEST_GEN = ALL
+set TEST_GEN = TEST
 set TEST_GEN = SOME
 
 #	How many procs do we play with: used for parallel build, openmp threads, mpi ranks
@@ -73,6 +74,28 @@ if      ( $TEST_GEN == ALL ) then
 
 else if ( $TEST_GEN == SOME ) then
 
+	set NUMBER    = ( 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16)
+	set TEST      = ( \
+	                  "em_real        3dtke conus rap tropical " \
+	                  "nmm_hwrf       1NE 2NE 3NE " \
+	                  "em_chem        1 2 5 " \
+	                  "em_quarter_ss  02NE 03 03NE 04 " \
+	                  "em_b_wave      1NE 2 2NE 3 " \
+	                  "em_real8       14 17AD " \
+	                  "em_quarter_ss8 06 08 09 " \
+	                  "em_move        01 " \
+	                  "em_fire        01 " \
+	                  "em_hill2d_x    01 " \
+	                  "em_realA       03 03DF 03FD 06 07NE " \
+	                  "em_realB       10 11 14 16 16DF " \
+	                  "em_realC       17 17AD 18 20 20NE " \
+	                  "em_realD       38 48 49 50 51 " \
+	                  "em_realE       52 52DF 52FD 60 60NE " \
+	                  "em_realF       65DF 66FD 71 78 79 " \
+	                )
+
+else if ( $TEST_GEN == test ) then
+
 	set NUMBER    = ( 01 02 ) # Logic is not set up to choose random (out of order) options
 	set NUMBER    = ( 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16)
 
@@ -93,24 +116,6 @@ else if ( $TEST_GEN == SOME ) then
 	                  "em_realD       38     " \
 	                  "em_realE       52     " \
 	                  "em_realF       65DF   " \
-	                )
-	set TEST      = ( \
-	                  "em_real        3dtke conus rap tropical " \
-	                  "nmm_hwrf       1NE 2NE 3NE " \
-	                  "em_chem        1 2 5 " \
-	                  "em_quarter_ss  02NE 03 03NE 04 " \
-	                  "em_b_wave      1NE 2 2NE 3 " \
-	                  "em_real8       14 17AD " \
-	                  "em_quarter_ss8 06 08 09 " \
-	                  "em_move        01 " \
-	                  "em_fire        01 " \
-	                  "em_hill2d_x    01 " \
-	                  "em_realA       03 03DF 03FD 06 07NE " \
-	                  "em_realB       10 11 14 16 16DF " \
-	                  "em_realC       17 17AD 18 20 20NE " \
-	                  "em_realD       38 48 49 50 51 " \
-	                  "em_realE       52 52DF 52FD 60 60NE " \
-	                  "em_realF       65DF 66FD 71 78 79 " \
 	                )
 
 	set TEST      = ( \
