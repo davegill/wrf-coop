@@ -857,6 +857,8 @@ foreach n ( $NUMBER )
 				     ( $RUNDIR[$COUNT] == em_realD ) || \
 				     ( $RUNDIR[$COUNT] == em_realE ) || \
 				     ( $RUNDIR[$COUNT] == em_realF ) || \
+				     ( $RUNDIR[$COUNT] == em_realG ) || \
+				     ( $RUNDIR[$COUNT] == em_realH ) || \
 				     ( $RUNDIR[$COUNT] == em_real8 ) ) then
 					echo '	set is_nest = `echo $t | rev | cut -c 1-2 | rev`' >> $fname
 					echo '	if ( ( $is_nest == NE ) || ( $is_nest == VN ) ) then' >> $fname
