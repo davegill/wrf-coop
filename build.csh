@@ -51,7 +51,7 @@ if ( ${#argv} == 0 ) then
 endif
 
 if      ( $TEST_GEN == ALL ) then
-	set NUMBER    = ( 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16)
+	set NUMBER    = ( 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18)
 
 	set TEST      = ( \
 	                  "em_real        3dtke cesm conus rap tropical " \
@@ -76,7 +76,7 @@ if      ( $TEST_GEN == ALL ) then
 
 else if ( $TEST_GEN == SOME ) then
 
-	set NUMBER    = ( 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16)
+	set NUMBER    = ( 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18)
 	set TEST      = ( \
 	                  "em_real        3dtke conus rap tropical " \
 	                  "nmm_hwrf       1NE 2NE 3NE " \
@@ -101,7 +101,7 @@ else if ( $TEST_GEN == SOME ) then
 else if ( $TEST_GEN == test ) then
 
 	set NUMBER    = ( 01 02 ) # Logic is not set up to choose random (out of order) options
-	set NUMBER    = ( 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16)
+	set NUMBER    = ( 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18)
 
 	set TEST      = ( \
 	                  "em_real        conus  " \
