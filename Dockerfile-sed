@@ -15,5 +15,7 @@ RUN git clone https://github.com/davegill/SCRIPTS.git SCRIPTS \
   && cp SCRIPTS/script.csh .    && chmod 755 script.csh    \
   && ln -sf SCRIPTS/Namelists . 
 
+RUN curl -SL https://www2.mmm.ucar.edu/wrf/dave/sbm.tar.gz | tar -xzC /wrf
+
 VOLUME /wrf
 CMD ["/bin/tcsh"]
