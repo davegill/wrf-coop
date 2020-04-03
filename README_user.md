@@ -5,7 +5,7 @@ docker.com
 
 ## Get the WRF container infrastructure
 
-1. Docker is needed
+1. Docker is needed   
 The WRF container build and run requires the use of docker. This may be downloaded at `docker.com`.
 
 2. Clone the WRF-specific wrf-coop repository. This is the code that builds the container for WRF.
