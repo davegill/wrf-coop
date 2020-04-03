@@ -367,12 +367,12 @@ foreach n ( $NUMBER )
 				if ( $n == 02 ) then
 					echo "	#docker run -it --name" '$test -v $SHARED/OUTPUT:/wrf/wrfoutput wrf_nmmregtest /bin/tcsh' >> $fname
 					echo "	#docker exec -it " '$test /bin/tcsh' >> $fname
-					echo "	#docker start -ai " '$test /bin/tcsh' >> $fname
+					echo "	#docker start -ai " '$test' >> $fname
 					echo "	docker run -d -t --name" '$test -v $SHARED/OUTPUT:/wrf/wrfoutput wrf_nmmregtest' >> $fname
 				else
 					echo "	#docker run -it --name" '$test -v $SHARED/OUTPUT:/wrf/wrfoutput wrf_regtest /bin/tcsh' >> $fname
 					echo "	#docker exec -it " '$test /bin/tcsh' >> $fname
-					echo "	#docker start -ai " '$test /bin/tcsh' >> $fname
+					echo "	#docker start -ai " '$test' >> $fname
 					echo "	docker run -d -t --name" '$test -v $SHARED/OUTPUT:/wrf/wrfoutput wrf_regtest' >> $fname
 				endif
 				echo "	date" >> $fname
@@ -517,12 +517,12 @@ foreach n ( $NUMBER )
 				if ( $n == 02 ) then
 					echo "#docker run -it --name test_0${n}${test_suffix} " '-v $SHARED/OUTPUT:/wrf/wrfoutput wrf_nmmregtest /bin/tcsh' >> $fname
 					echo "#docker exec -it test_0${n}${test_suffix} /bin/tcsh" >> $fname
-					echo "#docker start -ai test_0${n}${test_suffix} /bin/tcsh" >> $fname
+					echo "#docker start -ai test_0${n}${test_suffix}" >> $fname
 					echo "docker run -d -t --name test_0${n}${test_suffix} " '-v $SHARED/OUTPUT:/wrf/wrfoutput wrf_nmmregtest' >> $fname
 				else
 					echo "#docker run -it --name test_0${n}${test_suffix} " '-v $SHARED/OUTPUT:/wrf/wrfoutput wrf_regtest /bin/tcsh' >> $fname
 					echo "#docker exec -it test_0${n}${test_suffix} /bin/tcsh" >> $fname
-					echo "#docker start -ai test_0${n}${test_suffix} /bin/tcsh" >> $fname
+					echo "#docker start -ai test_0${n}${test_suffix}" >> $fname
 					echo "docker run -d -t --name test_0${n}${test_suffix} " '-v $SHARED/OUTPUT:/wrf/wrfoutput wrf_regtest' >> $fname
 				endif
 				echo "date" >> $fname
@@ -659,12 +659,12 @@ foreach n ( $NUMBER )
 				if ( $n == 02 ) then
 					echo "#docker run -it --name test_0${n}${test_suffix} " '-v $SHARED/OUTPUT:/wrf/wrfoutput wrf_nmmregtest /bin/tcsh' >> $fname
 					echo "#docker exec -it test_0${n}${test_suffix} /bin/tcsh" >> $fname
-					echo "#docker start -ai test_0${n}${test_suffix} /bin/tcsh" >> $fname
+					echo "#docker start -ai test_0${n}${test_suffix}" >> $fname
 					echo "docker run -d -t --name test_0${n}${test_suffix} " '-v $SHARED/OUTPUT:/wrf/wrfoutput wrf_nmmregtest' >> $fname
 				else
 					echo "#docker run -it --name test_0${n}${test_suffix} " '-v $SHARED/OUTPUT:/wrf/wrfoutput wrf_regtest /bin/tcsh' >> $fname
 					echo "#docker exec -it test_0${n}${test_suffix} /bin/tcsh" >> $fname
-					echo "#docker start -ai test_0${n}${test_suffix} /bin/tcsh" >> $fname
+					echo "#docker start -ai test_0${n}${test_suffix}" >> $fname
 					echo "docker run -d -t --name test_0${n}${test_suffix} " '-v $SHARED/OUTPUT:/wrf/wrfoutput wrf_regtest' >> $fname
 				endif
 				echo "date" >> $fname
@@ -801,12 +801,12 @@ foreach n ( $NUMBER )
 				if ( $n == 02 ) then
 					echo "#docker run -it --name test_0${n}${test_suffix} " '-v $SHARED/OUTPUT:/wrf/wrfoutput wrf_nmmregtest /bin/tcsh' >> $fname
 					echo "#docker exec -it test_0${n}${test_suffix} /bin/tcsh" >> $fname
-					echo "#docker start -ai test_0${n}${test_suffix} /bin/tcsh" >> $fname
+					echo "#docker start -ai test_0${n}${test_suffix}" >> $fname
 					echo "docker run -d -t --name test_0${n}${test_suffix} " '-v $SHARED/OUTPUT:/wrf/wrfoutput wrf_nmmregtest' >> $fname
 				else
 					echo "#docker run -it --name test_0${n}${test_suffix} " '-v $SHARED/OUTPUT:/wrf/wrfoutput wrf_regtest /bin/tcsh' >> $fname
 					echo "#docker exec -it test_0${n}${test_suffix} /bin/tcsh" >> $fname
-					echo "#docker start -ai test_0${n}${test_suffix} /bin/tcsh" >> $fname
+					echo "#docker start -ai test_0${n}${test_suffix}" >> $fname
 					echo "docker run -d -t --name test_0${n}${test_suffix} " '-v $SHARED/OUTPUT:/wrf/wrfoutput wrf_regtest' >> $fname
 				endif
 				echo "date" >> $fname
