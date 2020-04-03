@@ -2,15 +2,6 @@
 FROM davegill/wrf-coop:sixthtry
 MAINTAINER Dave Gill <gill@ucar.edu>
 
-#RUN echo _HERE1_
-#RUN git clone https://github.com/davegill/WRF.git davegill/WRF \
-#  && cd davegill/WRF \
-#  && git fetch origin +refs/pull/4/merge: \
-#  && git checkout -qf FETCH_HEAD \
-#  && cd .. \
-#  && mv WRF /wrf/WRF
-#RUN echo _HERE2_
-
 RUN git clone _FORK_/_REPO_.git WRF \
   && cd WRF \
   && git checkout _BRANCH_ \
@@ -20,8 +11,6 @@ RUN git clone https://github.com/davegill/SCRIPTS.git SCRIPTS \
   && cp SCRIPTS/rd_l2_norm.py . && chmod 755 rd_l2_norm.py \
   && cp SCRIPTS/script.csh .    && chmod 755 script.csh    \
   && ln -sf SCRIPTS/Namelists . 
-
-#ADD nml.tar /wrf
 
 VOLUME /wrf
 CMD ["/bin/tcsh"]
