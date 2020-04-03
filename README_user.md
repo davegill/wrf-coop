@@ -60,7 +60,7 @@ VOLUME /wrf
 CMD ["/bin/tcsh"]
 ```
 
-What need to be modified in both files is the location of the WRF repository to test. That is the section that has:
+What needs to be modified in both files is the location of the WRF repository to test. That is the section that has:
 ```
 RUN git clone _FORK_/_REPO_.git WRF \
   && cd WRF \
