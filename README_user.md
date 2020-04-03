@@ -109,7 +109,7 @@ You are now in the NMM container.
 
 ## Build executables from source, run tests
 
-Now, build the WRF code as usual. From the ARW container:
+Now, build the WRF code as usual. From inside the ARW container:
 
 ```
 cd WRF
