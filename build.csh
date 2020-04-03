@@ -95,7 +95,7 @@ else if ( $TEST_GEN == SOME ) then
 	                  "em_realE       52 52DF 52FD 60 60NE " \
 	                  "em_realF       65DF 66FD 71 78 79 " \
 	                  "em_realG       cmt kiaps1NE kiaps2 rala " \
-	                  "em_realH       solaraNE urb3aNE urb3bNE " \
+	                  "em_realH       solaraNE urb3bNE " \
 	                )
 
 else if ( $TEST_GEN == test ) then
