@@ -66,7 +66,7 @@ Several types of tests are easily available within this testing system.
 | kiaps2 |  16 |  14 |  14 |  14 |  1 |  91 |  4 |  1 |
 | solaraNE |  8 |  1 |  4 |  4 |  5 |  5 |  2 |  3 |
 | urb3bNE |  16 |  16 |  14 |  14 |  8 |  2 |  4 |  3 |
-
+| **Test** | **MP** | **CU** | **LW** | **SW** | **PBL** | **SFC** | **LSM** | **URB** |
 
 ## Get the WRF container infrastructure
 
