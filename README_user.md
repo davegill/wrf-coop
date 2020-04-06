@@ -137,11 +137,10 @@ RUN git clone _FORK_/_REPO_.git WRF \
   && cd ..
 ```
 
-For example, replacing those italicized names with the following:
-```
-_FORK_ => https://github.com/davegill
-_REPO_ => WRF
-_BRANCH_ => irr=3
+For example, replacing those italicized names with the following:   
+_FORK_ => `https://github.com/davegill`   
+_REPO_ => `WRF`   
+_BRANCH_ => `irr=3`   
 ```
 
 would yield the same final text to be used within both `Dockerfile` and `Dockerfile-NMM`.
