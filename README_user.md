@@ -29,11 +29,11 @@ The real-data ARW simulations are tested for the 2000 Jan 24-25 1200 UTC case (t
 The domain for the ARW real-data simulations is shown in the figure.
 ![Screen Shot 2020-04-06 at 10 52 27 AM](https://user-images.githubusercontent.com/12666234/78584017-d5263d00-77f4-11ea-89b3-54cdf8357090.png)
 
-Several types of tests are easily available within this testing system.
+Several types of tests are accessible within this docker testing system.
 
 1. Various build options are possible:
 
-|  Name              | Precision | 3D/2D | SERIAL | OPENMP | MPI | Ideal/Real | Nested |
+|  Build Type        | Precision | 3D/2D | SERIAL | OPENMP | MPI | Ideal/Real | Nested |
 | ------------------ |:---------:|:-----:|:------:|:------:|:---:|:----------:|:--:|
 |ARW em_real         |  4 and 8  |   3D  |  yes   | yes    | yes |    real    | Y |
 |NMM HWRF            |     4     |   3D  |        |        | yes |    real    | Y |
