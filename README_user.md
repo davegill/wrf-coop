@@ -141,7 +141,6 @@ For example, replacing those italicized names (including the leading and closing
 *\_FORK\_* => `https://github.com/davegill`   
 *\_REPO\_* => `WRF`   
 *\_BRANCH\_* => `irr=3`   
-```
 
 would yield the same final text to be used within both `Dockerfile` and `Dockerfile-NMM`.
 ```
