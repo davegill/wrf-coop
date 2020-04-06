@@ -2,9 +2,14 @@
 
 ### Purpose
 
-Testing the WRF model can present a challenge to developers. The particular test case used during the model development may be appropriate for demonstrating the correct and effective application for the specific purposes of the new option or enhanced feature. However, in many existing uses of the WRF model, the modified code may actually break the WRF model functionality. The primary purpose of this document is to provide developers with simple instructions to more fully vet their code before issuing a pull request to the WRF github repository. 
+Testing the WRF model can present a challenge to developers. The particular test case used during the model development may be appropriate for demonstrating the correct and effective application for the specific purposes of the new option or enhanced feature. However, in many existing uses of the WRF model, the modified code may actually break the WRF model functionality. The primary purpose of this document is to provide developers with simple instructions to more fully vet their code before issuing a pull request to the WRF github repository.
 
 ### What is tested
+
+The real-data ARW simulations are tested for the 2000 Jan 24-25 1200 UTC case (though typically for only the first half hour of the time period). 
+
+The domain for the ARW real-data simulations is shown in the figure.
+![Screen Shot 2020-04-06 at 10 52 27 AM](https://user-images.githubusercontent.com/12666234/78584017-d5263d00-77f4-11ea-89b3-54cdf8357090.png)
 
 Several types of tests are easily available within this testing system.
 
