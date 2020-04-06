@@ -21,6 +21,9 @@ Several types of tests are easily available within this testing system.
 |ARW moving nest     |     4     |   3D  |        |        | yes |    real    |
 |ARW 2D hill         |     4     |   2D  |  yes   |        |     |   ideal    |
 
+2. The testing uses the WRF run-time configuration file, `namelist.input` to exercise an expandable list of features. The current list of tests conducted is produced from information within two githhub respositories:
+   * All available namelists choices for em_real: https://github.com/davegill/SCRIPTS/tree/master/Namelists/weekly/em_real/MPI
+   * Requested tests: https://github.com/davegill/wrf-coop/blob/master/build.csh
 
 This testing capability requires the use of the the docker utility on your local machine (docker.com).
 
