@@ -129,7 +129,7 @@ VOLUME /wrf
 CMD ["/bin/tcsh"]
 ```
 
-What needs to be modified in both files is the location of the WRF repository to test. Look the section (in both files) that has:
+What needs to be modified in both files is the location of the WRF repository to test. Look for the section (in both files) that has:
 ```
 RUN git clone _FORK_/_REPO_.git WRF \
   && cd WRF \
@@ -137,7 +137,7 @@ RUN git clone _FORK_/_REPO_.git WRF \
   && cd ..
 ```
 
-For example, replacing those flagged names with the following:
+For example, replacing those italicized names with the following:
 ```
 _FORK_ => https://github.com/davegill
 _REPO_ => WRF
