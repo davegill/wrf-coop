@@ -139,8 +139,8 @@ RUN git clone _FORK_/_REPO_.git WRF \
 
 For example, replacing those italicized names (including the leading and closing underscore characters) with the following:   
 *\_FORK\_* => `https://github.com/davegill`   
-*_REPO_* => `WRF`   
-*_BRANCH_* => `irr=3`   
+*\_REPO\_* => `WRF`   
+*\_BRANCH\_* => `irr=3`   
 ```
 
 would yield the same final text to be used within both `Dockerfile` and `Dockerfile-NMM`.
@@ -151,7 +151,7 @@ RUN git clone https://github.com/davegill/WRF.git WRF \
   && cd ..
 ```
 
-Please note that some people have their repository name as `WRF-1`.
+Please note that some people have their repository name as `WRF-1` (instead of the more traditional `WRF`).
 
 2. Construct the docker image
 
@@ -162,7 +162,7 @@ docker build -t wrf_regtest .
 docker build -f Dockerfile-NMM -t wrf_nmmregtest .
 ```
 
-You have to be in the directory where the Dockerfiles are located (or else use the `f` option). The each of the commands takes about 5 minutes to complete (several GB of data and code). Afterwards, there are two docker images (`wrf_regtest` and `wrf_nmmregtest`) that can be used to build your WRF containers:
+You have to be in the directory where the Dockerfiles are located (or else use the `-f` option). Each of the two commands takes about 5 minutes to complete (downloading several GB of data and code). Afterwards, there are two docker images (`wrf_regtest` and `wrf_nmmregtest`) that can be used to build your WRF containers. The images that include the name `wrf-coop` are the public dockerhub pieces that include Linux, the compiler, user libraries (such as netcdf and mpi), user executables (again such as from netcdf and mpi), and directory structure for the WRF model. These preparatory images are not used directly by users.
 ```
 docker images
 
@@ -177,14 +177,17 @@ davegill/wrf-coop   sixthtry            c36f5f2b0cc6        3 months ago        
 
 1. Choose a shared directory for docker
 
-To get data and files between the host OS and the docker container, a user-defined assignment maps a local directory to a directory inside of the WRF container. For example, let's assume that the existing local directory is `/users/gill/DOCKER_STUFF`.
+To share data and files back and forth between the host OS and the docker container, a user-defined assignment maps a local host OS directory to a directory inside of the WRF container. For example, let's assume that the existing local directory on the host OS is `/users/gill/DOCKER_STUFF`.
 
-2. Build the containers
+2. Build the containers. Each of these take about 30 seconds to complete (nothing to download, just local processing). These commands should each be issued from separate terminal windows from the host OS (i.e. don't issue a docker command inside of a WRF docker container).
 
 ```
 docker run -it --name ARW -v /users/gill/DOCKER_STUFF:/wrf/wrfoutput wrf_regtest /bin/tcsh
 ```
-You are now in the ARW container.
+You are now in the ARW container. You'll notice that the prompt has changed:
+```
+[wrfuser@cc600ad4caea ~]$
+```
 
 In another window execute:
 ```
@@ -239,7 +242,7 @@ Timing for Writing wrfout_d01_2000-01-24_12:30:00 for domain        1:    0.1585
 d01 2000-01-24_12:30:00 wrf: SUCCESS COMPLETE WRF
 ```
 
-To visualize the data, copy or link the file to `/wrf/wrfoutput`:
+To visualize the data, copy or link the file to `/wrf/wrfoutput` (which was chosen as the docker shared directory location). 
 ```
 cp wrfout_d01_2000-01-24_12:00:00 /wrf/wrfoutput/
 ```
@@ -250,4 +253,46 @@ cd /users/gill/DOCKER_STUFF
 ls -ls
 total 78936
 78936 -rw-r--r--  1 gill  1500  40413808 Apr  3 14:19 wrfout_d01_2000-01-24_12:00:00
+```
+
+## Docker Clean Up
+
+When running docker containers, approximately 5-6 GB of disk space is used per container. Exiting from a container simply stops the container, but does not kill the container process. Similarly, removing the container process does not remove the docker WRF images. 
+
+### Stop, re-enter, and remove a docker container
+
+From a host OS terminal window and while you are still in the docker container in another terminal window, you can see the running containers:
+```
+docker ps -a
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS               NAMES
+cc600ad4caea        wrf_regtest         "/usr/bin/entrypoint…"   3 minutes ago       Up 2 minutes                            ARW
+```
+Once you exit the docker container, the status of the container changes from `Up` to `Exited`.
+```
+docker ps -a
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS                     PORTS               NAMES
+cc600ad4caea        wrf_regtest         "/usr/bin/entrypoint…"   4 minutes ago       Exited (0) 5 seconds ago                       ARW
+```
+You can get back into that exact container:
+```
+docker start -ai ARW
+```
+Once a container is running, other host OS terminal windows may enter the same container:
+```
+docker exec -it ARW /bin/tcsh
+```
+Once the docker container status is `Exited`, the container may be removed. This step is typically used when building a new container. Removing the container is also required when the intention is to remove the docker image (by default, you cannot remove an image that has a container).
+
+What docker images are available to remove:
+```
+docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+wrf_nmmregtest      latest              13b80465a2f4        2 days ago          5.78GB
+wrf_regtest         latest              d7dd1400f486        2 days ago          6.14GB
+davegill/wrf-coop   eighthtry           56930417513a        5 weeks ago         5.59GB
+davegill/wrf-coop   sixthtry            c36f5f2b0cc6        3 months ago        5.32GB
+```
+As mentioned previously, leave the `wrf-coop` images alone. To remove the images that made both the `ARW` and `NMM` containers (in the above example):
+```
+docker rmi 13b80465a2f4 d7dd1400f486
 ```
