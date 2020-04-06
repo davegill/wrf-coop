@@ -21,7 +21,7 @@ Several types of tests are easily available within this testing system.
 |ARW moving nest     |     4     |   3D  |        |        | yes |    real    |
 |ARW 2D hill         |     4     |   2D  |  yes   |        |     |   ideal    |
 
-2. The testing uses the WRF run-time configuration file, `namelist.input` to exercise an expandable list of features. The current list of tests conducted is produced from information within two githhub respositories:
+2. The testing uses the WRF run-time configuration file, `namelist.input` to exercise an expandable list of features that are all included within the WRF docker container. The current list of tests conducted is produced from information within two githhub respositories:
    * All available namelists choices for em_real: https://github.com/davegill/SCRIPTS/tree/master/Namelists/weekly/em_real/MPI
    * Requested tests: https://github.com/davegill/wrf-coop/blob/master/build.csh
 
@@ -68,16 +68,13 @@ Several types of tests are easily available within this testing system.
 | urb3bNE |  16 |  16 |  14 |  14 |  8 |  2 |  4 |  3 |
 
 
-
-
-This testing capability requires the use of the the docker utility on your local machine (docker.com).
-
 ## Get the WRF container infrastructure
 
 1. Docker is needed   
-The WRF container build and run requires the use of docker. This may be downloaded at `docker.com`.
 
-2. Clone the WRF-specific wrf-coop repository. This is the code that builds the container for WRF.
+The capability for the build and run testing (using the WRF container) necessarily requires the use of the the docker utility on your local machine (docker.com).
+
+2. To start the process of constructing a working WRF docker container, clone the WRF-specific wrf-coop repository. This is the code that eventually builds the container structures for WRF.
 ```
 git clone https://github.com/davegill/wrf-coop
 cd wrf-coop
@@ -85,7 +82,7 @@ cd wrf-coop
 
 ## Prepare the docker image
 
-1. Edit the runtime files for docker: `Dockerfile` and `Dockerfile-NMM`. 
+1. From inside the top-level `wrf-coop` directory, edit the runtime files for docker to test the single specific WRF fork, repository, and branch: `Dockerfile` and `Dockerfile-NMM`. 
 
 Here is the entire Dockerfile for ARW: `Dockerfile`:
 ```
