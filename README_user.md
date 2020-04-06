@@ -2,7 +2,11 @@
 
 ### Purpose
 
-Contributors who intend to propose modifications the WRF repository have responsibilities beyond the tests to validate the proper function of feature or option. Please see https://www2.mmm.ucar.edu/wrf/users/contrib_info.php for the full process for getting code into the WRF repository. The primary repsponsibilities are:
+Contributors who intend to propose modifications the WRF repository have responsibilities beyond the tests to validate the proper function of feature or option. 
+
+Please see https://www2.mmm.ucar.edu/wrf/users/contrib_info.php for the full process for getting code into the WRF repository. 
+
+The primary repsponsibilities for a contributing developer:
    * Meeting WRF coding standards
    * Performing code testing
    * Warning the Development Committee of limiting assumptions or possible code conflicts
