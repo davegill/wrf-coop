@@ -137,8 +137,8 @@ RUN git clone _FORK_/_REPO_.git WRF \
   && cd ..
 ```
 
-For example, replacing those italicized names (including the leading an closing underscore characters) with the following:   
-*_FORK_* => `https://github.com/davegill`   
+For example, replacing those italicized names (including the leading and closing underscore characters) with the following:   
+*\_FORK\_* => `https://github.com/davegill`   
 *_REPO_* => `WRF`   
 *_BRANCH_* => `irr=3`   
 ```
