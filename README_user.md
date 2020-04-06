@@ -10,16 +10,16 @@ Several types of tests are easily available within this testing system.
 
 1. Various build options are possible:
 
-|  Name              | Precision | 3D/2D | SERIAL | OPENMP | MPI | Ideal/Real |
-| ------------------ |:---------:|:-----:|:------:|:------:|:---:|:----------:|
-|ARW em_real         |  4 and 8  |   3D  |  yes   | yes    | yes |    real    |
-|NMM HWRF            |     4     |   3D  |        |        | yes |    real    |
-|ARW chemistry       |     4     |   3D  |  yes   |        | yes |    real    |
-|ARW super cell      |  4 and 8  |   3D  |  yes   | yes    | yes |   ideal    |
-|ARW baroclinic wave |     4     |   3D  |  yes   | yes    | yes |   ideal    |
-|ARW fire            |     4     |   3D  |  yes   | yes    | yes |   ideal    |
-|ARW moving nest     |     4     |   3D  |        |        | yes |    real    |
-|ARW 2D hill         |     4     |   2D  |  yes   |        |     |   ideal    |
+|  Name              | Precision | 3D/2D | SERIAL | OPENMP | MPI | Ideal/Real | Nested |
+| ------------------ |:---------:|:-----:|:------:|:------:|:---:|:----------:|:--:|
+|ARW em_real         |  4 and 8  |   3D  |  yes   | yes    | yes |    real    | Y |
+|NMM HWRF            |     4     |   3D  |        |        | yes |    real    | Y |
+|ARW chemistry       |     4     |   3D  |  yes   |        | yes |    real    | N |
+|ARW super cell      |  4 and 8  |   3D  |  yes   | yes    | yes |   ideal    | Y |
+|ARW baroclinic wave |     4     |   3D  |  yes   | yes    | yes |   ideal    | Y |
+|ARW fire            |     4     |   3D  |  yes   | yes    | yes |   ideal    | N |
+|ARW moving nest     |     4     |   3D  |        |        | yes |    real    | Y |
+|ARW 2D hill         |     4     |   2D  |  yes   |        |     |   ideal    | N |
 
 2. The testing uses the WRF run-time configuration file, `namelist.input` to exercise an expandable list of features that are all included within the WRF docker container. The current list of tests conducted is produced from information within two githhub respositories:
    * All available namelists choices for em_real: https://github.com/davegill/SCRIPTS/tree/master/Namelists/weekly/em_real/MPI
