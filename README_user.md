@@ -1,6 +1,26 @@
 # How to use the WRF Docker Containers
 
-Testing the WRF model can present a challenge to developers. The particular test case used during the model development may be appropriate for demonstrating the correct and effective application for the specific purposes of the new option or enhanced feature. However, in many existing uses of the WRF model, the modified code may actually the WRF model functionality. The primary purpose of this document is to provide developers with simple instructions to more fully vet their code before issuing a pull request to the WRF github repository.
+### Purpose
+
+Testing the WRF model can present a challenge to developers. The particular test case used during the model development may be appropriate for demonstrating the correct and effective application for the specific purposes of the new option or enhanced feature. However, in many existing uses of the WRF model, the modified code may actually break the WRF model functionality. The primary purpose of this document is to provide developers with simple instructions to more fully vet their code before issuing a pull request to the WRF github repository. 
+
+### What is tested
+
+Several types of tests are easily available within this testing system.
+
+1. Various build options are possible:
+
+|  Name              | Precision | 3D/2D | SERIAL | OPENMP | MPI | Ideal/Real |
+| ------------------ |:---------:|:-----:|:------:|:------:|:---:|:----------:|
+|ARW em_real         |  4 and 8  |   3D  |  yes   | yes    | yes |    real    |
+|NMM HWRF            |     4     |   3D  |        |        | yes |    real    |
+|ARW chemistry       |     4     |   3D  |  yes   |        | yes |    real    |
+|ARW super cell      |  4 and 8  |   3D  |  yes   | yes    | yes |   ideal    |
+|ARW baroclinic wave |     4     |   3D  |  yes   | yes    | yes |   ideal    |
+|ARW fire            |     4     |   3D  |  yes   | yes    | yes |   ideal    |
+|ARW moving nest     |     4     |   3D  |        |        | yes |    real    |
+|ARW 2D hill         |     4     |   2D  |  yes   |        |     |   ideal    |
+
 
 This testing capability requires the use of the the docker utility on your local machine (docker.com).
 
