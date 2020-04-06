@@ -2,7 +2,21 @@
 
 ### Purpose
 
-Testing the WRF model can present a challenge to developers. The particular test case used during the model development may be appropriate for demonstrating the correct and effective application for the specific purposes of the new option or enhanced feature. However, in many existing uses of the WRF model, the modified code may actually break the WRF model functionality. The primary purpose of this document is to provide developers with simple instructions to more fully vet their code before issuing a pull request to the WRF github repository.
+Contributors who intend to propose modifications the WRF repository have responsibilities beyond the tests to validate the proper function of feature or option. Please see https://www2.mmm.ucar.edu/wrf/users/contrib_info.php for the full process for getting code into the WRF repository. The primary repsponsibilities are:
+   * Meeting WRF coding standards
+   * Performing code testing
+   * Warning the Development Committee of limiting assumptions or possible code conflicts
+   * Providing commit information
+   * Documentation
+
+Performing code testing for the WRF model can present a challenge to developers. The particular test case (or cases) used during the model development may be appropriate for demonstrating the correct and effective application for the specific purposes of the new option or enhanced feature. However, in many existing uses of the WRF model, the modified code may unintentionally break some other WRF model functionality. 
+
+Code proposed for WRF must be thoroughly tested prior
+to submission, and it is the proposing developer’s responsibility to perform
+all required positive and negative testing.  The developer must ensure that the proposed change
+_does_ work as described, and importantly that the modification _does not_ accidentally impact other parts of the model.  
+
+This page describes how to use docker containers for the testing of code proposed to WRF. This document provides developers with simple instructions to allow them to more fully vet their code before issuing a pull request to the WRF github repository.
 
 ### What is tested
 
