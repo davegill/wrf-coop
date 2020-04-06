@@ -37,6 +37,7 @@ Several types of tests are easily available within this testing system.
 | 06 |  6 |  6 |  24 |  24 |  8 |  2 |  1 |  0 |
 | 07NE |  8 | 14 |  5 |  5 | 8 | 1 |  2 |  2 |
 | 10 |  10 |  2 |  1 |  2 |  4 |  4 |  7 |  0 |
+| **Test** | **MP** | **CU** | **LW** | **SW** | **PBL** | **SFC** | **LSM** | **URB** |
 | 11 |  10 |  2 |  1 |  2 |  4 |  4 |  7 |  0 |
 | 14 |  3 |  6 |  3 |  3 |  4 |  4 |  3 |  0 |
 | 16 |  8 | 14 |  5 |  5 | 9 | 2 |  7 |  0 |
@@ -47,6 +48,7 @@ Several types of tests are easily available within this testing system.
 | 20 |  4 |  1 |  1 |  2 |  12 |  1 |  2 |  0 |
 | 20NE |  4 |  1 |  1 |  2 |  12 |  1 |  2 |  0 |
 | 38 |  2 | 14 |  4 |  4 | 2 | 2 |  7 |  0 |
+| **Test** | **MP** | **CU** | **LW** | **SW** | **PBL** | **SFC** | **LSM** | **URB** |
 | 48 |  3 |  3 |  24 |  24 |  4 |  4 |  1 |  0 |
 | 49 |  3 |  1 |  24 |  24 |  1 |  91 |  2 |  0 |
 | 50 |  3 |  1 |  24 |  24 |  1 |  91 |  4 |  0 |
@@ -57,6 +59,7 @@ Several types of tests are easily available within this testing system.
 | 60 |  6 |  11 |  24 |  24 |  1 |  1 |  4 |  0 |
 | 60NE |  6 |  11 |  4 |  4 |  1 |  1 |  4 |  0 |
 | 65DF |  28 |  7 |  4 |  4 |  9 |  2 |  3 |  0 |
+| **Test** | **MP** | **CU** | **LW** | **SW** | **PBL** | **SFC** | **LSM** | **URB** |
 | 66FD |  3 |  1 |  4 |  4 |  4 |  4 |  1 |  0 |
 | 71 |  8 |  1 |  4 |  4 |  1 |  1 |  2 |  0 |
 | 78 |  52 |  1 |  4 |  4 |  1 |  1 |  2 |  0 |
