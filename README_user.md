@@ -25,6 +25,51 @@ Several types of tests are easily available within this testing system.
    * All available namelists choices for em_real: https://github.com/davegill/SCRIPTS/tree/master/Namelists/weekly/em_real/MPI
    * Requested tests: https://github.com/davegill/wrf-coop/blob/master/build.csh
 
+| Test | MP | CU | LW | SW | PBL | SFC | LSM | URB |
+| ------|:--:|:--:|:--:|:--:|:--: |:--: |:--: |:--: |
+| 3dtke | D | D | D | D |  D |  1 | D |  0 |
+| conus | D | D | D | D | D | D | D |  0 |
+| rap |  28 |  3 |  4 |  4 |  5 |  5 |  3 |  0 |
+| tropical | D | D | D | D | D | D | D |  0 |
+| 03 |  3 |  3 |  24 |  24 |  4 |  4 |  1 |  0 |
+| 03DF |  3 |  3 |  4 |  4 |  4 |  4 |  1 |  0 |
+| 03FD |  3 |  3 |  4 |  4 |  4 |  4 |  1 |  0 |
+| 06 |  6 |  6 |  24 |  24 |  8 |  2 |  1 |  0 |
+| 07NE |  8 | 14 |  5 |  5 | 8 | 1 |  2 |  2 |
+| 10 |  10 |  2 |  1 |  2 |  4 |  4 |  7 |  0 |
+| 11 |  10 |  2 |  1 |  2 |  4 |  4 |  7 |  0 |
+| 14 |  3 |  6 |  3 |  3 |  4 |  4 |  3 |  0 |
+| 16 |  8 | 14 |  5 |  5 | 9 | 2 |  7 |  0 |
+| 16DF |  8 | 14 |  5 |  5 | 9 | 2 |  7 |  0 |
+| 17 |  4 |  2 |  3 |  3 |  2 |  2 |  2 |  0 |
+| 17AD |  4 |  2 |  3 |  3 |  2 |  2 |  2 |  0 |
+| 18 |  8 | 6 |  5 |  5 | 10 | 10 |  7 |  0 |
+| 20 |  4 |  1 |  1 |  2 |  12 |  1 |  2 |  0 |
+| 20NE |  4 |  1 |  1 |  2 |  12 |  1 |  2 |  0 |
+| 38 |  2 | 14 |  4 |  4 | 2 | 2 |  7 |  0 |
+| 48 |  3 |  3 |  24 |  24 |  4 |  4 |  1 |  0 |
+| 49 |  3 |  1 |  24 |  24 |  1 |  91 |  2 |  0 |
+| 50 |  3 |  1 |  24 |  24 |  1 |  91 |  4 |  0 |
+| 51 |  3 |  1 |  24 |  24 |  1 |  91 |  4 |  0 |
+| 52 |  17 |  3 |  24 |  24 |  4 |  4 |  1 |  0 |
+| 52DF |  17 |  3 |  4 |  4 |  4 |  4 |  1 |  0 |
+| 52FD |  17 |  3 |  4 |  4 |  4 |  4 |  1 |  0 |
+| 60 |  6 |  11 |  24 |  24 |  1 |  1 |  4 |  0 |
+| 60NE |  6 |  11 |  4 |  4 |  1 |  1 |  4 |  0 |
+| 65DF |  28 |  7 |  4 |  4 |  9 |  2 |  3 |  0 |
+| 66FD |  3 |  1 |  4 |  4 |  4 |  4 |  1 |  0 |
+| 71 |  8 |  1 |  4 |  4 |  1 |  1 |  2 |  0 |
+| 78 |  52 |  1 |  4 |  4 |  1 |  1 |  2 |  0 |
+| 79 |  2 | 14 |  4 |  4 | 5 | 2 |  7 |  0 |
+| cmt |  6 |  11 |  4 |  4 |  1 |  1 |  2 |  0 |
+| kiaps1NE |  16 |  14 |  14 |  14 |  11 |  1 |  4 |  0 |
+| kiaps2 |  16 |  14 |  14 |  14 |  1 |  91 |  4 |  1 |
+| solaraNE |  8 |  1 |  4 |  4 |  5 |  5 |  2 |  3 |
+| urb3bNE |  16 |  16 |  14 |  14 |  8 |  2 |  4 |  3 |
+
+
+
+
 This testing capability requires the use of the the docker utility on your local machine (docker.com).
 
 ## Get the WRF container infrastructure
