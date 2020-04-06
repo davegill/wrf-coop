@@ -6,7 +6,7 @@ Contributors who intend to propose modifications to the WRF repository have resp
 
 Please see https://www2.mmm.ucar.edu/wrf/users/contrib_info.php for the full process for getting code into the WRF repository. 
 
-The primary repsponsibilities for a contributing developer include:
+The primary responsibilities for a contributing developer include:
    * Meeting WRF coding standards
    * Performing code testing
    * Warning the Development Committee of limiting assumptions or possible code conflicts
