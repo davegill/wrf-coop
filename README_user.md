@@ -2,11 +2,11 @@
 
 ### Purpose
 
-Contributors who intend to propose modifications the WRF repository have responsibilities beyond the tests to validate the proper function of feature or option. 
+Contributors who intend to propose modifications to the WRF repository have responsibilities beyond their own personal tests that they have used to validate the proper functioning of the new feature or option. 
 
 Please see https://www2.mmm.ucar.edu/wrf/users/contrib_info.php for the full process for getting code into the WRF repository. 
 
-The primary repsponsibilities for a contributing developer:
+The primary repsponsibilities for a contributing developer include:
    * Meeting WRF coding standards
    * Performing code testing
    * Warning the Development Committee of limiting assumptions or possible code conflicts
@@ -20,7 +20,7 @@ to submission, and it is the proposing developer’s responsibility to perform
 all required positive and negative testing.  The developer must ensure that the proposed change
 _does_ work as described, and importantly that the modification _does not_ accidentally impact other parts of the model.  
 
-This page describes how to use docker containers for the negative testing of code proposed to WRF. This document provides developers with simple instructions to allow them to more fully vet their code by providing data and configuration files of known working setups. Before issuing a pull request to the WRF github repository, the developer's code modifcation must demonstrate the continued proper functioning of these existing WRF capabilities.
+This page describes how to use docker containers for the negative testing of code proposed to WRF (no unintended consequences). This document provides developers with simple instructions to allow them to more fully vet their code by providing data and configuration files for a wide variety of known working setups. Before issuing a pull request to the WRF github repository, the developer's code modifcation must demonstrate the continued proper functioning of these existing WRF capabilities.
 
 ### What is tested
 
