@@ -1,7 +1,8 @@
 # How to use the WRF Docker Containers
 
-This requires the use of the the docker utility: 
-docker.com
+Testing the WRF model can present a challenge to developers. The particular test case used during the model development may be appropriate for demonstrating the correct and effective application for the specific purposes of the new option or enhanced feature. However, in many existing uses of the WRF model, the modified code may actually the WRF model functionality. The primary purpose of this document is to provide developers with simple instructions to more fully vet their code before issuing a pull request to the WRF github repository.
+
+This testing capability requires the use of the the docker utility on your local machine (docker.com).
 
 ## Get the WRF container infrastructure
 
