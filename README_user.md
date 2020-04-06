@@ -129,7 +129,7 @@ VOLUME /wrf
 CMD ["/bin/tcsh"]
 ```
 
-What needs to be modified in both files is the location of the WRF repository to test. That is the section that has:
+What needs to be modified in both files is the location of the WRF repository to test. Look the section (in both files) that has:
 ```
 RUN git clone _FORK_/_REPO_.git WRF \
   && cd WRF \
@@ -137,25 +137,42 @@ RUN git clone _FORK_/_REPO_.git WRF \
   && cd ..
 ```
 
-For example,
+For example, replacing those flagged names with the following:
 ```
 _FORK_ => https://github.com/davegill
 _REPO_ => WRF
 _BRANCH_ => irr=3
 ```
 
-Some people have their repository name as `WRF-1`.
+would yield the same final text to be used within both `Dockerfile` and `Dockerfile-NMM`.
+```
+RUN git clone https://github.com/davegill/WRF.git WRF \
+  && cd WRF \
+  && git checkout irr=3 \
+  && cd ..
+```
+
+Please note that some people have their repository name as `WRF-1`.
 
 2. Construct the docker image
 
-Using the `Dockerfile` and the `Dockerfile-NMM`, build two docker images. Note that there are indeed periods at the end of these commands!
+Using the `Dockerfile` and the `Dockerfile-NMM`, build two docker images. Note that there are indeed periods at the trailing ends of these commands!
 
 ```
 docker build -t wrf_regtest .
 docker build -f Dockerfile-NMM -t wrf_nmmregtest .
 ```
 
-You have to be in the directory where the Dockerfiles are located. The first takes about 5 minutes to complete (several GB of data and code). The second takes about the same amount of time.
+You have to be in the directory where the Dockerfiles are located (or else use the `f` option). The each of the commands takes about 5 minutes to complete (several GB of data and code). Afterwards, there are two docker images (`wrf_regtest` and `wrf_nmmregtest`) that can be used to build your WRF containers:
+```
+docker images
+
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+wrf_nmmregtest      latest              13b80465a2f4        2 days ago          5.78GB
+wrf_regtest         latest              d7dd1400f486        2 days ago          6.14GB
+davegill/wrf-coop   eighthtry           56930417513a        5 weeks ago         5.59GB
+davegill/wrf-coop   sixthtry            c36f5f2b0cc6        3 months ago        5.32GB
+```
 
 ## Contruct the docker containers
 
