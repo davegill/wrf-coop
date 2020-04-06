@@ -282,6 +282,13 @@ docker exec -it ARW /bin/tcsh
 ```
 Once the docker container status is `Exited`, the container may be removed. This step is typically used when building a new container. Removing the container is also required when the intention is to remove the docker image (by default, you cannot remove an image that has a container).
 
+To remove a docker container, first exit all processes from the container (just `exit` from inside the container in each terminal window). Then stop the container, then remove the container.
+```
+docker rm ARW
+```
+
+### Remove a docker image
+
 What docker images are available to remove:
 ```
 docker images
