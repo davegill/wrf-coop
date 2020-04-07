@@ -485,7 +485,7 @@ Diffing SERIAL/wrfout_d01_2000-01-24_12:00:00 wrfout_d01_2000-01-24_12:00:00
 
 ### Checking NMM results
 
-Most developers do not anticipate sharing contributions with the NMM dynamical core. It is mandatory that the existing build of the NMM WRF model work with the new code, a peaceful co-existence. This is an example of negative testing: tests need to be undertaken to demonstrate that no harm has been done to the existing NMM WRF capabilities. This testing must be done inside the NMM container. A couple of NMM-specific environment variables are required to be set prior to the build.
+Most developers do not anticipate sharing contributions with the NMM dynamical core. It is mandatory that the existing build of the NMM WRF model work with the new code, a peaceful co-existence. This is an example of negative testing: tests need to be undertaken to demonstrate that no harm has been done to the existing NMM WRF capabilities. This testing must be done inside the NMM container. A couple of NMM-specific environment variables are required to be set prior to the build. The ARW tests are much smaller than the NMM tests. While the ARW jobs are able to run with only 2 GB of memory, the NMM jobs use 8 GB. 
 
 1. Build the NMM WRF code
 ```
@@ -505,9 +505,43 @@ ls -ls main/*.exe
 cd test/nmm_real
 ln -sf /wrf/Data/nmm_hwrf/* .
 cp /wrf/Namelists/weekly/nmm_hwrf/namelist.input.1NE namelist.input
-
-
+mpirun -np 3 --oversubscribe real_nmm.exe 
+ mpirun -np 3 --oversubscribe wrf.exe
 ```
+3. Check the NMM WRF output
+
+This includes looking at the standard print out, looking for the "SUCCESS" message.
+```
+tail rsl.out.0000
+Timing for main: time 2012-10-28_06:09:30 on domain   2:    0.37067 elapsed seconds
+Timing for main: time 2012-10-28_06:09:45 on domain   2:    0.51848 elapsed seconds
+Timing for main: time 2012-10-28_06:09:45 on domain   1:   12.89504 elapsed seconds
+Timing for main: time 2012-10-28_06:10:00 on domain   2:    0.36900 elapsed seconds
+Timing for Writing wrfout_d02_2012-10-28_06:10:00 for domain        2:    1.00879 elapsed seconds
+Timing for main: time 2012-10-28_06:10:15 on domain   2:    1.52304 elapsed seconds
+Timing for main: time 2012-10-28_06:10:30 on domain   2:    0.36961 elapsed seconds
+Timing for main: time 2012-10-28_06:10:30 on domain   1:    4.61200 elapsed seconds
+Timing for Writing wrfout_d01_2012-10-28_06:10:30 for domain        1:    7.46972 elapsed seconds
+d01 2012-10-28_06:10:30 wrf: SUCCESS COMPLETE WRF
+```
+
+Verify that there are two time periods in the output (check both domains):
+```
+ncdump -h wrfout_d01_2012-10-28_06:00:00 | grep Time | grep UNLIMITED
+	Time = UNLIMITED ; // (2 currently)
+ncdump -h wrfout_d02_2012-10-28_06:00:00 | grep Time | grep UNLIMITED
+	Time = UNLIMITED ; // (2 currently)
+```
+
+Check that there are no NaN values in the history output (check both domains):
+```
+ncdump wrfout_d01_2012-10-28_06:00:00 | grep -i nan
+ncdump wrfout_d02_2012-10-28_06:00:00 | grep -i nan
+```
+4. For NMM, the following run-time tests should be conducted:
+   * 1NE
+   * 2NE
+   * 3NE
 
 ## Docker Clean Up
 
