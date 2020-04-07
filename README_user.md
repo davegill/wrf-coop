@@ -243,16 +243,29 @@ EOF
 compile em_real -j 4 >& foo ; tail -20 foo
 ```
 
-Run a sample test case:
+### Run a sample test case
 
+1. All of the required gridded fields, such as from metgrid, are inside the container. Those need to be in the working directory. With the shared directory between the docker container and the host OS, other data can easily be brought into the container.
 ```
 cd test/em_real
-cp /wrf/Namelists/weekly/em_real/MPI/namelist.input.conus namelist.input
 ln -sf /wrf/Data/em_real/* .
+```
+2. For the lengthy run-time configuration table above, choose the suffix from the test names. For example, the first few are listed as:
+   * 3dtke
+   * conus
+   * rap
+   * tropical
+
+This example shows selecting to run the `conus` namelist.
+```
+cp /wrf/Namelists/weekly/em_real/MPI/namelist.input.conus namelist.input
+```
+3. Since the code was built with DM (option 34 on the `configure` script), we can request multiple processors. Depending on the initial setup of your docker system, there may be fewer processes available within the container than physically available on your host machine. The `--oversubscribe` option permits multiple MPI ranks to be handled by the same process sequentially. The timing performance suffers, but the parallel testing is valid.
+```
 mpirun -np 3 --oversubscribe real.exe
 mpirun -np 3 --oversubscribe wrf.exe
 ```
-To check the results, you can look at the rsl files:
+### To check the results, you can look at the rsl files:
 ```
 cat rsl.out.0000 | tail -20
 ThompMP: read qr_acr_qsV2.dat instead of computing
