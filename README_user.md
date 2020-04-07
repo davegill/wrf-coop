@@ -221,8 +221,19 @@ You are now in the NMM container.
 
 ## Build executables from source, run tests
 
-Now, build the WRF code as usual. From inside the ARW container:
+Once the WRF containers are built and you are inside of the ARW container, building the WRF code is as usual. 
 
+1. From inside the ARW container, do the usual process of `clean`, `configure`, `compile`. 
+
+2. Note that while you are inside of the container, you are in a Linux environment. You will be setting up WRF to run natively in a Linux OS, _NOT_ for your host OS. The `configure` options for GNU LInux will always be:
+   * 32: serial build
+   * 33: OpenMP (threaded, shared memory, SM)
+   * 34: MPI (message passing, distributed memory, DM)
+   
+3. Since this is the entire WRF source code that is in the container, all of the standard `configure` options are available. 
+   * -d: debug, traceback, no optimization
+   * -D: -d + bounds check + identify uninitialized 
+   * -r8: 8-byte reals as default
 ```
 cd WRF
 configure -d << EOF
