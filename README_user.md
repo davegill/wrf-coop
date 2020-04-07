@@ -325,7 +325,7 @@ mkdir MPI
 mv wrfout_d01_2000-01-24_12:00:00 MPI
 cp wrf.exe MPI
 ```
-2. With the steps listed above, generate an OpenMP executable, run the test case, and save the results. To check bit-for-bit identical results, use the `-d` option on `configure`. This removes the optimization, and the compiler can return identical results. To use four parallel threads for compiling the code, use `-j 4` on the `compile` command. This can cut the time to build the executables in half.
+2. With the steps listed above, generate a serial executable, run the test case, and save the results. To allow us to eventually check bit-for-bit identical results, remember to use the `-d` option on `configure`. This removes the optimization, and the compiler can return identical results. To use four parallel threads for compiling the code, use `-j 4` on the `compile` command. This can cut the time to build the executables in half.
 ```
 cd /wrf/WRF
 clean -a
