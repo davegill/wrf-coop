@@ -201,7 +201,9 @@ davegill/wrf-coop   sixthtry            c36f5f2b0cc6        3 months ago        
 
 To share data and files back and forth between the host OS and the docker container, a user-defined assignment maps a local host OS directory to a directory inside of the WRF container. For example, let's assume that the existing local directory on the host OS is `/users/gill/DOCKER_STUFF`.
 
-2. Build the containers. Each of these take about 30 seconds to complete (nothing to download, just local processing). These commands should each be issued from separate terminal windows from the host OS (i.e. don't issue a docker command inside of a WRF docker container).
+2. Build the containers 
+
+Each of these take about 30 seconds to complete (nothing to download, just local processing). These commands should each be issued from separate terminal windows from the host OS (i.e. don't issue a docker command inside of a WRF docker container).
 
 ```
 docker run -it --name ARW -v /users/gill/DOCKER_STUFF:/wrf/wrfoutput wrf_regtest /bin/tcsh
