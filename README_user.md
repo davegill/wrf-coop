@@ -94,7 +94,7 @@ Several types of tests are accessible within this docker testing system.
 | urb3bNE |  16 |  16 |  14 |  14 |  8 |  2 |  4 |  3 |
 | **Test** | **MP** | **CU** | **LW** | **SW** | **PBL** | **SFC** | **LSM** | **URB** |
 
-## Get the WRF container infrastructure
+## Get the WRF docker infrastructure
 
 1. Docker is needed   
 
