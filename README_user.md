@@ -315,7 +315,169 @@ ls -ls
 total 78936
 78936 -rw-r--r--  1 gill  1500  40413808 Apr  3 14:19 wrfout_d01_2000-01-24_12:00:00
 ```
+### Compare the simulation results
 
+The listed run-time configuration options (in the above table) provide bit-wise identical results with serial, OpenMP, and MPI simulations. Confirming these bit identical results is via two pair-wise comparisons (serial vs OpenMP, and serial vs MPI).
+
+1. Save the MPI results to a separate directory.
+```
+mkdir MPI
+mv wrfout_d01_2000-01-24_12:00:00 MPI
+cp wrf.exe MPI
+```
+2. With the steps listed above, generate an OpenMP executable, run the test case, and save the results. To check bit-for-bit identical results, use the `-d` option on `configure`. This removes the optimization, and the compiler can return identical results. To use four parallel threads for compiling the code, use `-j 4` on the `compile` command. This can cut the time to build the executables in half.
+```
+cd /wrf/WRF
+clean -a
+configure -d << EOF
+32
+1
+EOF
+compile em_real -j 4 >& foo ; tail -20 foo
+cd test/em_real
+real.exe
+wrf.exe
+mkdir SERIAL
+mv wrfout_d01_2000-01-24_12:00:00 SERIAL
+```
+3. Similarly, build the code for OpenMP processing. Before running the model, set the OpenMP environment variable for the number of parallel threads to use.
+```
+cd /wrf/WRF
+clean -a
+configure -d << EOF
+33
+1
+EOF
+compile em_real -j 4 >& foo ; tail -20 foo
+cd test/em_real
+real.exe
+setenv OMP_NUM_THREADS 4
+wrf.exe
+mkdir OPENMP
+mv wrfout_d01_2000-01-24_12:00:00 OPENMP
+```
+4. Compare results
+
+When there are no differences (the results are bit-wise identical), only the column headers are listed for each time period.
+Serial vs OpenMP:
+```
+../../external/io_netcdf/diffwrf SERIAL/wrfout_d01_2000-01-24_12:00:00 OPENMP/wrfout_d01_2000-01-24_12:00:00 
+ Just plot  F
+Diffing SERIAL/wrfout_d01_2000-01-24_12:00:00 OPENMP/wrfout_d01_2000-01-24_12:00:00
+ Next Time 2000-01-24_12:00:00
+     Field   Ndifs    Dims       RMS (1)            RMS (2)     DIGITS    RMSE     pntwise max
+ Next Time 2000-01-24_12:30:00
+     Field   Ndifs    Dims       RMS (1)            RMS (2)     DIGITS    RMSE     pntwise max
+ ```
+Serial vs MPI:
+```
+../../external/io_netcdf/diffwrf SERIAL/wrfout_d01_2000-01-24_12:00:00 MPI/wrfout_d01_2000-01-24_12:00:00 
+ Just plot  F
+Diffing SERIAL/wrfout_d01_2000-01-24_12:00:00 MPI/wrfout_d01_2000-01-24_12:00:00
+ Next Time 2000-01-24_12:00:00
+     Field   Ndifs    Dims       RMS (1)            RMS (2)     DIGITS    RMSE     pntwise max
+ Next Time 2000-01-24_12:30:00
+     Field   Ndifs    Dims       RMS (1)            RMS (2)     DIGITS    RMSE     pntwise max
+ ```
+By introducing a modification to induce differences (changing the radiation frequency), this shows what the utility program report when simulation results are not identical. Every field that is different between the two simulations is listed.
+```
+../../external/io_netcdf/diffwrf SERIAL/wrfout_d01_2000-01-24_12:00:00 wrfout_d01_2000-01-24_12:00:00
+ Just plot  F
+Diffing SERIAL/wrfout_d01_2000-01-24_12:00:00 wrfout_d01_2000-01-24_12:00:00
+ Next Time 2000-01-24_12:00:00
+     Field   Ndifs    Dims       RMS (1)            RMS (2)     DIGITS    RMSE     pntwise max
+ Next Time 2000-01-24_12:30:00
+     Field   Ndifs    Dims       RMS (1)            RMS (2)     DIGITS    RMSE     pntwise max
+         U    199915    3   0.2077143625E+02   0.2077142723E+02   6   0.5675E-02   0.1523E-01
+         V    200665    3   0.1790809805E+02   0.1790801621E+02   5   0.7353E-02   0.1104E-01
+         W    213150    3   0.4382839517E-01   0.4384699643E-01   3   0.8522E-03   0.1233E+00
+        PH    197467    3   0.2233241586E+04   0.2233207488E+04   4   0.1643E+00   0.1681E-02
+         T    185501    3   0.7661905661E+02   0.7661891936E+02   5   0.5147E-02   0.1553E-02
+       THM    185536    3   0.7656888566E+02   0.7656875243E+02   5   0.5291E-02   0.1326E-02
+        MU      4113    2   0.1424778637E+04   0.1424783101E+04   5   0.2007E+00   0.1980E-02
+         P    188623    3   0.6987745239E+03   0.6987797266E+03   5   0.7223E+00   0.2656E-01
+     P_HYD     81851    3   0.5370673102E+05   0.5370672897E+05   7   0.1578E+00   0.2037E-03
+        Q2      4344    2   0.8673683758E-02   0.8671582948E-02   3   0.1359E-04   0.2213E-01
+        T2      4261    2   0.2782406813E+03   0.2782413176E+03   5   0.4033E-01   0.2445E-02
+       TH2      4263    2   0.2780485661E+03   0.2780492517E+03   5   0.4039E-01   0.2456E-02
+      PSFC      3842    2   0.1001839581E+06   0.1001839539E+06   7   0.3410E+00   0.2036E-03
+       U10      4365    2   0.2901385710E+01   0.2901844605E+01   3   0.8936E-02   0.1514E-01
+       V10      4360    2   0.5981108836E+01   0.5982545091E+01   3   0.1847E-01   0.2226E-01
+    QVAPOR    189027    3   0.3205001952E-02   0.3204968135E-02   4   0.1712E-05   0.9504E-02
+    QCLOUD      8947    3   0.2336827518E-04   0.2347073090E-04   2   0.8883E-06   0.9983E-01
+     QRAIN      5615    3   0.1997838925E-06   0.2001461333E-06   2   0.1645E-08   0.2284E-01
+      QICE     25159    3   0.6405221210E-05   0.6411338238E-05   3   0.1761E-06   0.1271E+00
+     QSNOW     28793    3   0.1192688229E-04   0.1191915427E-04   3   0.1350E-06   0.2526E-01
+    QGRAUP       854    3   0.1947443381E-07   0.1962026883E-07   2   0.5489E-09   0.3075E-01
+     QNICE     24405    3   0.4873312695E+06   0.4862787234E+06   2   0.2858E+05   0.2757E+00
+    QNRAIN      5616    3   0.2722437200E+02   0.2724165286E+02   3   0.4243E+00   0.5268E-01
+      TSLB      1599    3   0.2754714840E+03   0.2754715979E+03   6   0.2528E-02   0.2247E-03
+     SMOIS      2389    3   0.7157583399E+00   0.7157582866E+00   7   0.2024E-05   0.1424E-03
+      SH2O      3543    3   0.7084023035E+00   0.7084027496E+00   6   0.1625E-04   0.5382E-03
+    SMCREL      2341    3   0.8343049862E+00   0.8343046966E+00   6   0.5891E-05   0.9123E-04
+    SFROFF       277    2   0.1055065282E-04   0.1061663350E-04   2   0.6749E-07   0.6495E-02
+    UDROFF       215    2   0.2071690287E+02   0.2071692973E+02   5   0.3284E-03   0.3883E-04
+    GRDFLX      2349    2   0.3280135341E+02   0.3305123211E+02   2   0.1627E+01   0.2072E+00
+  ACGRDFLX      2349    2   0.6020761759E+05   0.5994200453E+05   2   0.1311E+04   0.5809E-01
+    ACSNOM        32    2   0.6084211585E-04   0.9523415932E-04   0   0.3713E-04   0.4409E+00
+      SNOW      1133    2   0.1243978355E+02   0.1243974196E+02   5   0.2038E-03   0.2198E-04
+     SNOWH      1160    2   0.6219826981E-01   0.6219791613E-01   5   0.3564E-05   0.2075E-03
+    CANWAT       684    2   0.4445508257E-02   0.4451814742E-02   2   0.6865E-04   0.2958E-01
+    COSZEN      4380    2   0.9974722728E-01   0.1009434751E+00   1   0.1471E-01   0.7694E-01
+      U10E      4368    2   0.3020588728E+01   0.3020997928E+01   3   0.1102E-01   0.1466E-01
+      V10E      4361    2   0.6179267792E+01   0.6180845772E+01   3   0.2425E-01   0.2896E-01
+   TKE_PBL     42145    3   0.1741388386E+00   0.1747809270E+00   2   0.3890E-02   0.1368E+00
+    EL_PBL     14120    3   0.1401868182E+02   0.1402771353E+02   3   0.1504E+01   0.5185E+00
+       TSK      2348    2   0.2792221534E+03   0.2792034899E+03   4   0.1166E+00   0.5388E-02
+     RAINC       432    2   0.8087492262E-01   0.8270815313E-01   1   0.6664E-02   0.2434E+00
+    RAINNC       858    2   0.3602370490E-02   0.3604607713E-02   3   0.5705E-05   0.2978E-02
+    SNOWNC       629    2   0.3563623709E-02   0.3565756517E-02   3   0.6800E-05   0.4096E-02
+ GRAUPELNC         8    2   0.3697328233E-07   0.3769433904E-07   1   0.1154E-08   0.4349E-01
+    CLDFRA      3632    3   0.2770395579E+00   0.2613639466E+00   1   0.9812E-01   0.1000E+01
+    SWDOWN      2188    2   0.4270942575E+02   0.3790899295E+02   0   0.6194E+01   0.3240E+00
+       GLW      4380    2   0.2915490577E+03   0.2904352124E+03   2   0.4723E+01   0.1401E+00
+   ACSWUPT      2188    2   0.3240405227E+05   0.3223664365E+05   2   0.2470E+04   0.2698E+00
+  ACSWUPTC      2188    2   0.2271701030E+05   0.2231482204E+05   1   0.9134E+03   0.5798E-01
+   ACSWDNT      2188    2   0.1098642656E+06   0.1073244794E+06   1   0.3785E+04   0.3516E-01
+  ACSWDNTC      2188    2   0.1098642656E+06   0.1073244794E+06   1   0.3785E+04   0.3516E-01
+   ACSWUPB      2188    2   0.3957730300E+04   0.3825888753E+04   1   0.3346E+03   0.1503E+00
+  ACSWUPBC      2188    2   0.4377922509E+04   0.4223275379E+04   1   0.3155E+03   0.1191E+00
+   ACSWDNB      2188    2   0.4875914027E+05   0.4745256201E+05   1   0.2644E+04   0.1503E+00
+  ACSWDNBC      2188    2   0.5403992505E+05   0.5243958371E+05   1   0.2014E+04   0.2006E-01
+   ACLWUPT      4380    2   0.4254680595E+06   0.4245412468E+06   2   0.4473E+04   0.4266E-01
+  ACLWUPTC      4380    2   0.4320672146E+06   0.4319657873E+06   3   0.4461E+03   0.3761E-02
+   ACLWUPB      4378    2   0.6397582477E+06   0.6395422783E+06   3   0.1251E+04   0.8610E-02
+  ACLWUPBC      4375    2   0.6393635490E+06   0.6390398419E+06   3   0.1289E+04   0.8613E-02
+   ACLWDNB      4380    2   0.4994158782E+06   0.5021246382E+06   2   0.5935E+04   0.4472E-01
+  ACLWDNBC      4380    2   0.4886655848E+06   0.4885339661E+06   3   0.2075E+03   0.1074E-02
+     SWUPT      2188    2   0.3969815577E+02   0.3271946513E+02   0   0.8081E+01   0.5039E+00
+    SWUPTC      2188    2   0.1942421402E+02   0.1734232072E+02   0   0.2847E+01   0.1814E+00
+     SWDNT      2188    2   0.9918293670E+02   0.8687890112E+02   0   0.1418E+02   0.9296E-01
+    SWDNTC      2188    2   0.9918293670E+02   0.8687890112E+02   0   0.1418E+02   0.9296E-01
+     SWUPB      2188    2   0.3634598267E+01   0.3103841565E+01   0   0.8106E+00   0.3651E+00
+    SWUPBC      2188    2   0.4393716892E+01   0.3653870715E+01   0   0.9462E+00   0.3651E+00
+     SWDNB      2188    2   0.4270942633E+02   0.3790899357E+02   0   0.6194E+01   0.3240E+00
+    SWDNBC      2188    2   0.5254713709E+02   0.4488580214E+02   0   0.8385E+01   0.1123E+00
+     LWUPT      4380    2   0.2282915116E+03   0.2299704349E+03   2   0.5588E+01   0.1690E+00
+    LWUPTC      4380    2   0.2394362106E+03   0.2395117591E+03   3   0.1745E+00   0.3213E-02
+     LWUPB      4377    2   0.3544427431E+03   0.3545018756E+03   3   0.3436E+00   0.7631E-02
+    LWUPBC      4372    2   0.3537143400E+03   0.3538060350E+03   3   0.2847E+00   0.6144E-02
+     LWDNB      4380    2   0.2915490577E+03   0.2904352124E+03   2   0.4723E+01   0.1401E+00
+    LWDNBC      4380    2   0.2708427912E+03   0.2708878724E+03   3   0.2643E+00   0.3326E-02
+       OLR      4380    2   0.2282915116E+03   0.2299704349E+03   2   0.5588E+01   0.1690E+00
+    ALBEDO       834    2   0.2897951198E+00   0.2897925515E+00   5   0.5130E-04   0.3185E-02
+     EMISS       315    2   0.9584721578E+00   0.9584721457E+00   7   0.9572E-07   0.1946E-05
+   NOAHRES      2334    2   0.1957383304E+00   0.2039653757E+00   1   0.3565E-01   0.9842E+00
+       UST      4373    2   0.3621059031E+00   0.3620335588E+00   3   0.3475E-02   0.6739E-01
+      PBLH      4054    2   0.5835742037E+03   0.5839932195E+03   3   0.2342E+02   0.1633E+00
+       HFX      4372    2   0.5986418778E+02   0.5987161655E+02   3   0.1372E+01   0.7971E-01
+       QFX      4372    2   0.5626051984E-04   0.5626636626E-04   3   0.2462E-06   0.2580E-01
+        LH      4372    2   0.1406542974E+03   0.1406689535E+03   3   0.6233E+00   0.2581E-01
+     ACHFX      4373    2   0.1019344107E+06   0.1017145494E+06   2   0.2027E+04   0.3408E-01
+     ACLHF      4368    2   0.2108091636E+06   0.2108122824E+06   4   0.7391E+03   0.1038E-01
+     SNOWC       895    2   0.3391681058E+00   0.3391674524E+00   5   0.5540E-05   0.8187E-04
+        SR       176    2   0.3535776588E+00   0.3538681369E+00   3   0.3389E-01   0.1000E+01
+```
 ## Docker Clean Up
 
 When running docker containers, approximately 5-6 GB of disk space is used per container. Exiting from a container simply stops the container, but does not kill the container process. Similarly, removing the container process does not remove the docker WRF images. 
