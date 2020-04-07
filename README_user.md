@@ -1,4 +1,4 @@
-# How to use the WRF Docker Containers
+# WRF Docker Containers for Code Contributors
 
 ### Purpose
 
