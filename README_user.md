@@ -265,7 +265,9 @@ cp /wrf/Namelists/weekly/em_real/MPI/namelist.input.conus namelist.input
 mpirun -np 3 --oversubscribe real.exe
 mpirun -np 3 --oversubscribe wrf.exe
 ```
-### To check the results, you can look at the rsl files:
+### Check the simulation results
+
+1. The output from standard err and standard out in the container are treated similarly as typical WRF simulations. The last line should contain the string "SUCCESS".
 ```
 cat rsl.out.0000 | tail -20
 ThompMP: read qr_acr_qsV2.dat instead of computing
@@ -288,6 +290,17 @@ Timing for main: time 2000-01-24_12:27:00 on domain   1:    1.20856 elapsed seco
 Timing for main: time 2000-01-24_12:30:00 on domain   1:    1.26051 elapsed seconds
 Timing for Writing wrfout_d01_2000-01-24_12:30:00 for domain        1:    0.15855 elapsed seconds
 d01 2000-01-24_12:30:00 wrf: SUCCESS COMPLETE WRF
+```
+2. There should be two time periods of data.
+```
+ncdump -h wrfout_d01_2000-01-24_12:00:00 | grep Time | grep UNLIMITED
+	Time = UNLIMITED ; // (2 currently)
+```
+3. There should be no NaN values in the generated model output file.
+```
+ncdump wrfout_d01_2000-01-24_12:00:00 | grep -i nan
+		IVGTYP:description = "DOMINANT VEGETATION CATEGORY" ;
+		ISLTYP:description = "DOMINANT SOIL CATEGORY" ;
 ```
 
 To visualize the data, copy or link the file to `/wrf/wrfoutput` (which was chosen as the docker shared directory location). 
