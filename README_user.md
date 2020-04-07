@@ -540,3 +540,7 @@ As mentioned previously, leave the `wrf-coop` images alone. To remove the images
 ```
 docker rmi 13b80465a2f4 d7dd1400f486
 ```
+The final clean-up step is to let docker do some removal of unnecessary space.
+```
+docker volume prune -f
+```
