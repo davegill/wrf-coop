@@ -485,9 +485,27 @@ Diffing SERIAL/wrfout_d01_2000-01-24_12:00:00 wrfout_d01_2000-01-24_12:00:00
 
 ### Checking NMM results
 
-Most developers do not anticipate contributions for the NMM dynamical core. It is mandatory that the existing build of the NMM WRF model work with the new code. This is an example of negative testing: tests need to be undertaken to demonstrate that no harm has been done to the existing WRF capabilities. This testing must be done inside the NMM container.
+Most developers do not anticipate sharing contributions with the NMM dynamical core. It is mandatory that the existing build of the NMM WRF model work with the new code, a peaceful co-existence. This is an example of negative testing: tests need to be undertaken to demonstrate that no harm has been done to the existing NMM WRF capabilities. This testing must be done inside the NMM container. A couple of NMM-specific environment variables are required to be set prior to the build.
 
+1. Build the NMM WRF code
 ```
+cd WRF
+setenv WRF_NMM_CORE 1
+setenv HWRF 1
+configure -d << EOF
+34
+EOF
+compile nmm_real >& foo
+ls -ls main/*.exe
+39756 -rwxr-xr-x 1 wrfuser wrf 40708544 Apr  7 18:55 main/real_nmm.exe
+49948 -rwxr-xr-x 1 wrfuser wrf 51144032 Apr  7 18:55 main/wrf.exe
+```
+2. Run the NMM WRF code
+```
+cd test/nmm_real
+ln -sf /wrf/Data/nmm_hwrf/* .
+cp /wrf/Namelists/weekly/nmm_hwrf/namelist.input.1NE namelist.input
+
 
 ```
 
