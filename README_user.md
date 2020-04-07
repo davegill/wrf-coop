@@ -339,6 +339,7 @@ real.exe
 wrf.exe
 mkdir SERIAL
 mv wrfout_d01_2000-01-24_12:00:00 SERIAL
+cp wrf.exe SERIAL
 ```
 3. Similarly, build the code for OpenMP processing. Before running the model, set the OpenMP environment variable for the number of parallel threads to use.
 ```
@@ -355,6 +356,7 @@ setenv OMP_NUM_THREADS 4
 wrf.exe
 mkdir OPENMP
 mv wrfout_d01_2000-01-24_12:00:00 OPENMP
+cp wrf.exe OPENMP
 ```
 4. Compare results
 
@@ -379,7 +381,7 @@ Diffing SERIAL/wrfout_d01_2000-01-24_12:00:00 MPI/wrfout_d01_2000-01-24_12:00:00
  Next Time 2000-01-24_12:30:00
      Field   Ndifs    Dims       RMS (1)            RMS (2)     DIGITS    RMSE     pntwise max
  ```
-By introducing a modification to induce differences (changing the radiation frequency), this shows what the utility program report when simulation results are not identical. Every field that is different between the two simulations is listed.
+By introducing a modification to induce differences (changing the radiation frequency), this shows what the utility program reports when simulation results are not identical. Every field that is different between the two simulations is listed.
 ```
 ../../external/io_netcdf/diffwrf SERIAL/wrfout_d01_2000-01-24_12:00:00 wrfout_d01_2000-01-24_12:00:00
  Just plot  F
@@ -478,6 +480,17 @@ Diffing SERIAL/wrfout_d01_2000-01-24_12:00:00 wrfout_d01_2000-01-24_12:00:00
      SNOWC       895    2   0.3391681058E+00   0.3391674524E+00   5   0.5540E-05   0.8187E-04
         SR       176    2   0.3535776588E+00   0.3538681369E+00   3   0.3389E-01   0.1000E+01
 ```
+5. By saving the WRF executables (`wrf.exe`) in each directory, a user can now run through all of the tests for each parallel build to verify identical results.
+6. A contributor should also modify a standard namelist to include a positive test for the new source code to be included. Of course, most of the infrastructure inside the container is in place to verify that the new code has not broken anything. However, the same infrastructure should be used to ensure bit-wise identical results among the three parallel build options with the new feature or option.
+
+### Checking NMM results
+
+Most developers do not anticipate contributions for the NMM dynamical core. It is mandatory that the existing build of the NMM WRF model work with the new code. This is an example of negative testing: tests need to be undertaken to demonstrate that no harm has been done to the existing WRF capabilities. This testing must be done inside the NMM container.
+
+```
+
+```
+
 ## Docker Clean Up
 
 When running docker containers, approximately 5-6 GB of disk space is used per container. Exiting from a container simply stops the container, but does not kill the container process. Similarly, removing the container process does not remove the docker WRF images. 
