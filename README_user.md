@@ -250,7 +250,7 @@ compile em_real -j 4 >& foo ; tail -20 foo
 cd test/em_real
 ln -sf /wrf/Data/em_real/* .
 ```
-2. For the lengthy run-time configuration table above, choose the suffix from the test names. For example, the first few are listed as:
+2. From the lengthy run-time configuration table above, choose a suffix from the test names. For example, the first few are listed as:
    * 3dtke
    * conus
    * rap
