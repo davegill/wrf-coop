@@ -91,7 +91,6 @@ Several types of tests are accessible within this docker testing system.
 | kiaps1NE |  16 |  14 |  14 |  14 |  11 |  1 |  4 |  0 |
 | kiaps2 |  16 |  14 |  14 |  14 |  1 |  91 |  4 |  1 |
 | solaraNE |  8 |  1 |  4 |  4 |  5 |  5 |  2 |  3 |
-| urb3bNE |  16 |  16 |  14 |  14 |  8 |  2 |  4 |  3 |
 | **Test** | **MP** | **CU** | **LW** | **SW** | **PBL** | **SFC** | **LSM** | **URB** |
 
 ## Get the WRF docker infrastructure
@@ -506,7 +505,7 @@ cd test/nmm_real
 ln -sf /wrf/Data/nmm_hwrf/* .
 cp /wrf/Namelists/weekly/nmm_hwrf/namelist.input.1NE namelist.input
 mpirun -np 3 --oversubscribe real_nmm.exe 
- mpirun -np 3 --oversubscribe wrf.exe
+mpirun -np 3 --oversubscribe wrf.exe
 ```
 3. Check the NMM WRF output
 
