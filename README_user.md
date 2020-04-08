@@ -482,6 +482,10 @@ Diffing SERIAL/wrfout_d01_2000-01-24_12:00:00 wrfout_d01_2000-01-24_12:00:00
 5. By saving the WRF executables (`wrf.exe`) in each directory, a user can now run through all of the tests for each parallel build to verify identical results.
 6. A contributor should also modify a standard namelist to include a positive test for the new source code to be included. Of course, most of the infrastructure inside the container is in place to verify that the new code has not broken anything. However, the same infrastructure should be used to ensure bit-wise identical results among the three parallel build options with the new feature or option.
 
+### Checking WRF Chem results
+
+### Checking WRF DA results
+
 ### Checking NMM results
 
 Most developers do not anticipate sharing contributions with the NMM dynamical core. It is mandatory that the existing build of the NMM WRF model work with the new code, a peaceful co-existence. This is an example of negative testing: tests need to be undertaken to demonstrate that no harm has been done to the existing NMM WRF capabilities. This testing must be done inside the NMM container. A couple of NMM-specific environment variables are required to be set prior to the build. The ARW tests are much smaller than the NMM tests. While the ARW jobs are able to run with only 2 GB of memory, the NMM jobs use 8 GB. 
