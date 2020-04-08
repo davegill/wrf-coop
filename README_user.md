@@ -2,7 +2,7 @@
 
 ### Purpose
 
-Contributors who intend to propose modifications to the WRF repository have responsibilities beyond their own personal tests that they have used to validate the proper functioning of the new feature or option. 
+Contributors who intend to propose modifications to the WRF repository have responsibilities beyond their own personal tests that they have previously used to validate the proper functioning of the new feature or option. 
 
 Please see https://www2.mmm.ucar.edu/wrf/users/contrib_info.php for the full process for getting code into the WRF repository. 
 
