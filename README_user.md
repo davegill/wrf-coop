@@ -556,6 +556,18 @@ ls -lrt var/build/*.exe  # 43 executables
 -rwxr-xr-x 1 liuz ncar   5169112 Mar 12 11:30 var/build/da_rad_diags.exe
 ```
 
+WRFDA non-4DVar build can skip step of building WRFPlus:
+```
+cd WRFDA
+setenv CRTM 1   # will build with CRTM, optinal
+setenv RTTOV rttov-lib-directory # 3rd part software, optional
+setenv HDF5 hdf5-lib-directory # optional, some obs file I/O need this.
+./configure wrfda
+choose 34 for dmpar with GNU
+./compile all_wrfvar >& foo
+ls -lrt var/build/*.exe will get the same 43 executables.
+```
+
 ### Checking NMM results
 
 Most developers do not anticipate sharing contributions with the NMM dynamical core. It is mandatory that the existing build of the NMM WRF model work with the new code, a peaceful co-existence. This is an example of negative testing: tests need to be undertaken to demonstrate that no harm has been done to the existing NMM WRF capabilities. This testing must be done inside the NMM container. A couple of NMM-specific environment variables are required to be set prior to the build. The ARW tests are much smaller than the NMM tests. While the ARW jobs are able to run with only 2 GB of memory, the NMM jobs use 8 GB. 
