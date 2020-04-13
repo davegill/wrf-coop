@@ -488,14 +488,18 @@ Diffing SERIAL/wrfout_d01_2000-01-24_12:00:00 wrfout_d01_2000-01-24_12:00:00
 
 1. Build the WRFDA code
 
-WRFDA can be built in 4DVar mode or non-4DVar mode. 4DVar build allows to run
-also 3DVar and hybrid-3D/4DEnVar and needs to build WRFPlus (i.e., TL/AD of WRF) first.
+WRFDA can be built in 4DVar mode or non-4DVar mode. The 4DVar build allows a user to also run
+3DVar and hybrid-3D/4DEnVar. The 4DVar build needs to additionally build WRFPlus (i.e., the tangent linear and adjoint (TL/AD) of WRF).
+Users may find a benefit to having separate directories for WRF, WRFPLUS, and WRFDA.
 
 For WRFPlus build:
 ```
-cd WRFPLUS
-./configure wrfplus
-choose 18 for dmpar with GNU
+cd ~
+cp -pr WRF WRFPLUS
+cd WRFPLUS 
+./configure wrfplus << EOF
+18
+EOF
 ./compile wrfplus >& foo
 ls -ls main/*.exe
 -rwxr-xr-x 1 liuz ncar 64177872 Mar 12 10:56 wrfplus.exe
@@ -503,13 +507,16 @@ ls -ls main/*.exe
 
 For WRFDA-4DVar build:
 ```
+cd ~
+cp -pr WRF WRFDA
 cd WRFDA
 setenv CRTM 1   # will build with CRTM, optinal
 setenv RTTOV rttov-lib-directory # 3rd part software, optional
 setenv HDF5 hdf5-lib-directory # optional, some obs file I/O need this.
 setenv WRFPLUS_DIR built-wrfplus-directory # must have for 4DVar
-./configure 4dvar
-choose 18 for dmpar with GNU
+./configure 4dvar << EOF
+18
+EOF
 ./compile all_wrfvar >& foo
 ls -lrt var/build/*.exe  # 43 executables
 -rwxr-xr-x 1 liuz ncar 110278320 Mar 12 11:28 var/build/da_wrfvar.exe
@@ -559,12 +566,15 @@ ls -lrt var/build/*.exe  # 43 executables
 
 WRFDA non-4DVar build can skip the step of building WRFPlus:
 ```
+cd ~
+cp -pr WRF WRFDA
 cd WRFDA
 setenv CRTM 1   # will build with CRTM, optinal
 setenv RTTOV rttov-lib-directory # 3rd part software, optional
 setenv HDF5 hdf5-lib-directory # optional, some obs file I/O need this.
-./configure wrfda
-choose 34 for dmpar with GNU
+./configure wrfda << EOF
+34
+EOF
 ./compile all_wrfvar >& foo
 ls -lrt var/build/*.exe will get the same 43 executables.
 ```
