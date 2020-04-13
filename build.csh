@@ -95,7 +95,7 @@ else if ( $TEST_GEN == SOME ) then
 	                  "em_realE       52 52DF 52FD 60 60NE " \
 	                  "em_realF       65DF 66FD 71 78 79 " \
 	                  "em_realG       kiaps1NE kiaps2 " \
-	                  "em_realH       cmt solaraNE " \
+	                  "em_realH       cmt solaraNE urb3bNE " \
 	                )
 
 else if ( $TEST_GEN == test ) then
@@ -150,7 +150,7 @@ endif
 #	Options that are used for all test generation settings. 
 
 set SERIAL    = ( T           F              T           T             T           T           T              F           T           T           T           T           T           T           T           T           T           T           )
-set OPENMP    = ( T           F              F           T             T           T           T              F           T           F           T           T           T           T           T           T           T           T           )
+set OPENMP    = ( T           F              F           T             T           T           T              F           T           F           T           T           T           T           T           T           T           F           )
 set MPI       = ( T           T              T           T             T           T           T              T           T           F           T           T           T           T           T           T           T           T           )
 set NEST      = ( 1           3              1           1             1           1           1              3           1           0           1           1           1           1           1           1           1           1           )
 set NAME      = ( em          hwrf           chem        qss           bwave       real8       qss8           move        fire        hill        em          em          em          em          em          em          em          em          )
