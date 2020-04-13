@@ -487,7 +487,8 @@ Diffing SERIAL/wrfout_d01_2000-01-24_12:00:00 wrfout_d01_2000-01-24_12:00:00
 ### Checking WRF DA results
 
 1. Build the WRFDA code
-WRFDA can be build in 4DVar mode or non-4DVar mode. 4DVar build allows to run
+
+WRFDA can be built in 4DVar mode or non-4DVar mode. 4DVar build allows to run
 also 3DVar and hybrid-3D/4DEnVar and needs to build WRFPlus (i.e., TL/AD of WRF) first.
 
 For WRFPlus build:
@@ -556,7 +557,7 @@ ls -lrt var/build/*.exe  # 43 executables
 -rwxr-xr-x 1 liuz ncar   5169112 Mar 12 11:30 var/build/da_rad_diags.exe
 ```
 
-WRFDA non-4DVar build can skip step of building WRFPlus:
+WRFDA non-4DVar build can skip the step of building WRFPlus:
 ```
 cd WRFDA
 setenv CRTM 1   # will build with CRTM, optinal
