@@ -486,6 +486,76 @@ Diffing SERIAL/wrfout_d01_2000-01-24_12:00:00 wrfout_d01_2000-01-24_12:00:00
 
 ### Checking WRF DA results
 
+1. Build the WRFDA code
+WRFDA can be build in 4DVar mode or non-4DVar mode. 4DVar build allows to run
+also 3DVar and hybrid-3D/4DEnVar and needs to build WRFPlus (i.e., TL/AD of WRF) first.
+
+For WRFPlus build:
+```
+cd WRFPLUS
+./configure wrfplus
+choose 18 for dmpar with GNU
+./compile wrfplus >& foo
+ls -ls main/*.exe
+-rwxr-xr-x 1 liuz ncar 64177872 Mar 12 10:56 wrfplus.exe
+```
+
+For WRFDA-4DVar build:
+```
+cd WRFDA
+setenv CRTM 1   # will build with CRTM, optinal
+setenv RTTOV rttov-lib-directory # 3rd part software, optional
+setenv HDF5 hdf5-lib-directory # optional, some obs file I/O need this.
+setenv WRFPLUS_DIR built-wrfplus-directory # must have for 4DVar
+./configure 4dvar
+choose 18 for dmpar with GNU
+./compile all_wrfvar >& foo
+ls -lrt var/build/*.exe  # 43 executables
+-rwxr-xr-x 1 liuz ncar 110278320 Mar 12 11:28 var/build/da_wrfvar.exe
+-rwxr-xr-x 1 liuz ncar     30184 Mar 12 11:28 var/build/da_advance_time.exe
+-rwxr-xr-x 1 liuz ncar   5314584 Mar 12 11:28 var/build/da_update_bc.exe
+-rwxr-xr-x 1 liuz ncar   5277832 Mar 12 11:28 var/build/da_update_bc_ad.exe
+-rwxr-xr-x 1 liuz ncar   6090656 Mar 12 11:28 var/build/gen_be_stage0_wrf.exe
+-rwxr-xr-x 1 liuz ncar   6070440 Mar 12 11:28 var/build/gen_be_stage0_gsi.exe
+-rwxr-xr-x 1 liuz ncar   6041080 Mar 12 11:28 var/build/gen_be_ep1.exe
+-rwxr-xr-x 1 liuz ncar   6114944 Mar 12 11:29 var/build/gen_be_ep2.exe
+-rwxr-xr-x 1 liuz ncar   6012408 Mar 12 11:29 var/build/gen_be_stage1.exe
+-rwxr-xr-x 1 liuz ncar   5955120 Mar 12 11:29 var/build/gen_be_vertloc.exe
+-rwxr-xr-x 1 liuz ncar   5997040 Mar 12 11:29 var/build/gen_be_addmean.exe
+-rwxr-xr-x 1 liuz ncar   6004432 Mar 12 11:29 var/build/gen_be_stage1_gsi.exe
+-rwxr-xr-x 1 liuz ncar   6000128 Mar 12 11:29 var/build/gen_be_stage1_1dvar.exe
+-rwxr-xr-x 1 liuz ncar   5983736 Mar 12 11:29 var/build/gen_be_stage2.exe
+-rwxr-xr-x 1 liuz ncar    171512 Mar 12 11:29 var/build/gen_be_stage2_gsi.exe
+-rwxr-xr-x 1 liuz ncar   6090424 Mar 12 11:29 var/build/gen_mbe_stage2.exe
+-rwxr-xr-x 1 liuz ncar   6004280 Mar 12 11:29 var/build/gen_be_stage2_1dvar.exe
+-rwxr-xr-x 1 liuz ncar   5971448 Mar 12 11:29 var/build/gen_be_stage2a.exe
+-rwxr-xr-x 1 liuz ncar   5983736 Mar 12 11:29 var/build/gen_be_stage3.exe
+-rwxr-xr-x 1 liuz ncar   5959168 Mar 12 11:29 var/build/gen_be_stage4_global.exe
+-rwxr-xr-x 1 liuz ncar   5992208 Mar 12 11:29 var/build/gen_be_stage4_regional.exe
+-rwxr-xr-x 1 liuz ncar   5959160 Mar 12 11:29 var/build/gen_be_cov2d.exe
+-rwxr-xr-x 1 liuz ncar   5959160 Mar 12 11:29 var/build/gen_be_cov3d.exe
+-rwxr-xr-x 1 liuz ncar   5971656 Mar 12 11:29 var/build/gen_be_cov3d3d_bin3d_contrib.exe
+-rwxr-xr-x 1 liuz ncar   5975744 Mar 12 11:29 var/build/gen_be_cov3d3d_contrib.exe
+-rwxr-xr-x 1 liuz ncar   5971648 Mar 12 11:30 var/build/gen_be_cov2d3d_contrib.exe
+-rwxr-xr-x 1 liuz ncar   5971648 Mar 12 11:30 var/build/gen_be_cov3d2d_contrib.exe
+-rwxr-xr-x 1 liuz ncar   5950968 Mar 12 11:30 var/build/gen_be_diags.exe
+-rwxr-xr-x 1 liuz ncar   5967544 Mar 12 11:30 var/build/gen_be_diags_read.exe
+-rwxr-xr-x 1 liuz ncar   5967352 Mar 12 11:30 var/build/gen_be_hist.exe
+-rwxr-xr-x 1 liuz ncar   5979744 Mar 12 11:30 var/build/gen_be_ensrf.exe
+-rwxr-xr-x 1 liuz ncar   6054528 Mar 12 11:30 var/build/gen_be_etkf.exe
+-rwxr-xr-x 1 liuz ncar   5963320 Mar 12 11:30 var/build/gen_be_ensmean.exe
+-rwxr-xr-x 1 liuz ncar    270480 Mar 12 11:30 var/build/da_tune_obs_hollingsworth1.exe
+-rwxr-xr-x 1 liuz ncar    180488 Mar 12 11:30 var/build/da_tune_obs_hollingsworth2.exe
+-rwxr-xr-x 1 liuz ncar    129800 Mar 12 11:30 var/build/da_tune_obs_desroziers.exe
+-rwxr-xr-x 1 liuz ncar   5133368 Mar 12 11:30 var/build/da_verif_obs.exe
+-rwxr-xr-x 1 liuz ncar   5364056 Mar 12 11:30 var/build/da_verif_grid.exe
+-rwxr-xr-x 1 liuz ncar    109920 Mar 12 11:30 var/build/da_bias_airmass.exe
+-rwxr-xr-x 1 liuz ncar     47520 Mar 12 11:30 var/build/da_bias_sele.exe
+-rwxr-xr-x 1 liuz ncar    101296 Mar 12 11:30 var/build/da_bias_scan.exe
+-rwxr-xr-x 1 liuz ncar     56104 Mar 12 11:30 var/build/da_bias_verif.exe
+-rwxr-xr-x 1 liuz ncar   5169112 Mar 12 11:30 var/build/da_rad_diags.exe
+```
+
 ### Checking NMM results
 
 Most developers do not anticipate sharing contributions with the NMM dynamical core. It is mandatory that the existing build of the NMM WRF model work with the new code, a peaceful co-existence. This is an example of negative testing: tests need to be undertaken to demonstrate that no harm has been done to the existing NMM WRF capabilities. This testing must be done inside the NMM container. A couple of NMM-specific environment variables are required to be set prior to the build. The ARW tests are much smaller than the NMM tests. While the ARW jobs are able to run with only 2 GB of memory, the NMM jobs use 8 GB. 
