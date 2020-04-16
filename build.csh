@@ -89,7 +89,7 @@ else if ( $TEST_GEN == SOME ) then
 	                  "em_fire        01 " \
 	                  "em_hill2d_x    01 " \
 	                  "em_realA       03 03DF 03FD 06 07NE " \
-	                  "em_realB       10 11 14 16 16DF " \
+	                  "em_realB       10 11 14 16 " \
 	                  "em_realC       17 17AD 18 20 20NE " \
 	                  "em_realD       38 48 49 50 51 " \
 	                  "em_realE       52 52DF 52FD 60 60NE " \
