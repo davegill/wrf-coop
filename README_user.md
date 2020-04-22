@@ -507,7 +507,7 @@ ls -ls main/*.exe
 cd test/em_real
 ln -sf /wrf/Data/em_chem/* .
 mv namelist.input namelist.input.bk
-ln -sv /wrf/Namelists/weekly/em_chem/namelist.input.1 namelist.input
+cp /wrf/Namelists/weekly/em_chem/namelist.input.1 namelist.input
 mpirun -np 3 --oversubscribe real.exe
 mpirun -np 3 --oversubscribe wrf.exe
 ```
@@ -527,14 +527,14 @@ Timing for main: time 2006-04-06_00:40:00 on domain   1:    0.30653 elapsed seco
 Timing for Writing wrfout_d01_2006-04-06_00:40:00 for domain        1:    0.12587 elapsed seconds
 d01 2006-04-06_00:40:00 wrf: SUCCESS COMPLETE WRF
 ```
-Verify that there are two time perids in the output..
+Verify that there are two time perids in the output.
 ```
 ncdump -h wrfout_d01_2006-04-06_00:00:00 | grep Time | grep UNLIMITED
         Time = UNLIMITED ; // (2 currently)
 ```
-And check that there are no missing values
+And check that there are no NaN (not a number) values in the gridded model output:
 ```
-grep -i nan
+ncdump -h wrfout_d01_2006-04-06_00:00:00 | grep -i nan
                 IVGTYP:description = "DOMINANT VEGETATION CATEGORY" ;
                 ISLTYP:description = "DOMINANT SOIL CATEGORY" ;
 ```
