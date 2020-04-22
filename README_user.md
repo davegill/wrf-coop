@@ -484,6 +484,65 @@ Diffing SERIAL/wrfout_d01_2000-01-24_12:00:00 wrfout_d01_2000-01-24_12:00:00
 
 ### Checking WRF Chem results
 
+Compiling the chemistry code requires significantly more time and resorces than the ARW build without chemistry. If your compile is killed, open Docker's preferences, go to Resources, and increase Memory and Swap.
+
+1. Build the WRF-Chem code
+```
+cd WRF
+setenv WRF_EM_CORE 1
+setenv WRF_CHEM 1
+configure -d << EOF
+34
+1
+EOF
+compile em_real -j 4 >& foo
+ls -ls main/*.exe
+ 98856 -rwxr-xr-x 1 wrfuser wrf 101227120 Apr 20 20:08 main/ndown.exe
+ 99128 -rwxr-xr-x 1 wrfuser wrf 101505816 Apr 20 20:08 main/real.exe
+ 96408 -rwxr-xr-x 1 wrfuser wrf  98718320 Apr 20 20:08 main/tc.exe
+113652 -rwxr-xr-x 1 wrfuser wrf 116378112 Apr 20 20:02 main/wrf.exe
+```
+2. Run the WRF-Chem code
+```
+cd test/em_real
+ln -sf /wrf/Data/em_chem/* .
+mv namelist.input namelist.input.bk
+cp /wrf/Namelists/weekly/em_chem/namelist.input.1 namelist.input
+mpirun -np 3 --oversubscribe real.exe
+mpirun -np 3 --oversubscribe wrf.exe
+```
+3. Check the WRF-Chem ouput
+
+This includes looking at the standard out, looking for "SUCCESS COMPLETE WRF".
+```
+tail rsl.out.0000
+Timing for main: time 2006-04-06_00:12:00 on domain   1:    0.45490 elapsed seconds
+Timing for main: time 2006-04-06_00:16:00 on domain   1:    0.44533 elapsed seconds
+Timing for main: time 2006-04-06_00:20:00 on domain   1:    0.46689 elapsed seconds
+Timing for main: time 2006-04-06_00:24:00 on domain   1:    0.29783 elapsed seconds
+Timing for main: time 2006-04-06_00:28:00 on domain   1:    0.30349 elapsed seconds
+Timing for main: time 2006-04-06_00:32:00 on domain   1:    0.28939 elapsed seconds
+Timing for main: time 2006-04-06_00:36:00 on domain   1:    0.52982 elapsed seconds
+Timing for main: time 2006-04-06_00:40:00 on domain   1:    0.30653 elapsed seconds
+Timing for Writing wrfout_d01_2006-04-06_00:40:00 for domain        1:    0.12587 elapsed seconds
+d01 2006-04-06_00:40:00 wrf: SUCCESS COMPLETE WRF
+```
+Verify that there are two time perids in the output.
+```
+ncdump -h wrfout_d01_2006-04-06_00:00:00 | grep Time | grep UNLIMITED
+        Time = UNLIMITED ; // (2 currently)
+```
+And check that there are no NaN (not a number) values in the gridded model output:
+```
+ncdump -h wrfout_d01_2006-04-06_00:00:00 | grep -i nan
+                IVGTYP:description = "DOMINANT VEGETATION CATEGORY" ;
+                ISLTYP:description = "DOMINANT SOIL CATEGORY" ;
+```
+4. For WRF-Chem, the following tests (i.e., namelist.input.$TESTNUMBER) should be conducted
+   * 1
+   * 5
+   * 6 (namelist in MPI subdirectory)
+
 ### Checking WRF DA results
 
 ### Checking NMM results
