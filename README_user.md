@@ -510,8 +510,8 @@ For WRFDA-4DVar build:
 cd ~
 cp -pr WRF WRFDA
 cd WRFDA
+setenv CRTM 1   # will build with CRTM, optional
 <!---
-setenv CRTM 1   # will build with CRTM, optinal
 setenv RTTOV rttov-lib-directory # 3rd part software, optional
 setenv HDF5 hdf5-lib-directory # optional, some obs file I/O need this.
 --->
@@ -571,8 +571,8 @@ WRFDA non-4DVar build can skip the step of building WRFPlus:
 cd ~
 cp -pr WRF WRFDA
 cd WRFDA
+setenv CRTM 1   # will build with CRTM, optional
 <!---
-setenv CRTM 1   # will build with CRTM, optinal
 setenv RTTOV rttov-lib-directory # 3rd part software, optional
 setenv HDF5 hdf5-lib-directory # optional, some obs file I/O need this.
 --->
