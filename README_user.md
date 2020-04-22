@@ -506,7 +506,6 @@ ls -ls main/*.exe
 ```
 cd test/em_real
 ln -sf /wrf/Data/em_chem/* .
-mv namelist.input namelist.input.bk
 cp /wrf/Namelists/weekly/em_chem/namelist.input.1 namelist.input
 mpirun -np 3 --oversubscribe real.exe
 mpirun -np 3 --oversubscribe wrf.exe
