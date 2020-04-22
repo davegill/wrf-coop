@@ -484,8 +484,6 @@ Diffing SERIAL/wrfout_d01_2000-01-24_12:00:00 wrfout_d01_2000-01-24_12:00:00
 
 ### Checking WRF Chem results
 
-The WRF-Chem code is currently tested using a chemistry option that does not require the Kinetic-Pre-Processor (KPP).
-
 Compiling the chemistry code requires significantly more time and resorces than the ARW build without chemistry. If your compile is killed, open Docker's preferences, go to Resources, and increase Memory and Swap.
 
 1. Build the WRF-Chem code
