@@ -564,15 +564,15 @@ ls -ls main/*.exe
 ```
 
 For WRFDA-4DVar build:
+<!--
+setenv RTTOV rttov-lib-directory # 3rd part software, optional
+setenv HDF5 hdf5-lib-directory # optional, some obs file I/O need this.
+-->
 ```
 cd ~
 cp -pr WRF WRFDA
 cd WRFDA
 setenv CRTM 1   # will build with CRTM, optional
-<!--
-setenv RTTOV rttov-lib-directory # 3rd part software, optional
-setenv HDF5 hdf5-lib-directory # optional, some obs file I/O need this.
--->
 setenv WRFPLUS_DIR built-wrfplus-directory # must have for 4DVar
 ./configure 4dvar << EOF
 18
@@ -625,15 +625,15 @@ ls -lrt var/build/*.exe  # 43 executables
 ```
 
 WRFDA non-4DVar build can skip the step of building WRFPlus:
+<!--
+setenv RTTOV rttov-lib-directory # 3rd part software, optional
+setenv HDF5 hdf5-lib-directory # optional, some obs file I/O need this.
+-->
 ```
 cd ~
 cp -pr WRF WRFDA
 cd WRFDA
 setenv CRTM 1   # will build with CRTM, optional
-<!--
-setenv RTTOV rttov-lib-directory # 3rd part software, optional
-setenv HDF5 hdf5-lib-directory # optional, some obs file I/O need this.
--->
 ./configure wrfda << EOF
 34
 EOF
