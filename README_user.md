@@ -2,6 +2,9 @@
 
 **Contents**
 * [Purpose](#Purpose)
+* [What is tested](#Tested)
+* [Get the WRF docker infrastructure](#Getdocker)
+* [Prepare the docker image](#Prepareimage)
 
 ### Purpose<a name="Purpose"/>
 
@@ -25,7 +28,7 @@ _does_ work as described, and importantly that the modification _does not_ accid
 
 This page describes how to use docker containers for both the positive tests (activated option must perform as expected) and negative tests (no unintended consequences) of code proposed to WRF. This document provides developers with simple instructions to allow them to more fully vet their code by providing data and configuration files for a wide variety of known working setups. Before issuing a pull request to the WRF github repository, the developer's code modification must demonstrate the continued proper functioning of these existing WRF capabilities.
 
-### What is tested
+### What is tested<a name="Tested"/>
 
 The real-data ARW simulations are tested for the 2000 Jan 24-25 1200 UTC case (though typically for only the first half hour of the time period). 
 
@@ -96,7 +99,7 @@ Several types of tests are accessible within this docker testing system.
 | solaraNE |  8 |  1 |  4 |  4 |  5 |  5 |  2 |  3 |
 | **Test** | **MP** | **CU** | **LW** | **SW** | **PBL** | **SFC** | **LSM** | **URB** |
 
-## Get the WRF docker infrastructure
+## Get the WRF docker infrastructure<a name="Getdocker"/>
 
 1. Docker is needed   
 
@@ -108,7 +111,7 @@ git clone https://github.com/davegill/wrf-coop
 cd wrf-coop
 ```
 
-## Prepare the docker image
+## Prepare the docker image<a name="Prepareimage"/>
 
 1. From inside the top-level `wrf-coop` directory, edit the runtime files for docker to test the single specific WRF fork, repository, and branch: `Dockerfile` and `Dockerfile-NMM`. 
 
