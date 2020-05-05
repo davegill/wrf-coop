@@ -5,6 +5,17 @@
 * [What is tested](#Tested)
 * [Get the WRF docker infrastructure](#Getdocker)
 * [Prepare the docker image](#Prepareimage)
+* [Contruct the docker containers](#Constrcutcontainers)
+* [Build executables from source, run tests](#Buildexec)
+    * [Run a sample test case](#Runsample)
+    * [Check the simulation results](#Checkresults)
+    * [Compare the simulation results](#Compareresults)
+    * [Checking WRF Chem results](#WRFChem)
+    * [Checking WRF DA results](#WRFDA)
+    * [Checking NMM results](#WRFNMM)
+* [Docker Clean Up](#Cleanup)
+* [Stop, re-enter, and remove a docker container](#Stop)
+* [Remove a docker image](#RemoveImage)
 
 ### Purpose<a name="Purpose"/>
 
@@ -200,7 +211,7 @@ davegill/wrf-coop   eighthtry           56930417513a        5 weeks ago         
 davegill/wrf-coop   sixthtry            c36f5f2b0cc6        3 months ago        5.32GB
 ```
 
-## Contruct the docker containers
+## Contruct the docker containers<a name="Constrcutcontainers"/>
 
 1. Choose a shared directory for docker
 
@@ -224,7 +235,7 @@ docker run -it --name NMM -v /users/gill/DOCKER_STUFF:/wrf/wrfoutput wrf_nmmregt
 ```
 You are now in the NMM container.
 
-## Build executables from source, run tests
+## Build executables from source, run tests<a name="Buildexec"/>
 
 Once the WRF containers are built and you are inside of the ARW container, building the WRF code is as usual. 
 
@@ -248,7 +259,7 @@ EOF
 compile em_real -j 4 >& foo ; tail -20 foo
 ```
 
-### Run a sample test case
+### Run a sample test case<a name="Runsample"/>
 
 1. All of the required gridded fields, such as from metgrid, are inside the container. Those need to be in the working directory. With the shared directory between the docker container and the host OS, other data can easily be brought into the container.
 ```
@@ -270,7 +281,7 @@ cp /wrf/Namelists/weekly/em_real/MPI/namelist.input.conus namelist.input
 mpirun -np 3 --oversubscribe real.exe
 mpirun -np 3 --oversubscribe wrf.exe
 ```
-### Check the simulation results
+### Check the simulation results<a name="Checkresults"/>
 
 1. The output from standard err and standard out in the container are treated similarly as typical WRF simulations. The last line should contain the string "SUCCESS".
 ```
@@ -320,7 +331,7 @@ ls -ls
 total 78936
 78936 -rw-r--r--  1 gill  1500  40413808 Apr  3 14:19 wrfout_d01_2000-01-24_12:00:00
 ```
-### Compare the simulation results
+### Compare the simulation results<a name="Compareresults"/>
 
 The listed run-time configuration options (in the above table) provide bit-wise identical results with serial, OpenMP, and MPI simulations. Confirming these bit identical results is via two pair-wise comparisons (serial vs OpenMP, and serial vs MPI).
 
@@ -488,7 +499,7 @@ Diffing SERIAL/wrfout_d01_2000-01-24_12:00:00 wrfout_d01_2000-01-24_12:00:00
 5. By saving the WRF executables (`wrf.exe`) in each directory, a user can now run through all of the tests for each parallel build to verify identical results.
 6. A contributor should also modify a standard namelist to include a positive test for the new source code to be included. Of course, most of the infrastructure inside the container is in place to verify that the new code has not broken anything. However, the same infrastructure should be used to ensure bit-wise identical results among the three parallel build options with the new feature or option.
 
-### Checking WRF Chem results
+### Checking WRF Chem results<a name="WRFChem"/>
 
 Compiling the chemistry code requires significantly more time and resorces than the ARW build without chemistry. If your compile is killed, open Docker's preferences, go to Resources, and increase Memory and Swap.
 
@@ -548,7 +559,7 @@ ncdump -h wrfout_d01_2006-04-06_00:00:00 | grep -i nan
    * 5
    * 6 (namelist in MPI subdirectory)
 
-### Checking WRF DA results
+### Checking WRF DA results<a name="WRFDA"/>
 
 1. Build the WRFDA code
 
@@ -647,7 +658,7 @@ EOF
 ls -lrt var/build/*.exe will get the same 43 executables.
 ```
 
-### Checking NMM results
+### Checking NMM results<a name="WRFNMM"/>
 
 Most developers do not anticipate sharing contributions with the NMM dynamical core. It is mandatory that the existing build of the NMM WRF model work with the new code, a peaceful co-existence. This is an example of negative testing: tests need to be undertaken to demonstrate that no harm has been done to the existing NMM WRF capabilities. This testing must be done inside the NMM container. A couple of NMM-specific environment variables are required to be set prior to the build. The ARW tests are much smaller than the NMM tests. While the ARW jobs are able to run with only 2 GB of memory, the NMM jobs use 8 GB. 
 
@@ -707,11 +718,11 @@ ncdump wrfout_d02_2012-10-28_06:00:00 | grep -i nan
    * 2NE
    * 3NE
 
-## Docker Clean Up
+## Docker Clean Up<a name="Cleanup"/>
 
 When running docker containers, approximately 5-6 GB of disk space is used per container. Exiting from a container simply stops the container, but does not kill the container process. Similarly, removing the container process does not remove the docker WRF images. 
 
-### Stop, re-enter, and remove a docker container
+### Stop, re-enter, and remove a docker container<a name="Stop"/>
 
 From a host OS terminal window and while you are still in the docker container in another terminal window, you can see the running containers:
 ```
@@ -741,7 +752,7 @@ docker stop ARW
 docker rm ARW
 ```
 
-### Remove a docker image
+### Remove a docker image<a name="RemoveImage"/>
 
 What docker images are available to remove:
 ```
