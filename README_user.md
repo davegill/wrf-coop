@@ -129,7 +129,7 @@ cd wrf-coop
 Here is the entire Dockerfile for ARW: `Dockerfile`:
 ```
 #
-FROM davegill/wrf-coop:eighthtry
+FROM davegill/wrf-coop:ninthtry
 MAINTAINER Dave Gill <gill@ucar.edu>
 
 RUN git clone _FORK_/_REPO_.git WRF \
@@ -207,7 +207,7 @@ docker images
 REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
 wrf_nmmregtest      latest              13b80465a2f4        2 days ago          5.78GB
 wrf_regtest         latest              d7dd1400f486        2 days ago          6.14GB
-davegill/wrf-coop   eighthtry           56930417513a        5 weeks ago         5.59GB
+davegill/wrf-coop   ninthtry            b64c05d77cfb        19 minutes ago      5.11 GB
 davegill/wrf-coop   sixthtry            c36f5f2b0cc6        3 months ago        5.32GB
 ```
 
@@ -760,7 +760,7 @@ docker images
 REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
 wrf_nmmregtest      latest              13b80465a2f4        2 days ago          5.78GB
 wrf_regtest         latest              d7dd1400f486        2 days ago          6.14GB
-davegill/wrf-coop   eighthtry           56930417513a        5 weeks ago         5.59GB
+davegill/wrf-coop   ninthtry            b64c05d77cfb        19 minutes ago      5.11 GB
 davegill/wrf-coop   sixthtry            c36f5f2b0cc6        3 months ago        5.32GB
 ```
 As mentioned previously, leave the `wrf-coop` images alone. To remove the images that made both the `ARW` and `NMM` containers (in the above example):
