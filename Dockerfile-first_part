@@ -20,7 +20,7 @@ ENTRYPOINT [ "/usr/bin/entrypoint.sh" ]
 RUN yum -y install file gcc gcc-gfortran gcc-c++ glibc.i686 libgcc.i686 libpng-devel jasper \
   jasper-devel hostname m4 make perl tar bash tcsh time wget which zlib zlib-devel \
   openssh-clients openssh-server net-tools fontconfig libgfortran libXext libXrender \
-  sudo epel-release git
+  sudo epel-release git flex yacc
 
 # Newer version 9 of GNU compiler, required to fix WRF RRTMG-derivative builds
 
@@ -100,18 +100,15 @@ RUN source /opt/rh/devtoolset-9/enable \
  && make install &> /wrf/libs/build_log_ncf_make \
  && echo dummy printout to keep travis happy ncf make
 
-#RUN yum -y install python-pip python-setuptools
-RUN yum -y install python-pip
-RUN yum -y install python-devel
-#RUN pip install Cython
-#RUN echo pip istalled Cython
-RUN pip install --upgrade pip \
- && pip install numpy \
- && echo pip istalled numpy
-#RUN pip install cython \
-# && echo pip istalled cython
-RUN pip install --upgrade setuptools \
- && echo pip istalled setuptools
+# Setup up python3.6
+RUN yum -y install python36 \
+ && yum -y install python36-devel \
+ && yum -y install python36-pip \
+ && yum -y install python36-setuptools \
+ && easy_install-3.6 pip \
+ && python3.6 -m pip install numpy \
+ && python3.6 -m pip install --upgrade pip \
+ && python3.6 -m pip install --upgrade setuptools
 RUN ldconfig -v
 
 # Build netCDF4-python libraries
@@ -122,10 +119,10 @@ RUN source /opt/rh/devtoolset-9/enable \
  && export LD_LIBRARY_PATH=${NETCDF}/lib:${LD_LIBRARY_PATH} \
  && export NETCDF4_DIR=${NETCDF} \
  && export HDF5_DIR=/usr/local \
- && python setup.py build \
- && CPPFLAGS="-I${NETCDF}/include -I/usr/local/include" LDFLAGS="-L${NETCDF}/lib -L/usr/local/lib" python setup.py install \
+ && python3.6 -m pip install wheel \
+ && python3.6 setup.py build \
+ && CPPFLAGS="-I${NETCDF}/include -I/usr/local/include" LDFLAGS="-L${NETCDF}/lib -L/usr/local/lib" python3.6 setup.py install \
  && echo dummy printout to keep travis happy ncf4-python install
-#&& python setup.py build &> /wrf/libs/build_log_ncf4-python_build
 
 RUN mkdir -p /var/run/sshd \
     && ssh-keygen -A \
