@@ -1,5 +1,5 @@
 #
-FROM davegill/wrf-coop:ninthtry
+FROM davegill/wrf-coop:eleventhtry
 MAINTAINER Dave Gill <gill@ucar.edu>
 
 RUN git clone _FORK_/_REPO_.git WRF \

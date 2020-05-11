@@ -129,7 +129,7 @@ cd wrf-coop
 Here is the entire Dockerfile for ARW: `Dockerfile`:
 ```
 #
-FROM davegill/wrf-coop:ninthtry
+FROM davegill/wrf-coop:eleventhtry
 MAINTAINER Dave Gill <gill@ucar.edu>
 
 RUN git clone _FORK_/_REPO_.git WRF \
@@ -206,8 +206,8 @@ docker images
 
 REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
 wrf_nmmregtest      latest              13b80465a2f4        2 days ago          5.78GB
-wrf_regtest         latest              d7dd1400f486        2 days ago          6.14GB
-davegill/wrf-coop   ninthtry            b64c05d77cfb        19 minutes ago      5.11 GB
+wrf_regtest         latest              05892c8db574        About an hour ago   5.66 GB
+davegill/wrf-coop   eleventhtry         d189602ba49d        About an hour ago   5.11 GB
 davegill/wrf-coop   sixthtry            c36f5f2b0cc6        3 months ago        5.32GB
 ```
 
@@ -519,6 +519,27 @@ ls -ls main/*.exe
  96408 -rwxr-xr-x 1 wrfuser wrf  98718320 Apr 20 20:08 main/tc.exe
 113652 -rwxr-xr-x 1 wrfuser wrf 116378112 Apr 20 20:02 main/wrf.exe
 ```
+
+To build the WRF-Chem executables with KPP, a couple of extra environment variables are required but otherwise the process is identical. The compilation and build takes longer with WRF-Chem, and the KPP build is even longer.
+```
+cd WRF
+setenv WRF_EM_CORE 1
+setenv WRF_CHEM 1
+setenv WRF_KPP 1
+setenv FLEX_LIB_DIR /usr/lib64
+setenv YACC '/usr/bin/yacc -d'
+configure -d << EOF
+34
+1
+EOF
+compile em_real -j 4 >& foo
+ls -ls main/*.exe
+101896 -rwxr-xr-x 1 wrfuser wrf 104339744 May 11 03:01 ndown.exe
+102172 -rwxr-xr-x 1 wrfuser wrf 104622976 May 11 03:01 real.exe
+ 99444 -rwxr-xr-x 1 wrfuser wrf 101827832 May 11 03:01 tc.exe
+132888 -rwxr-xr-x 1 wrfuser wrf 136076608 May 11 03:00 wrf.exe
+```
+
 2. Run the WRF-Chem code
 ```
 cd test/em_real
@@ -759,8 +780,8 @@ What docker images are available to remove:
 docker images
 REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
 wrf_nmmregtest      latest              13b80465a2f4        2 days ago          5.78GB
-wrf_regtest         latest              d7dd1400f486        2 days ago          6.14GB
-davegill/wrf-coop   ninthtry            b64c05d77cfb        19 minutes ago      5.11 GB
+wrf_regtest         latest              05892c8db574        About an hour ago   5.66 GB
+davegill/wrf-coop   eleventhtry         d189602ba49d        About an hour ago   5.11 GB
 davegill/wrf-coop   sixthtry            c36f5f2b0cc6        3 months ago        5.32GB
 ```
 As mentioned previously, leave the `wrf-coop` images alone. To remove the images that made both the `ARW` and `NMM` containers (in the above example):

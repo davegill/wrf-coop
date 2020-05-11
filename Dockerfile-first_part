@@ -20,7 +20,7 @@ ENTRYPOINT [ "/usr/bin/entrypoint.sh" ]
 RUN yum -y install file gcc gcc-gfortran gcc-c++ glibc.i686 libgcc.i686 libpng-devel jasper \
   jasper-devel hostname m4 make perl tar bash tcsh time wget which zlib zlib-devel \
   openssh-clients openssh-server net-tools fontconfig libgfortran libXext libXrender \
-  sudo epel-release git flex yacc
+  sudo epel-release git flex flex-devel byacc
 
 # Newer version 9 of GNU compiler, required to fix WRF RRTMG-derivative builds
 
