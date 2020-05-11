@@ -155,9 +155,10 @@ CONTAINER ID        IMAGE               COMMAND             CREATED             
 ```
 ```
 > docker images
-REPOSITORY                    TAG                 IMAGE ID            CREATED             SIZE
-wrf_regtest                   latest              196313365c17        About an hour ago   4.72 GB
-docker.io/davegill/wrf-coop   fifthtry            efc665da99ef        7 months ago        4.28 GB
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+wrf_regtest         latest              05892c8db574        About an hour ago   5.66 GB
+davegill/wrf-coop   eleventhtry         d189602ba49d        About an hour ago   5.11 GB
+
 ```
 ```
 > docker rmi 196313365c17 efc665da99ef
@@ -302,6 +303,29 @@ Run ./test_009s.csh
 Run ./test_009o.csh
 Run ./test_009m.csh
 Run ./test_010s.csh
+Run ./test_011s.csh
+Run ./test_011o.csh
+Run ./test_011m.csh
+Run ./test_012s.csh
+Run ./test_012o.csh
+Run ./test_012m.csh
+Run ./test_013s.csh
+Run ./test_013o.csh
+Run ./test_013m.csh
+Run ./test_014s.csh
+Run ./test_014o.csh
+Run ./test_014m.csh
+Run ./test_015s.csh
+Run ./test_015o.csh
+Run ./test_015m.csh
+Run ./test_016s.csh
+Run ./test_016o.csh
+Run ./test_016m.csh
+Run ./test_017s.csh
+Run ./test_017o.csh
+Run ./test_017m.csh
+Run ./test_018s.csh
+Run ./test_018m.csh
 ```
 
 The correct usage would be to assign each test to a separate node.
