@@ -143,7 +143,7 @@ Run a single test in each container, takes less than a minute for each.
 0 for test 1NE
 > docker exec test_003 ./script.csh RUN em_real 34 em_chem 1 NP=3 ; set OK = $status ; echo $OK for test 1
 0 for test 1
-> docker exec test_004 ./script.csh RUN em_real 34 em_chem_kpp 101 NP=3 ; set OK = $status ; echo $OK for test 1
+> docker exec test_004 ./script.csh RUN em_real 34 em_chem_kpp 101 NP=3 ; set OK = $status ; echo $OK for test 101
 0 for test 1
 ```
 
