@@ -125,7 +125,7 @@ Build the specific containers: em_real (test_001), NMM (test_002), Chem (test_00
 > docker exec test_003 ./script.csh BUILD CLEAN 34 1 em_real -d J=-j@3 WRF_CHEM=1
 > docker exec test_004 ./script.csh BUILD CLEAN 34 1 em_real -d J=-j@3 WRF_CHEM=1 WRF_KPP=1 FLEX_LIB_DIR=/usr/lib64 YACC=/usr/bin/yacc@-d
 ```
-If your machine is _beefy_ enough, put these build jobs (as in "build a wrf executable") in the background, and run them all at the same time. Since each job is asking for `make` to use three parallel threads to speed up the build process of the WRF executables (`J=-j@3`), a _beefy_ enough machine for these three tasks would have twelve or more non-hyperthreaded processors.	
+If your machine is _beefy_ enough, put these build jobs (as in "build a wrf executable") in the background, and run them all at the same time. Since each job is asking for `make` to use three parallel threads to speed up the build process of the WRF executables (`J=-j@3`), a _beefy_ enough machine for these four tasks (the fourseparate builds) would have twelve or more non-hyperthreaded processors.	
 ```
 > docker exec test_001 ./script.csh BUILD CLEAN 34 1 em_real -d J=-j@3 &
 > docker exec test_002 ./script.csh BUILD CLEAN 34 3 nmm_real -d J=-j@3 WRF_NMM_CORE=1 HWRF=1 &
