@@ -107,27 +107,30 @@ The second image is faster (it requires a much shorter time to build the image),
 > docker build -t wrftest .
 ```
 
-### With the second image, build three containers
-We construct a few containers from the `wrftest` image: real (test_001), nmm (test_002), chem (test_003). These containers take only a few seconds each to create.
+### With the second image, build four containers
+We construct a few containers from the `wrftest` image: real (test_001), nmm (test_002), chem (test_003), chem_kpp (test_004). These containers take only a few seconds each to create.
 ```
 > docker run -d -t --name test_001 wrftest
 > docker run -d -t --name test_002 wrftest
 > docker run -d -t --name test_003 wrftest
+> docker run -d -t --name test_004 wrftest
 ```
 
 
-### With those available containers, build the WRF code in three separate ways
-Build the specific containers: em_real (test_001), NMM (test_002), Chem (test_003). These each require 5-20 minutes each, with most of the time consumed in the compilation of the WRF object files from source.
+### With those available containers, build the WRF code in four separate ways
+Build the specific containers: em_real (test_001), NMM (test_002), Chem (test_003), Chem KPP (test_004). These each require 5-20 minutes each, with most of the time consumed in the compilation of the WRF object files from source.
 ```
 > docker exec test_001 ./script.csh BUILD CLEAN 34 1 em_real -d J=-j@3
 > docker exec test_002 ./script.csh BUILD CLEAN 34 3 nmm_real -d J=-j@3 WRF_NMM_CORE=1 HWRF=1
 > docker exec test_003 ./script.csh BUILD CLEAN 34 1 em_real -d J=-j@3 WRF_CHEM=1
+> docker exec test_004 ./script.csh BUILD CLEAN 34 1 em_real -d J=-j@3 WRF_CHEM=1 WRF_KPP=1 FLEX_LIB_DIR=/usr/lib64 YACC=/usr/bin/yacc@-d
 ```
-If your machine is _beefy_ enough, put these build jobs (as in "build a wrf executable") in the background, and run them all at the same time. Since each job is asking for `make` to use three parallel threads to speed up the build process of the WRF executables (`J=-j@3`), a _beefy_ enough machine for these three tasks would have nine or more non-hyperthreaded processors.	
+If your machine is _beefy_ enough, put these build jobs (as in "build a wrf executable") in the background, and run them all at the same time. Since each job is asking for `make` to use three parallel threads to speed up the build process of the WRF executables (`J=-j@3`), a _beefy_ enough machine for these three tasks would have twelve or more non-hyperthreaded processors.	
 ```
 > docker exec test_001 ./script.csh BUILD CLEAN 34 1 em_real -d J=-j@3 &
 > docker exec test_002 ./script.csh BUILD CLEAN 34 3 nmm_real -d J=-j@3 WRF_NMM_CORE=1 HWRF=1 &
 > docker exec test_003 ./script.csh BUILD CLEAN 34 1 em_real -d J=-j@3 WRF_CHEM=1 &
+> docker exec test_004 ./script.csh BUILD CLEAN 34 1 em_real -d J=-j@3 WRF_CHEM=1 WRF_KPP=1 FLEX_LIB_DIR=/usr/lib64 YACC=/usr/bin/yacc@-d &
 > wait
 ```
 
@@ -139,6 +142,8 @@ Run a single test in each container, takes less than a minute for each.
 > docker exec test_002 ./script.csh RUN nmm_real 34 nmm_hwrf 1NE NP=3 ; set OK = $status ; echo $OK for test 1NE
 0 for test 1NE
 > docker exec test_003 ./script.csh RUN em_real 34 em_chem 1 NP=3 ; set OK = $status ; echo $OK for test 1
+0 for test 1
+> docker exec test_004 ./script.csh RUN em_real 34 em_chem_kpp 101 NP=3 ; set OK = $status ; echo $OK for test 1
 0 for test 1
 ```
 
@@ -199,6 +204,8 @@ Run ./test_001m.csh
 Run ./test_002m.csh
 Run ./test_003s.csh
 Run ./test_003m.csh
+Run ./test_004s.csh
+Run ./test_004m.csh
 ```
 
 Each manufactured job script looks similar to this:
@@ -248,7 +255,7 @@ date
 
 On a single desktop, a reasonable run-time command would be:
 ```
-> date ; ( ./single.csh ; ./test_001s.csh ; ./test_001o.csh ; ./test_001m.csh ; ./test_002m.csh ; ./test_003s.csh ; ./test_003m.csh ;) >& output ; date
+> date ; ( ./single.csh ; ./test_001s.csh ; ./test_001o.csh ; ./test_001m.csh ; ./test_002m.csh ; ./test_003s.csh ; ./test_003m.csh ; ./test_004s.csh ; ./test_004m.csh ;) >& output ; date
 ```
 
 To view how the status of the testing after the command is complete, search for `SUCCESS`. There should be four `SUCCESS` messages for each test conducted (in this example, we did five tests):
