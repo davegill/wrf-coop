@@ -108,29 +108,29 @@ The second image is faster (it requires a much shorter time to build the image),
 ```
 
 ### With the second image, build four containers
-We construct a few containers from the `wrftest` image: real (test_001), nmm (test_002), chem (test_003), chem_kpp (test_004). These containers take only a few seconds each to create.
+We construct a few containers from the `wrftest` image: real (test_001), nmm (test_002), chem (test_003), chem_kpp (test_019). These containers take only a few seconds each to create.
 ```
 > docker run -d -t --name test_001 wrftest
 > docker run -d -t --name test_002 wrftest
 > docker run -d -t --name test_003 wrftest
-> docker run -d -t --name test_004 wrftest
+> docker run -d -t --name test_019 wrftest
 ```
 
 
 ### With those available containers, build the WRF code in four separate ways
-Build the specific containers: em_real (test_001), NMM (test_002), Chem (test_003), Chem KPP (test_004). These each require 5-20 minutes each, with most of the time consumed in the compilation of the WRF object files from source.
+Build the specific containers: em_real (test_001), NMM (test_002), Chem (test_003), Chem KPP (test_019). These each require 5-20 minutes each, with most of the time consumed in the compilation of the WRF object files from source.
 ```
 > docker exec test_001 ./script.csh BUILD CLEAN 34 1 em_real -d J=-j@3
 > docker exec test_002 ./script.csh BUILD CLEAN 34 3 nmm_real -d J=-j@3 WRF_NMM_CORE=1 HWRF=1
 > docker exec test_003 ./script.csh BUILD CLEAN 34 1 em_real -d J=-j@3 WRF_CHEM=1
-> docker exec test_004 ./script.csh BUILD CLEAN 34 1 em_real -d J=-j@3 WRF_CHEM=1 WRF_KPP=1 FLEX_LIB_DIR=/usr/lib64 YACC=/usr/bin/yacc@-d
+> docker exec test_019 ./script.csh BUILD CLEAN 34 1 em_real -d J=-j@3 WRF_CHEM=1 WRF_KPP=1 FLEX_LIB_DIR=/usr/lib64 YACC=/usr/bin/yacc@-d
 ```
 If your machine is _beefy_ enough, put these build jobs (as in "build a wrf executable") in the background, and run them all at the same time. Since each job is asking for `make` to use three parallel threads to speed up the build process of the WRF executables (`J=-j@3`), a _beefy_ enough machine for these four tasks (the fourseparate builds) would have twelve or more non-hyperthreaded processors.	
 ```
 > docker exec test_001 ./script.csh BUILD CLEAN 34 1 em_real -d J=-j@3 &
 > docker exec test_002 ./script.csh BUILD CLEAN 34 3 nmm_real -d J=-j@3 WRF_NMM_CORE=1 HWRF=1 &
 > docker exec test_003 ./script.csh BUILD CLEAN 34 1 em_real -d J=-j@3 WRF_CHEM=1 &
-> docker exec test_004 ./script.csh BUILD CLEAN 34 1 em_real -d J=-j@3 WRF_CHEM=1 WRF_KPP=1 FLEX_LIB_DIR=/usr/lib64 YACC=/usr/bin/yacc@-d &
+> docker exec test_019 ./script.csh BUILD CLEAN 34 1 em_real -d J=-j@3 WRF_CHEM=1 WRF_KPP=1 FLEX_LIB_DIR=/usr/lib64 YACC=/usr/bin/yacc@-d &
 > wait
 ```
 
@@ -143,7 +143,7 @@ Run a single test in each container, takes less than a minute for each.
 0 for test 1NE
 > docker exec test_003 ./script.csh RUN em_real 34 em_chem 1 NP=3 ; set OK = $status ; echo $OK for test 1
 0 for test 1
-> docker exec test_004 ./script.csh RUN em_real 34 em_chem_kpp 101 NP=3 ; set OK = $status ; echo $OK for test 101
+> docker exec test_019 ./script.csh RUN em_real 34 em_chem_kpp 120 NP=3 ; set OK = $status ; echo $OK for test 120
 0 for test 1
 ```
 
@@ -205,7 +205,47 @@ Run ./test_002m.csh
 Run ./test_003s.csh
 Run ./test_003m.csh
 Run ./test_004s.csh
+Run ./test_004o.csh
 Run ./test_004m.csh
+Run ./test_005s.csh
+Run ./test_005o.csh
+Run ./test_005m.csh
+Run ./test_006s.csh
+Run ./test_006o.csh
+Run ./test_006m.csh
+Run ./test_007s.csh
+Run ./test_007o.csh
+Run ./test_007m.csh
+Run ./test_008m.csh
+Run ./test_009s.csh
+Run ./test_009o.csh
+Run ./test_009m.csh
+Run ./test_010s.csh
+Run ./test_011s.csh
+Run ./test_011o.csh
+Run ./test_011m.csh
+Run ./test_012s.csh
+Run ./test_012o.csh
+Run ./test_012m.csh
+Run ./test_013s.csh
+Run ./test_013o.csh
+Run ./test_013m.csh
+Run ./test_014s.csh
+Run ./test_014o.csh
+Run ./test_014m.csh
+Run ./test_015s.csh
+Run ./test_015o.csh
+Run ./test_015m.csh
+Run ./test_016s.csh
+Run ./test_016o.csh
+Run ./test_016m.csh
+Run ./test_017s.csh
+Run ./test_017o.csh
+Run ./test_017m.csh
+Run ./test_018s.csh
+Run ./test_018m.csh
+Run ./test_019s.csh
+Run ./test_019m.csh
 ```
 
 Each manufactured job script looks similar to this:
@@ -255,7 +295,7 @@ date
 
 On a single desktop, a reasonable run-time command would be:
 ```
-> date ; ( ./single.csh ; ./test_001s.csh ; ./test_001o.csh ; ./test_001m.csh ; ./test_002m.csh ; ./test_003s.csh ; ./test_003m.csh ; ./test_004s.csh ; ./test_004m.csh ;) >& output ; date
+> date ; ( ./single.csh ; ./test_001s.csh ; ./test_001o.csh ; ./test_001m.csh ; ./test_002m.csh ; ./test_003s.csh ; ./test_003m.csh ; ./test_019s.csh ; ./test_019m.csh ;) >& output ; date
 ```
 
 To view how the status of the testing after the command is complete, search for `SUCCESS`. There should be four `SUCCESS` messages for each test conducted (in this example, we did five tests):
