@@ -11,7 +11,7 @@ MAINTAINER Dave Gill <gill@ucar.edu>
 RUN yum -y update
 # Install SCL release package and python SCL
 RUN yum -y install centos-release-scl \
- && yum -y install --setopt=tsflags=nodocs rh-python35
+ && yum -y install --setopt=tsflags=nodocs rh-python36
 # Enable rh-python scl binary
 COPY entrypoint.sh /usr/bin/entrypoint.sh
 RUN chmod +x /usr/bin/entrypoint.sh
@@ -80,7 +80,7 @@ RUN source /opt/rh/devtoolset-9/enable \
  && cd ${NETCDF}/BUILD_DIR \
  && curl -L -O https://github.com/Unidata/netcdf-c/archive/v4.6.2.tar.gz \
  && curl -L -O https://github.com/Unidata/netcdf-fortran/archive/v4.4.5.tar.gz \
- && curl -L -O https://github.com/Unidata/netcdf4-python/archive/v1.5.1rel.tar.gz \
+ && curl -L -O https://github.com/Unidata/netcdf4-python/archive/v1.5.3rel.tar.gz \
  && tar -xf v4.6.2.tar.gz \
  && cd netcdf-c-4.6.2 \
  && ./configure --enable-shared --prefix=${NETCDF} &> /wrf/libs/build_log_ncc_config \
@@ -114,8 +114,8 @@ RUN ldconfig -v
 # Build netCDF4-python libraries
 RUN source /opt/rh/devtoolset-9/enable \
  && cd ${NETCDF}/BUILD_DIR \
- && tar -xf v1.5.1rel.tar.gz \
- && cd netcdf4-python-1.5.1rel/ \
+ && tar -xf v1.5.3rel.tar.gz \
+ && cd netcdf4-python-1.5.3rel/ \
  && export LD_LIBRARY_PATH=${NETCDF}/lib:${LD_LIBRARY_PATH} \
  && export NETCDF4_DIR=${NETCDF} \
  && export HDF5_DIR=/usr/local \
