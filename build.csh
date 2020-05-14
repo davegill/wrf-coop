@@ -51,7 +51,7 @@ if ( ${#argv} == 0 ) then
 endif
 
 if      ( $TEST_GEN == ALL ) then
-	set NUMBER    = ( 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18)
+	set NUMBER    = ( 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 )
 
 	set TEST      = ( \
 	                  "em_real        3dtke cesm conus rap tropical " \
@@ -72,11 +72,12 @@ if      ( $TEST_GEN == ALL ) then
 	                  "em_realF       65DF 66FD 71 78 79 " \
 	                  "em_realG       kiaps1NE kiaps2 rala ralbNE " \
 	                  "em_realH       cmt fsbm solaraNE solarb urb3aNE urb3bNE " \
+	                  "em_chem_kpp    101 107 120 201 " \
 	                )
 
 else if ( $TEST_GEN == SOME ) then
 
-	set NUMBER    = ( 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18)
+	set NUMBER    = ( 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 )
 	set TEST      = ( \
 	                  "em_real        3dtke conus rap tropical " \
 	                  "nmm_hwrf       1NE 2NE 3NE " \
@@ -96,12 +97,13 @@ else if ( $TEST_GEN == SOME ) then
 	                  "em_realF       65DF 66FD 71 78 79 " \
 	                  "em_realG       kiaps1NE kiaps2 " \
 	                  "em_realH       cmt solaraNE urb3bNE " \
+	                  "em_chem_kpp    120 " \
 	                )
 
 else if ( $TEST_GEN == test ) then
 
 	set NUMBER    = ( 01 02 ) # Logic is not set up to choose random (out of order) options
-	set NUMBER    = ( 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18)
+	set NUMBER    = ( 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 )
 
 	set TEST      = ( \
 	                  "em_real        conus  " \
@@ -122,6 +124,7 @@ else if ( $TEST_GEN == test ) then
 	                  "em_realF       65DF   " \
 	                  "em_realG       cmt    " \
 	                  "em_realH       fsbm   " \
+	                  "em_chem_kpp    120 " \
 	                )
 
 	set TEST      = ( \
@@ -143,27 +146,30 @@ else if ( $TEST_GEN == test ) then
 	                  "em_realF       65DF   " \
 	                  "em_realG       cmt    " \
 	                  "em_realH       fsbm   " \
+	                  "em_chem_kpp    120 " \
 	                )
 
 endif
 
 #	Options that are used for all test generation settings. 
 
-set SERIAL    = ( T           F              T           T             T           T           T              F           T           T           T           T           T           T           T           T           T           T           )
-set OPENMP    = ( T           F              F           T             T           T           T              F           T           F           T           T           T           T           T           T           T           F           )
-set MPI       = ( T           T              T           T             T           T           T              T           T           F           T           T           T           T           T           T           T           T           )
-set NEST      = ( 1           3              1           1             1           1           1              3           1           0           1           1           1           1           1           1           1           1           )
-set NAME      = ( em          hwrf           chem        qss           bwave       real8       qss8           move        fire        hill        em          em          em          em          em          em          em          em          )
-set COMPILE   = ( em_real     nmm_real       em_real     em_quarter_ss em_b_wave   em_real     em_quarter_ss  em_real     em_fire     em_hill2d_x em_real     em_real     em_real     em_real     em_real     em_real     em_real     em_real     )
-set RUNDIR    = ( em_real     nmm_hwrf       em_chem     em_quarter_ss em_b_wave   em_real8    em_quarter_ss8 em_move     em_fire     em_hill2d_x em_realA    em_realB    em_realC    em_realD    em_realE    em_realF    em_realG    em_realH    )
-set DASHOPT1  = ( -d          -d             -d          -d            -d          -d          -d             -d          -d          -d          -d          -d          -d          -d          -d          -d          -d          -d          )
-set DASHOPT2  = ( F           F              F           F             F           -r8         -r8            F           F           F           F           F           F           F           F           F           F           F           )
-set BUILDENV1 = ( F           WRF_NMM_CORE=1 WRF_CHEM=1  F             F           F           F              F           F           F           F           F           F           F           F           F           F           F           )
-set BUILDENV2 = ( J=-j@$PROCS J=-j@$PROCS    J=-j@$PROCS J=-j@$PROCS   J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS    J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS )
-set BUILDENV3 = ( F           HWRF=1         F           F             F           F           F              F           F           F           F           F           F           F           F           F           F           F           )
-#set SERIALBG  = ( T           F              F           T             T           T           T              F           F           F           T           T           T           T           T           T           T           T           )
-set SERIALBG  = ( F           F              F           F             F           F           F              F           F           F           F           F           F           F           F           F           F           F           )
-set NP        = ( $PROCS      $PROCS         $PROCS      $PROCS        $PROCS      $PROCS      $PROCS         $PROCS      $PROCS      $PROCS      $PROCS      $PROCS      $PROCS      $PROCS      $PROCS      $PROCS      $PROCS      $PROCS      )
+set SERIAL    = ( T           F              T           T             T           T           T              F           T           T           T           T           T           T           T           T           T           T           T           )
+set OPENMP    = ( T           F              F           T             T           T           T              F           T           F           T           T           T           T           T           T           T           F           F           )
+set MPI       = ( T           T              T           T             T           T           T              T           T           F           T           T           T           T           T           T           T           T           T           )
+set NEST      = ( 1           3              1           1             1           1           1              3           1           0           1           1           1           1           1           1           1           1           1           )
+set NAME      = ( em          hwrf           chem        qss           bwave       real8       qss8           move        fire        hill        em          em          em          em          em          em          em          em          kpp         )
+set COMPILE   = ( em_real     nmm_real       em_real     em_quarter_ss em_b_wave   em_real     em_quarter_ss  em_real     em_fire     em_hill2d_x em_real     em_real     em_real     em_real     em_real     em_real     em_real     em_real     em_real     )
+set RUNDIR    = ( em_real     nmm_hwrf       em_chem     em_quarter_ss em_b_wave   em_real8    em_quarter_ss8 em_move     em_fire     em_hill2d_x em_realA    em_realB    em_realC    em_realD    em_realE    em_realF    em_realG    em_realH    em_chem_kpp )
+set DASHOPT1  = ( -d          -d             -d          -d            -d          -d          -d             -d          -d          -d          -d          -d          -d          -d          -d          -d          -d          -d          -d          )
+set DASHOPT2  = ( F           F              F           F             F           -r8         -r8            F           F           F           F           F           F           F           F           F           F           F           F           )
+set BUILDENV1 = ( F           WRF_NMM_CORE=1 WRF_CHEM=1  F             F           F           F              F           F           F           F           F           F           F           F           F           F           F           WRF_CHEM=1  )
+set BUILDENV2 = ( J=-j@$PROCS J=-j@$PROCS    J=-j@$PROCS J=-j@$PROCS   J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS    J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS )
+set BUILDENV3 = ( F           HWRF=1         F           F             F           F           F              F           F           F           F           F           F           F           F           F           F           F           WRF_KPP=1   )
+set BUILDENV4 = ( F           F              F           F             F           F           F              F           F           F           F           F           F           F           F           F           F           F           FLEX_LIB_DIR=/usr/lib64 )
+set BUILDENV5 = ( F           F              F           F             F           F           F              F           F           F           F           F           F           F           F           F           F           F           YACC=/usr/bin/yacc@-d )
+#set SERIALBG  = ( T           F              F           T             T           T           T              F           F           F           T           T           T           T           T           T           T           T           F           )
+set SERIALBG  = ( F           F              F           F             F           F           F              F           F           F           F           F           F           F           F           F           F           F           F           )
+set NP        = ( $PROCS      $PROCS         $PROCS      $PROCS        $PROCS      $PROCS      $PROCS         $PROCS      $PROCS      $PROCS      $PROCS      $PROCS      $PROCS      $PROCS      $PROCS      $PROCS      $PROCS      $PROCS      $PROCS      )
 
 set SERIAL_OPT = 32
 set OPENMP_OPT = 33
@@ -511,6 +517,12 @@ foreach n ( $NUMBER )
 				if ( $BUILDENV3[$COUNT] != F ) then
 					set str = ( $str $BUILDENV3[$COUNT] )
 				endif
+				if ( $BUILDENV4[$COUNT] != F ) then
+					set str = ( $str $BUILDENV4[$COUNT] )
+				endif
+				if ( $BUILDENV5[$COUNT] != F ) then
+					set str = ( $str $BUILDENV5[$COUNT] )
+				endif
 				set string = ( $string $str )
 
 				echo "echo Build container" >> $fname
@@ -653,6 +665,12 @@ foreach n ( $NUMBER )
 				if ( $BUILDENV3[$COUNT] != F ) then
 					set str = ( $str $BUILDENV3[$COUNT] )
 				endif
+				if ( $BUILDENV4[$COUNT] != F ) then
+					set str = ( $str $BUILDENV4[$COUNT] )
+				endif
+				if ( $BUILDENV5[$COUNT] != F ) then
+					set str = ( $str $BUILDENV5[$COUNT] )
+				endif
 				set string = ( $string $str )
 
 				echo "echo Build container" >> $fname
@@ -794,6 +812,12 @@ foreach n ( $NUMBER )
 				endif
 				if ( $BUILDENV3[$COUNT] != F ) then
 					set str = ( $str $BUILDENV3[$COUNT] )
+				endif
+				if ( $BUILDENV4[$COUNT] != F ) then
+					set str = ( $str $BUILDENV4[$COUNT] )
+				endif
+				if ( $BUILDENV5[$COUNT] != F ) then
+					set str = ( $str $BUILDENV5[$COUNT] )
 				endif
 				set string = ( $string $str )
 
