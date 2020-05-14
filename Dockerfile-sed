@@ -1,5 +1,5 @@
 #
-FROM davegill/wrf-coop:eleventhtry
+FROM davegill/wrf-coop:twelfthtry
 MAINTAINER Dave Gill <gill@ucar.edu>
 
 #	DO NOT CHANGE UNDERSCORE GIT STRINGS
@@ -14,8 +14,6 @@ RUN git clone https://github.com/davegill/SCRIPTS.git SCRIPTS \
   && cp SCRIPTS/rd_l2_norm.py . && chmod 755 rd_l2_norm.py \
   && cp SCRIPTS/script.csh .    && chmod 755 script.csh    \
   && ln -sf SCRIPTS/Namelists . 
-
-RUN curl -SL https://www2.mmm.ucar.edu/wrf/dave/sbm.tar.gz | tar -xzC /wrf
 
 VOLUME /wrf
 CMD ["/bin/tcsh"]
