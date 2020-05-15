@@ -129,7 +129,7 @@ cd wrf-coop
 Here is the entire Dockerfile for ARW: `Dockerfile`:
 ```
 #
-FROM davegill/wrf-coop:eleventhtry
+FROM davegill/wrf-coop:thirteenthtry
 MAINTAINER Dave Gill <gill@ucar.edu>
 
 RUN git clone _FORK_/_REPO_.git WRF \
@@ -204,11 +204,11 @@ You have to be in the directory where the Dockerfiles are located (or else use t
 ```
 docker images
 
-REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
-wrf_nmmregtest      latest              13b80465a2f4        2 days ago          5.78GB
-wrf_regtest         latest              05892c8db574        About an hour ago   5.66 GB
-davegill/wrf-coop   eleventhtry         d189602ba49d        About an hour ago   5.11 GB
-davegill/wrf-coop   sixthtry            c36f5f2b0cc6        3 months ago        5.32GB
+REPOSITORY          TAG                 IMAGE ID            CREATED              SIZE
+wrf_nmmregtest      latest              13b80465a2f4        2 days ago           5.78GB
+wrf_regtest         latest              cb75a489c00c        About a minute ago   5.67 GB
+davegill/wrf-coop   thirteenthtry       c06fd248f249        6 hours ago          5.21 GB
+davegill/wrf-coop   sixthtry            c36f5f2b0cc6        3 months ago         5.32GB
 ```
 
 ## Contruct the docker containers<a name="Constrcutcontainers"/>
@@ -778,11 +778,11 @@ docker rm ARW
 What docker images are available to remove:
 ```
 docker images
-REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
-wrf_nmmregtest      latest              13b80465a2f4        2 days ago          5.78GB
-wrf_regtest         latest              05892c8db574        About an hour ago   5.66 GB
-davegill/wrf-coop   eleventhtry         d189602ba49d        About an hour ago   5.11 GB
-davegill/wrf-coop   sixthtry            c36f5f2b0cc6        3 months ago        5.32GB
+REPOSITORY          TAG                 IMAGE ID            CREATED              SIZE
+wrf_nmmregtest      latest              13b80465a2f4        2 days ago           5.78GB
+wrf_regtest         latest              cb75a489c00c        About a minute ago   5.67 GB
+davegill/wrf-coop   thirteenthtry       c06fd248f249        6 hours ago          5.21 GB
+davegill/wrf-coop   sixthtry            c36f5f2b0cc6        3 months ago         5.32GB
 ```
 As mentioned previously, leave the `wrf-coop` images alone. To remove the images that made both the `ARW` and `NMM` containers (in the above example):
 ```
