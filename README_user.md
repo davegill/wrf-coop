@@ -15,9 +15,8 @@
     * [Checking NMM results](#WRFNMM)
 * [Docker Clean Up](#Cleanup)
     * [Stop, re-enter, and remove a docker container](#Stop) 
-    	* [still even deeper](#Stop)
-		* [This can be crazy](#Stop)
-    * [Remove a docker image](#RemoveImage)
+        * [still even deeper](#Stop)
+* [Remove a docker image](#RemoveImage)
 
 ### Purpose<a name="Purpose"/>
 
