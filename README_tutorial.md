@@ -67,7 +67,7 @@ The WPS source code (WPS directory), the WRF source code (WRF directory), the WP
 #### Example 1 ####
 
 For this first example, do not be afraid. You cannot break anything, even if you really try. From within the container (in this first example), you cannot modify anything on your laptop. Even within the container things are very safe. If you remove all of the files within the container instance, you can simply exit out of the container, remove that docker container instance, re-issue that `docker run` command, and then you are back to the original pristine version of the WRF container.
- -j 4
+ 
 For example, from within the container, we type `exit`. That pops us back out to the host OS. From there, we remove the existing (currently stopped) instance with the `docker rm` command, and then just type the `docker run` command.
 ```
 docker    rm     teachme
@@ -105,7 +105,7 @@ So far we have built our image (the `docker build` step), we have gone in and ou
 ```
     cd ../WPS
     ./configure
-`` -j 4`
+```
 3. Build the WPS, compile step
    * NOTE: takes 30 s on my laptop  
 ```
