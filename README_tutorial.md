@@ -16,7 +16,6 @@ https://docs.docker.com/docker-for-windows/install/
 
 On a Linux machine:
 ```
-https://docs.docker.com/docker-for-mac/install/
 https://docs.docker.com/engine/install/
 ```
 
