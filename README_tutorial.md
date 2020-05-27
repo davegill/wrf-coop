@@ -29,12 +29,13 @@ If this works, you get a short "Hello from Docker!" message, something like belo
 
 #### Building a WRF Docker Container ####
 
-Now that we have docker working on your machine, we use the two WRF-supplied files: Dockerfile and default-mca-params.conf. They are both text files, so feel free to peek inside to see what they are doing. The Dockerfile, the bigger file, sets up the whole environment within the container: directories, compiler versions, environment variables, lots of libraries, netcdf, MPI, WRF and WPS source code, WPS_GEOG data, grib2 data - _EVERYTHING_. The smaller file contains some information to allow openmpi to run on multiple cores.
+Now that we have docker working on your machine, we use the WRF-supplied file `Dockerfile_wps`. It is a text files, so feel free to peek inside to see what is happening. The Dockerfile brings the WRF and WPS repositories into an environment that can be used to build and run the codes (inside a container).
 
 There are docker _images_ and docker _containers_. We first need to construct the docker image. From that fixed image, we can make containers, as many as we want (or as many as the machine can hold). To generate our WRF container, we first need to build our image. To construct the docker image, we use the `docker build` command, and that command automatically uses the two supplied files. Therefore, both the Dockerfile and the configuration file need to be in the current directory when you issue this `docker build` command.  The `argname=tutorial` option sends information to the Dockerfile regarding what files to download. And _YES_, there really is a period at the end of the following command, and it is really important! 
 
 ```
-docker   build   -t   wrf_tutorial   --build-arg argname=tutorial   .
+cp Dockerfile_wps Dockerfile
+docker   build   -t   wrfwps   .
 ```
 
 This command takes a few minutes (on my 4 year old Mac at home it takes 4.5 minutes, at work with faster internet it takes 3 minutes). Quite a few files are downloaded, so you might want to issue this container `docker build` command when using a reasonable network. For example, NOT with lots of your best friends at the same time at a WRF Tutorial on a guest network. This command would be much better processed at your home institution where you have a fast internet connection. After that, maybe at your hotel would work, but only maybe.
@@ -43,22 +44,22 @@ This command takes a few minutes (on my 4 year old Mac at home it takes 4.5 minu
 
 Now we want to get INTO that container that we have just built. When we issue the following `docker run` command (takes a few seconds to do), note that your command line prompt changes after you issue this command:
 ```
-docker   run   -it   --name   teachme   wrf_tutorial   /bin/tcsh
+docker   run   -it   --name   teachme   wrfwps   /bin/tcsh
 ```
 
-You are now in _CONTAINER LAND_. You are running an instance of the "wrf_tutorial" container (we just built it above). We could "run" the container externally, but we prefer that introductory students interact with the source code interactively from within the container. You have named your container instance "teachme". Your default shell is /bin/tcsh, which you could easily switch to /bin/bash from the docker command.
+You are now in _CONTAINER LAND_. You are running an instance of the "wrfwps" container (we just built it above). We could "run" the container externally, but we prefer that introductory students interact with the source code interactively from within the container. You have named your container instance "teachme". Your default shell is /bin/tcsh, which you could easily switch to /bin/bash from the docker command.
 
 When you do an `ls -ls` from within the container, you see something like:
 ```
 [wrfuser@efee06a6d22f ~]$ ls -ls
-total 24
-4 drwxr-sr-x  2 wrfuser wrf 4096 Nov 30 20:52 netcdf_links
-4 drwxr-sr-x  7 wrfuser wrf 4096 Nov 10 00:13 WPS
-4 drwsr-sr-x 31 wrfuser wrf 4096 Nov 30 20:51 WPS_GEOG
-4 drwxr-sr-x 22 wrfuser wrf 4096 Nov  9 23:55 WRF
-4 drwsr-sr-x  2 wrfuser wrf 4096 Nov 30 20:52 wrfinput
+total 28
+4 drwxr-sr-x  8 wrfuser wrf 4096 May 27 06:30 WPS
+4 drwsr-sr-x  3 wrfuser wrf 4096 May 27 06:14 WPS_GEOG
+4 drwxr-sr-x 22 wrfuser wrf 4096 May 27 06:30 WRF
 4 drwxr-sr-x  3 wrfuser wrf 4096 Jan 22  2014 WRF_NCL_scripts
-0 drwxr-xr-x  2 wrfuser wrf   68 Nov 30 20:57 wrfoutput
+4 drwxr-sr-x  5 wrfuser wrf 4096 May 27 06:05 libs
+4 drwsr-sr-x  2 wrfuser wrf 4096 May 27 06:15 wrfinput
+4 drwsr-sr-x  2 wrfuser wrf 4096 May 27 06:08 wrfoutput
 ```
 
 The WPS source code (WPS directory), the WRF source code (WRF directory), the WPS geographic/static data (WPS_GEOG), and the GRIB2 data (wrfinput directory) are all here. Also, the namelists for the tutorial case that are consistent with the grib data are included in the wrfinput directory. There is quite a bit of data in this container which is why we recommend that you issue the `docker build` command in a location with a fast internet.
@@ -70,7 +71,7 @@ For this first example, do not be afraid. You cannot break anything, even if you
 For example, from within the container, we type `exit`. That pops us back out to the host OS. From there, we remove the existing (currently stopped) instance with the `docker rm` command, and then just type the `docker run` command.
 ```
 docker    rm     teachme
-docker   run  -it  --name   teachme  wrf_tutorial   /bin/tcsh
+docker   run  -it  --name   teachme  wrfwps   /bin/tcsh
 ```
 
 #### START TO BUILD AND RUN THE WRF SYSTEM ####
@@ -248,13 +249,13 @@ We built and ran the code, but we can't look at the data from within the contain
 We can "see" the container data from the outside (and also the outside from within the container) by setting up the "run" command on our instance a little differently. We have to add the `-v` option (i.e. volume, visible, etc). 
 
 ```
-docker run -it --name teachme -v _some_directory_absolute_path_on_my_laptop_:/wrf/wrfoutput wrf_tutorial /bin/tcsh
+docker run -it --name teachme -v _some_directory_absolute_path_on_my_laptop_:/wrf/wrfoutput wrfwps /bin/tcsh
 ```
 
 If you want a concrete example, put in a subdirectory called `OUTPUT` on your host OS platform, then use that directory as the shared volume:
 ```
 mkdir OUTPUT
-docker run -it --name teachme -v `pwd`/OUTPUT:/wrf/wrfoutput wrf_tutorial /bin/tcsh
+docker run -it --name teachme -v `pwd`/OUTPUT:/wrf/wrfoutput wrfwps /bin/tcsh
 ```
 
 With the above `docker run` command, from within the container, anything that we place in the /wrf/wrfoutput directory is visible to the outside world (located in the explicitly defined directory on the left hand side of the ":"). Similarly, any files placed in the explicitly named local directory (the left hand side of the ":"), those files are visible within the container in the /wrf/wrfoutput directory (the directory listed on the right hand side of the ":"). Note that you can add more  "-v localpath:containerpath" entries to this `docker run` command to have even more shared volumes as visible.
@@ -377,7 +378,7 @@ docker    rm    teachme
 4. What docker images are available? How would I delete one?
 ```
 docker    images    –a
-docker    rmi    wrf_tutorial
+docker    rmi    wrfwps
 ```
 
 

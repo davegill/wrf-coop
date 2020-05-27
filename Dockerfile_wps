@@ -1,0 +1,20 @@
+#
+FROM davegill/wrf_and_wps:secondtry
+MAINTAINER Dave Gill <gill@ucar.edu>
+
+RUN git clone https://github.com/wrf-model/WRF.git WRF \
+  && cd WRF \
+  && git checkout release-v4.2.1 \
+  && git checkout master \
+  && git checkout develop \
+  && cd ..
+
+RUN git clone https://github.com/wrf-model/WPS.git WPS \
+  && cd WPS \
+  && git checkout release-v4.2 \
+  && git checkout master \
+  && git checkout develop \
+  && cd ..
+
+VOLUME /wrf
+CMD ["/bin/tcsh"]
