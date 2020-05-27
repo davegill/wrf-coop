@@ -14,6 +14,12 @@ On a Windows machine (there are issues with Windows 7, basically do not even try
 https://docs.docker.com/docker-for-windows/install/
 ```
 
+On a Linux machine:
+```
+https://docs.docker.com/docker-for-mac/install/
+https://docs.docker.com/engine/install/
+```
+
 The NCAR WRF Tutorial staff cannot assist you with this installation. We are not permitted to work on any laptop from a tutorial attendee.
 
 Once you have docker installed, make sure it is working by trying the "hello world" program.
