@@ -29,12 +29,12 @@ If this works, you get a short "Hello from Docker!" message, something like belo
 
 #### Building a WRF Docker Container ####
 
-Now that we have docker working on your machine, we use the WRF-supplied file `Dockerfile_wps`. It is a text files, so feel free to peek inside to see what is happening. The Dockerfile brings the WRF and WPS repositories into an environment that can be used to build and run the codes (inside a container).
+Now that we have docker working on your machine, we use the WRF-supplied file `Dockerfile_wps`. It is a text file, so feel free to peek inside to see what is happening. The Dockerfile brings the WRF and WPS repositories into an environment that can be used to build and run the codes (inside a docker container).
 
-There are docker _images_ and docker _containers_. We first need to construct the docker image. From that fixed image, we can make containers, as many as we want (or as many as the machine can hold). To generate our WRF container, we first need to build our image. To construct the docker image, we use the `docker build` command, and that command automatically uses the two supplied files. Therefore, both the Dockerfile and the configuration file need to be in the current directory when you issue this `docker build` command.  The `argname=tutorial` option sends information to the Dockerfile regarding what files to download. And _YES_, there really is a period at the end of the following command, and it is really important! 
+There are docker _images_ and docker _containers_. We first need to construct the docker image. From that fixed image, we can make containers, as many as we want (or as many as the machine can hold). To generate our WRF container, we first need to build our image. To construct the docker image, we use the `docker build` command, and that command automatically uses the docker text file `Dockerfile_wps`. This Dockerfile file needs to be in the current directory when you issue this `docker build` command.  And _YES_, there really is a period at the end of the following command, and it is really important! 
 
 ```
-cp Dockerfile_wps Dockerfile
+cp   Dockerfile_wps   Dockerfile
 docker   build   -t   wrfwps   .
 ```
 
@@ -47,7 +47,7 @@ Now we want to get INTO that container that we have just built. When we issue th
 docker   run   -it   --name   teachme   wrfwps   /bin/tcsh
 ```
 
-You are now in _CONTAINER LAND_. You are running an instance of the "wrfwps" container (we just built it above). We could "run" the container externally, but we prefer that introductory students interact with the source code interactively from within the container. You have named your container instance "teachme". Your default shell is /bin/tcsh, which you could easily switch to /bin/bash from the docker command.
+You are now in _CONTAINER LAND_. You are running an instance (a container) based on the "wrfwps" image that we just built above. We could "run" the container externally, but we prefer that introductory students interact with the source code interactively from within the container. You have named your container instance "teachme". Your default shell is /bin/tcsh, which you could easily switch to /bin/bash from the docker command.
 
 When you do an `ls -ls` from within the container, you see something like:
 ```
@@ -67,7 +67,7 @@ The WPS source code (WPS directory), the WRF source code (WRF directory), the WP
 #### Example 1 ####
 
 For this first example, do not be afraid. You cannot break anything, even if you really try. From within the container (in this first example), you cannot modify anything on your laptop. Even within the container things are very safe. If you remove all of the files within the container instance, you can simply exit out of the container, remove that docker container instance, re-issue that `docker run` command, and then you are back to the original pristine version of the WRF container.
-
+ -j 4
 For example, from within the container, we type `exit`. That pops us back out to the host OS. From there, we remove the existing (currently stopped) instance with the `docker rm` command, and then just type the `docker run` command.
 ```
 docker    rm     teachme
@@ -89,7 +89,7 @@ So far we have built our image (the `docker build` step), we have gone in and ou
 ```
     ./clean -a
     ./configure
-    ./compile em_real >&! foo
+    ./compile em_real -j 4 >&! foo
 ```
 
 ```
@@ -105,49 +105,40 @@ So far we have built our image (the `docker build` step), we have gone in and ou
 ```
     cd ../WPS
     ./configure
-```
-3. Build the WPS, tweaks for the configure script
-   * NOTE: edit the configure.wps, add "-lnetcdff" to the line that has "-lnetcdf", and the libraries have to be in the correct order  
-   * Original line vs new line
-```
-                        -L$(NETCDF)/lib  -lnetcdf
-```
-```
-                        -L$(NETCDF)/lib  -lnetcdff -lnetcdf
-```
-4. Build the WPS, compile step
-   * NOTE: takes 15 s on my laptop  
+`` -j 4`
+3. Build the WPS, compile step
+   * NOTE: takes 30 s on my laptop  
 ```
     ./compile >&! foo
 ```
-5. Build the WPS, Hey! we have executables!
+4. Build the WPS, Hey! we have executables!
 ```
     ls -ls *.exe
     0 lrwxrwxrwx 1 wrfuser wrf 23 Nov 30 21:12 geogrid.exe -> geogrid/src/geogrid.exe
     0 lrwxrwxrwx 1 wrfuser wrf 23 Nov 30 21:12 metgrid.exe -> metgrid/src/metgrid.exe
     0 lrwxrwxrwx 1 wrfuser wrf 21 Nov 30 21:12 ungrib.exe -> ungrib/src/ungrib.exe
 ```
-6. Run WPS, small namelist changes
+5. Run WPS, small namelist changes
    * cd to the WPS directory (if you just built the code, you are THERE)
    * geogrid requires the namelist.wps to be modified for various size, geophysical siting, and the location of the GEOG data  
      --> hold on the the original namelist for WPS
    * `cp namelist.wps namelist.wps.original`  
       --> use the sample namelist provided inside the container  
    * `cp /wrf/wrfinput/namelist.wps.docker namelist.wps`  
-7. Run WPS, GEOGRID
+6. Run WPS, GEOGRID
    * `./geogrid.exe`  
      NOTE: takes about 3 seconds
 ```
       ls -ls geo_em.d01.nc 
       2672 -rw-r--r-- 1 wrfuser wrf 2736012 Dec  3 19:35 geo_em.d01.nc
 ```
-8. Run WPS, UNGRIB
+7. Run WPS, UNGRIB
    * ungrib requires the grib2 data and the correct Vtable
    * edit the `namelist.wps` file, pay attention to the `&share` and `&ungrib` namelist records - the DATES are important (for this test, that work is already handled)
    * `./link_grib.csh /wrf/wrfinput/fnl`
    * `cp ungrib/Variable_Tables/Vtable.GFS Vtable`
    * `./ungrib.exe`  
-     NOTE: takes about 2 seconds
+     NOTE: takes about 10 seconds
 ```
       ls -ls FILE*
       41272 -rw-r--r-- 1 wrfuser wrf 42261264 Nov 30 21:52 FILE:2016-03-23_00
@@ -156,10 +147,11 @@ So far we have built our image (the `docker build` step), we have gone in and ou
       41272 -rw-r--r-- 1 wrfuser wrf 42261264 Nov 30 21:52 FILE:2016-03-23_18
       41272 -rw-r--r-- 1 wrfuser wrf 42261264 Nov 30 21:52 FILE:2016-03-24_00
 ```
-9. Run WPS, METGRID
+8. Run WPS, METGRID
    * metgrid is usually able to run if both geogrid and ungrib mods to the namelist have been completed
    * `./metgrid.exe`  
      NOTE: takes about 2 seconds
+     NOTE: those `floating-point exceptions are signalling` notifications are not a problem.
 ```
       ls -ls met_em.*
       6728 -rw-r--r-- 1 wrfuser wrf 6888308 Dec  3 16:33 met_em.d01.2016-03-23_00:00:00.nc
@@ -169,8 +161,8 @@ So far we have built our image (the `docker build` step), we have gone in and ou
       6728 -rw-r--r-- 1 wrfuser wrf 6888308 Dec  3 16:33 met_em.d01.2016-03-24_00:00:00.nc
 ```
 
-10. Run Real, initial set up of files and namelist
-    * cd WRF directory/test/em_real
+9. Run Real, initial set up of files and namelist
+    * cd WRFrun -np 2 ./real.exe/test/em_real
     * link the WPS metgrid files locally
     * edit the namelist for the tutorial case
     * NOTE: you can "cheat" with `/wrf/wrfinput/namelist.input.docker` file
@@ -180,25 +172,25 @@ So far we have built our image (the `docker build` step), we have gone in and ou
     cp /wrf/wrfinput/namelist.input.docker namelist.input
 ```
 
-11. run real, we are selecting 2 cores just to show how
+10. run real, we are selecting 2 cores just to show how
     * NOTE: takes about 1 second on my laptop
 
 ```
     mpirun -np 2 ./real.exe  
 ```
-12. run real, inspecting output
+11. run real, inspecting output
     * NOTE: look at the last line of the `rsl.out.0000` file:
 ```
     d01 2016-03-24_00:00:00 real_em: SUCCESS COMPLETE REAL_EM INIT
 ```
-13. Run real, there are some expected files 
+12. Run real, there are some expected files 
 ```
     ls -ls wrfinput_d01 wrfbdy_d01 
     20028 -rw-r--r-- 1 wrfuser wrf 20508248 Dec  3 16:39 wrfbdy_d01
     15868 -rw-r--r-- 1 wrfuser wrf 16247624 Dec  3 16:39 wrfinput_d01
 ```
 
-14. Run WRF
+13. Run WRF
     * run wrf, we are selecting 3 cores to show this can be different than what was chosen for real
     * NOTE: the ending "&" lets the job work in the background and returns control to you
     * NOTE: takes about 7 minutes on my laptop (the first time computes look up tables), approximately 4 minutes on subsequent runs from within the same instance
@@ -219,7 +211,7 @@ So far we have built our image (the `docker build` step), we have gone in and ou
     Timing for Writing wrfout_d01_2016-03-24_00:00:00 for domain        1:    0.68972 elapsed seconds
     d01 2016-03-24_00:00:00 wrf: SUCCESS COMPLETE WRF
 ```
-15. Run WRF, expected files
+14. Run WRF, expected files
 ```
     ls -ls wrfo*
     18648 -rw-r--r-- 1 wrfuser wrf 19095444 Dec  3 19:49 wrfout_d01_2016-03-23_00:00:00
