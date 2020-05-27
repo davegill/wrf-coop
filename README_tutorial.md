@@ -150,7 +150,7 @@ So far we have built our image (the `docker build` step), we have gone in and ou
 8. Run WPS, METGRID
    * metgrid is usually able to run if both geogrid and ungrib mods to the namelist have been completed
    * `./metgrid.exe`  
-     NOTE: takes about 2 seconds
+     NOTE: takes about 2 seconds   
      NOTE: those `floating-point exceptions are signalling` notifications are not a problem.
 ```
       ls -ls met_em.*
@@ -193,7 +193,7 @@ So far we have built our image (the `docker build` step), we have gone in and ou
 13. Run WRF
     * run wrf, we are selecting 3 cores to show this can be different than what was chosen for real
     * NOTE: the ending "&" lets the job work in the background and returns control to you
-    * NOTE: takes about 7 minutes on my laptop (the first time computes look up tables), approximately 4 minutes on subsequent runs from within the same instance
+    * NOTE: takes about 13 minutes on my laptop (the first time computes look up tables), approximately 5 minutes on subsequent runs from within the same instance
     * NOTE: look at the end of the `rsl.out.0000` file
 ```
     mpirun -np 3 ./wrf.exe &
