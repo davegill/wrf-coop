@@ -87,7 +87,3 @@ We construct a container from the `wrfwps` image to build and run the WPS and WR
 ```
 > docker run -d -t --name wrf_and_wps wrfwps
 ```
-
-
-### Get into the container, build and run WRF and WPS
-Build the specific containers: em_real (test_001), NMM (test_002), Chem (test_003), Chem KPP (test_019). These each require 5-20 minutes each, with most of the time consumed in the compilation of the WRF object files from source.
