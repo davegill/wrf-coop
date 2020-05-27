@@ -369,7 +369,7 @@ docker    rm    teachme
 
 4. What docker images are available? How would I delete one?
 ```
-docker    images    –a
+docker    images
 docker    rmi    wrfwps
 ```
 
