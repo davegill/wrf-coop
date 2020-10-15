@@ -313,11 +313,10 @@ echo "	sed -e 's/#ADD/ADD/' Dockerfile-NMM > .foo" >> single_init.csh
 echo "	mv .foo Dockerfile-NMM" >> single_init.csh
 echo "endif" >> single_init.csh
 echo "" >> single_init.csh
-echo 'if ( $1 == Dockerfile ) then' >> single_init.csh
-echo "	docker build -t wrf_regtest ." >> single_init.csh
-echo "else" >> single_init.csh
-echo '	docker build -f $1 -t wrf_nmmregtest .' >> single_init.csh
-echo "endif" >> single_init.csh
+echo '#	-f $1 = name of the Dockerfile' >> single_init.csh
+echo '#	-t $2 = name of the generated docker image' >> single_init.csh
+echo "" >> single_init.csh
+echo 'docker build -f $1 -t $2 .' >> single_init.csh
 echo "date" >> single_init.csh
 echo "" >> single_init.csh
 echo "#####################   END OF JOB    #####################" >> single_init.csh
