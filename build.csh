@@ -273,55 +273,76 @@ echo "                                                                          
 
 #	The docker image needs to be constructed. 
 
-if ( -e single.csh ) rm single.csh
-touch single.csh
-chmod +x single.csh
-echo '#\!/bin/csh' >> single.csh
-echo "#####################   TOP OF JOB    #####################" >> single.csh
-echo "" >> single.csh
-echo "#	This script builds the docker image for the rest of the testing harness " >> single.csh
-echo "" >> single.csh
-echo "#	The mandatory input argument is the name of the Dockerfile" >> single.csh
-echo '#	If the name is "Dockerfile", the ARW code is run' >> single.csh
-echo '#	If the name is "Dockerfile-NMM", the HWRF code is run' >> single.csh
-echo "" >> single.csh
-echo "date" >> single.csh
-echo "set SHARED = $SHARED" >> single.csh
-echo 'if ( ! -d ${SHARED}/OUTPUT ) mkdir ${SHARED}/OUTPUT' >> single.csh
-echo 'chmod -R 777 ${SHARED}/OUTPUT' >> single.csh
-echo "" >> single.csh
-echo "date" >> single.csh
-echo 'set num_containers = `docker ps -a | wc -l`' >> single.csh
-echo 'if ( $num_containers > 1 ) then' >> single.csh
-echo '  set hash = `docker ps -a | sed -n 2,${num_containers}p | ' "awk '{print " '$1}' "'" '`' >>  single.csh
-echo '  docker rm $hash' >> single.csh
-echo "endif" >> single.csh
-echo "" >> single.csh
-echo 'set num_images = `docker images | wc -l`' >> single.csh
-echo 'if ( $num_images > 1 ) then' >> single.csh
-echo '  set hash = `docker images | sed -n 2,${num_images}p | ' "awk '{print " '$3}' "'" '`' >>  single.csh
-echo '  docker rmi --force $hash' >> single.csh
-echo "endif" >> single.csh
-echo "" >> single.csh
-echo "date" >> single.csh
-echo "if ( -d ${DROPIT}/Namelists ) then" >> single.csh
-echo "	cp -pr ${DROPIT}/Namelists ." >> single.csh
-echo "	tar -cf nml.tar Namelists" >> single.csh
-echo "	sed -e 's/#ADD/ADD/' Dockerfile > .foo" >> single.csh
-echo "	mv .foo Dockerfile" >> single.csh
-echo "	sed -e 's/#ADD/ADD/' Dockerfile-NMM > .foo" >> single.csh
-echo "	mv .foo Dockerfile-NMM" >> single.csh
-echo "endif" >> single.csh
-echo "" >> single.csh
-echo 'if ( $1 == Dockerfile ) then' >> single.csh
-echo "	docker build -t wrf_regtest ." >> single.csh
-echo "else" >> single.csh
-echo '	docker build -f $1 -t wrf_nmmregtest .' >> single.csh
-echo "endif" >> single.csh
-echo "date" >> single.csh
-echo "" >> single.csh
-echo "#####################   END OF JOB    #####################" >> single.csh
-echo "Run ./single.csh"
+if ( -e single_init.csh ) rm single_init.csh
+touch single_init.csh
+chmod +x single_init.csh
+echo '#\!/bin/csh' >> single_init.csh
+echo "#####################   TOP OF JOB    #####################" >> single_init.csh
+echo "" >> single_init.csh
+echo "#	This script builds the docker image for the rest of the testing harness " >> single_init.csh
+echo "" >> single_init.csh
+echo "#	The mandatory input argument is the name of the Dockerfile" >> single_init.csh
+echo '#	If the name is "Dockerfile", the ARW code is run' >> single_init.csh
+echo '#	If the name is "Dockerfile-NMM", the HWRF code is run' >> single_init.csh
+echo "" >> single_init.csh
+echo "date" >> single_init.csh
+echo "set SHARED = $SHARED" >> single_init.csh
+echo 'if ( ! -d ${SHARED}/OUTPUT ) mkdir ${SHARED}/OUTPUT' >> single_init.csh
+echo 'chmod -R 777 ${SHARED}/OUTPUT' >> single_init.csh
+echo "" >> single_init.csh
+echo "date" >> single_init.csh
+echo 'set num_containers = `docker ps -a | wc -l`' >> single_init.csh
+echo 'if ( $num_containers > 1 ) then' >> single_init.csh
+echo '  set hash = `docker ps -a | sed -n 2,${num_containers}p | ' "awk '{print " '$1}' "'" '`' >>  single_init.csh
+echo '  docker rm $hash' >> single_init.csh
+echo "endif" >> single_init.csh
+echo "" >> single_init.csh
+echo 'set num_images = `docker images | wc -l`' >> single_init.csh
+echo 'if ( $num_images > 1 ) then' >> single_init.csh
+echo '  set hash = `docker images | sed -n 2,${num_images}p | ' "awk '{print " '$3}' "'" '`' >>  single_init.csh
+echo '  docker rmi --force $hash' >> single_init.csh
+echo "endif" >> single_init.csh
+echo "" >> single_init.csh
+echo "date" >> single_init.csh
+echo "if ( -d ${DROPIT}/Namelists ) then" >> single_init.csh
+echo "	cp -pr ${DROPIT}/Namelists ." >> single_init.csh
+echo "	tar -cf nml.tar Namelists" >> single_init.csh
+echo "	sed -e 's/#ADD/ADD/' Dockerfile > .foo" >> single_init.csh
+echo "	mv .foo Dockerfile" >> single_init.csh
+echo "	sed -e 's/#ADD/ADD/' Dockerfile-NMM > .foo" >> single_init.csh
+echo "	mv .foo Dockerfile-NMM" >> single_init.csh
+echo "endif" >> single_init.csh
+echo "" >> single_init.csh
+echo 'if ( $1 == Dockerfile ) then' >> single_init.csh
+echo "	docker build -t wrf_regtest ." >> single_init.csh
+echo "else" >> single_init.csh
+echo '	docker build -f $1 -t wrf_nmmregtest .' >> single_init.csh
+echo "endif" >> single_init.csh
+echo "date" >> single_init.csh
+echo "" >> single_init.csh
+echo "#####################   END OF JOB    #####################" >> single_init.csh
+echo "Run ./single_init.csh"
+
+#	The docker image needs to be removed
+
+if ( -e single_end.csh ) rm single_end.csh
+touch single_end.csh
+chmod +x single_end.csh
+echo '#\!/bin/csh' >> single_end.csh
+echo "#####################   TOP OF JOB    #####################" >> single_end.csh
+echo "" >> single_end.csh
+echo "#	This script removes the docker image and" >> single_end.csh
+echo "#	does some seasonal pruning" >> single_end.csh
+echo "" >> single_end.csh
+echo "date" >> single_end.csh
+echo "docker rmi wrf_regtest" >> single_end.csh
+echo "set hash = "'`'"docker images | grep davegill |  awk '{print  " '$3' "}'" ' `' >> single_end.csh
+echo 'docker rmi --force $hash' >> single_end.csh
+echo "docker volume prune -f" >> single_end.csh
+echo "docker system df" >> single_end.csh
+echo "date" >> single_end.csh
+echo "" >> single_end.csh
+echo "#####################   END OF JOB    #####################" >> single_end.csh
 
 #	Build each of the scripts: serial, openmp, then mpi.
 
