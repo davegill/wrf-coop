@@ -335,7 +335,7 @@ echo "#	This script removes the docker image and" >> single_end.csh
 echo "#	does some seasonal pruning" >> single_end.csh
 echo "" >> single_end.csh
 echo "date" >> single_end.csh
-echo "docker rmi wrf_regtest" >> single_end.csh
+echo 'docker rmi $1' >> single_end.csh
 echo "set hash = "'`'"docker images | grep davegill |  awk '{print  " '$3' "}'" ' `' >> single_end.csh
 echo 'docker rmi --force $hash' >> single_end.csh
 echo "docker volume prune -f" >> single_end.csh
@@ -477,26 +477,6 @@ foreach n ( $NUMBER )
 				echo "end" >> $fname
 				echo "date" >> $fname
 
-				if      ( $JOB == INDEPENDENT ) then
-					if ( $n == 02 ) then
-						echo "docker rmi wrf_nmmregtest" >> $fname
-					else
-						echo "docker rmi wrf_regtest" >> $fname
-					endif
-					echo 'set hash = `docker images | grep -v REPOSITORY | ' "awk '{print " '$3' "}' " '`' >> $fname
-					echo 'docker rmi --force $hash' >> $fname
-				else if ( $JOB == SEQUENTIAL  ) then
-					if ( $n == 02 ) then
-						echo "echo docker rmi wrf_nmmregtest" >> $fname
-					else
-						echo "echo docker rmi wrf_regtest" >> $fname
-					endif
-					set hash = `docker images | grep -v REPOSITORY | awk '{print $3}'`
-					echo "echo docker rmi --force $hash" >> $fname
-				endif
-				echo "docker volume prune -f" >> $fname
-				echo "docker system df" >> $fname
-				echo "date" >> $fname
 				echo "touch $DROPIT/COMPLETE_test_0${n}${test_suffix}" >> $fname
 				echo "chmod 666 $DROPIT/COMPLETE_test_0${n}${test_suffix}" >> $fname
 				echo "mv $DROPIT/DOING_NOW_test_0${n}${test_suffix} $DROPIT/COMPLETE_test_0${n}${test_suffix}" >> $fname
@@ -619,26 +599,6 @@ foreach n ( $NUMBER )
 				echo "docker stop test_0${n}${test_suffix}" >> $fname
 				echo "date" >> $fname
 				echo "docker rm test_0${n}${test_suffix}" >> $fname
-				echo "date" >> $fname
-				if      ( $JOB == INDEPENDENT ) then
-					if ( $n == 02 ) then
-						echo "docker rmi wrf_nmmregtest" >> $fname
-					else
-						echo "docker rmi wrf_regtest" >> $fname
-					endif
-					echo 'set hash = `docker images | grep davegill | ' "awk '{print " '$3' "}' " '`' >> $fname
-					echo 'docker rmi --force $hash' >> $fname
-				else if ( $JOB == SEQUENTIAL  ) then
-					if ( $n == 02 ) then
-						echo "echo docker rmi wrf_nmmregtest" >> $fname
-					else
-						echo "echo docker rmi wrf_regtest" >> $fname
-					endif
-					set hash = `docker images | grep davegill | awk '{print $3}'`
-					echo "echo docker rmi --force $hash" >> $fname
-				endif
-				echo "docker volume prune -f" >> $fname
-				echo "docker system df" >> $fname
 				echo "date" >> $fname
 				echo "touch $DROPIT/COMPLETE_test_0${n}${test_suffix}" >> $fname
 				echo "chmod 666 $DROPIT/COMPLETE_test_0${n}${test_suffix}" >> $fname
@@ -767,26 +727,6 @@ foreach n ( $NUMBER )
 				echo "docker stop test_0${n}${test_suffix}" >> $fname
 				echo "date" >> $fname
 				echo "docker rm test_0${n}${test_suffix}" >> $fname
-				echo "date" >> $fname
-				if      ( $JOB == INDEPENDENT ) then
-					if ( $n == 02 ) then
-						echo "docker rmi wrf_nmmregtest" >> $fname
-					else
-						echo "docker rmi wrf_regtest" >> $fname
-					endif
-					echo 'set hash = `docker images | grep davegill | ' "awk '{print " '$3' "}' " '`' >> $fname
-					echo 'docker rmi --force $hash' >> $fname
-				else if ( $JOB == SEQUENTIAL  ) then
-					if ( $n == 02 ) then
-						echo "echo docker rmi wrf_nmmregtest" >> $fname
-					else
-						echo "echo docker rmi wrf_regtest" >> $fname
-					endif
-					set hash = `docker images | grep davegill | awk '{print $3}'`
-					echo "echo docker rmi --force $hash" >> $fname
-				endif
-				echo "docker volume prune -f" >> $fname
-				echo "docker system df" >> $fname
 				echo "date" >> $fname
 				echo "touch $DROPIT/COMPLETE_test_0${n}${test_suffix}" >> $fname
 				echo "chmod 666 $DROPIT/COMPLETE_test_0${n}${test_suffix}" >> $fname
@@ -935,26 +875,6 @@ foreach n ( $NUMBER )
 				echo "docker stop test_0${n}${test_suffix}" >> $fname
 				echo "date" >> $fname
 				echo "docker rm test_0${n}${test_suffix}" >> $fname
-				echo "date" >> $fname
-				if      ( $JOB == INDEPENDENT ) then
-					if ( $n == 02 ) then
-						echo "docker rmi wrf_nmmregtest" >> $fname
-					else
-						echo "docker rmi wrf_regtest" >> $fname
-					endif
-					echo 'set hash = `docker images | grep davegill | ' "awk '{print " '$3' "}' " '`' >> $fname
-					echo 'docker rmi --force $hash' >> $fname
-				else if ( $JOB == SEQUENTIAL  ) then
-					if ( $n == 02 ) then
-						echo "echo docker rmi wrf_nmmregtest" >> $fname
-					else
-						echo "echo docker rmi wrf_regtest" >> $fname
-					endif
-					set hash = `docker images | grep davegill | awk '{print $3}'`
-					echo "echo docker rmi --force $hash" >> $fname
-				endif
-				echo "docker volume prune -f" >> $fname
-				echo "docker system df" >> $fname
 				echo "date" >> $fname
 				echo "touch $DROPIT/COMPLETE_test_0${n}${test_suffix}" >> $fname
 				echo "chmod 666 $DROPIT/COMPLETE_test_0${n}${test_suffix}" >> $fname
