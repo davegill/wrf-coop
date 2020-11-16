@@ -293,14 +293,14 @@ echo "" >> single_init.csh
 echo "date" >> single_init.csh
 echo 'set num_containers = `docker ps -a | wc -l`' >> single_init.csh
 echo 'if ( $num_containers > 1 ) then' >> single_init.csh
-echo '  set hash = `docker ps -a | sed -n 2,${num_containers}p | ' "awk '{print " '$1}' "'" '`' >>  single_init.csh
-echo '  docker rm $hash' >> single_init.csh
+echo '	set hash = `docker ps -a | sed -n 2,${num_containers}p | ' "awk '{print " '$1}' "'" '`' >>  single_init.csh
+echo '#	docker rm $hash' >> single_init.csh
 echo "endif" >> single_init.csh
 echo "" >> single_init.csh
 echo 'set num_images = `docker images | wc -l`' >> single_init.csh
 echo 'if ( $num_images > 1 ) then' >> single_init.csh
-echo '  set hash = `docker images | sed -n 2,${num_images}p | ' "awk '{print " '$3}' "'" '`' >>  single_init.csh
-echo '  docker rmi --force $hash' >> single_init.csh
+echo '	set hash = `docker images | sed -n 2,${num_images}p | ' "awk '{print " '$3}' "'" '`' >>  single_init.csh
+echo '#	docker rmi --force $hash' >> single_init.csh
 echo "endif" >> single_init.csh
 echo "" >> single_init.csh
 echo "date" >> single_init.csh
