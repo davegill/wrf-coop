@@ -85,7 +85,7 @@ else if ( $TEST_GEN == SOME ) then
 	                  "em_quarter_ss  02NE 03 03NE 04 " \
 	                  "em_b_wave      1NE 2 2NE 3 " \
 	                  "em_real8       14 17AD " \
-	                  "em_quarter_ss8 06 08 09 " \
+	                  "em_quarter_ss8 08 09 " \
 	                  "em_move        01 " \
 	                  "em_fire        01 " \
 	                  "em_hill2d_x    01 " \
