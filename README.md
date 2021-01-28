@@ -161,8 +161,8 @@ CONTAINER ID        IMAGE               COMMAND             CREATED             
 ```
 > docker images
 REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
-wrf_regtest         latest              cb75a489c00c        About a minute ago   5.67 GB
-davegill/wrf-coop   thirteenthtry       c06fd248f249        6 hours ago          5.21 GB
+wrf_regtest         latest              cb75a489c00c        About a minute ago  5.67 GB
+davegill/wrf-coop   fourteenthtry       41a5030914ca        10 minutes ago      5.55 GB
 ```
 ```
 > docker rmi 196313365c17 efc665da99ef
