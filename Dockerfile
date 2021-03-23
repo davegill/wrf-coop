@@ -1,10 +1,14 @@
 #
 FROM davegill/wrf-coop:fourteenthtry
-MAINTAINER Dave Gill <gill@ucar.edu>
+LABEL maintainer="Dave Gill <gill@ucar.edu>"
 
-RUN git clone _FORK_/_REPO_.git WRF \
+ENV FORK https://github.com/davegill
+ENV REPO WRF
+ENV BRANCH irr=3
+
+RUN git clone ${FORK}/${REPO}.git WRF \
   && cd WRF \
-  && git checkout _BRANCH_ \
+  && git checkout ${BRANCH} \
   && cd ..
 
 RUN git clone https://github.com/davegill/SCRIPTS.git SCRIPTS \
