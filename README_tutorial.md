@@ -167,7 +167,7 @@ So far we have built our image (the `docker build` step), we have gone in and ou
 ```
 
 9. Run Real, initial set up of files and namelist
-    * cd WRFrun -np 2 ./real.exe/test/em_real
+    * From WPS, cd in to the WRF/test/em_real directory
     * link the WPS metgrid files locally
     * edit the namelist for the tutorial case
     * NOTE: you can "cheat" with `/wrf/wrfinput/namelist.input.docker` file
