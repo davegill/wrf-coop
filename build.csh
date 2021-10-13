@@ -317,7 +317,7 @@ echo "" >> single_init.csh
 echo '#	-f $1 = name of the Dockerfile' >> single_init.csh
 echo '#	-t $2 = name of the generated docker image' >> single_init.csh
 echo "" >> single_init.csh
-echo 'docker build -f $1 -t $2 .' >> single_init.csh
+echo 'docker build -f $1 -t $2 --build-arg argname=feature_tests .' >> single_init.csh
 echo "date" >> single_init.csh
 echo "" >> single_init.csh
 echo "#####################   END OF JOB    #####################" >> single_init.csh
