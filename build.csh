@@ -974,3 +974,99 @@ echo "" >> last_only_once.csh
 echo "#####################   END OF JOB    #####################" >> last_only_once.csh
 echo "Run ./last_only_once.csh"
 
+
+
+
+if ( -e part.sh ) then
+	rm part.sh
+endif
+touch part.sh
+echo "##############   ADD THIS TO Comparison.sh   ##############" >> part.sh
+echo "if (label=='"'"DO_KPP_TEST"'"'){"  >> part.sh
+echo "	sh '''" >> part.sh
+echo "" >> part.sh
+echo "	# This compares both serial vs openmp and serial vs mpi results" >> part.sh
+echo "" >> part.sh
+
+set INCR_FINE_GRAIN = ${#NUMBER}
+set COUNT = 1
+foreach n ( $NUMBER )
+	set THIS_SERIAL = FALSE
+	set THIS_OPENMP = FALSE
+	set THIS_MPI    = FALSE
+
+	set STRING1 = ""
+
+	set root1_file = SUCCESS_RUN_WRF
+
+	set root2_file_s = $COMPILE[$COUNT]_${SERIAL_OPT}_$RUNDIR[$COUNT]
+	set root2_file_o = $COMPILE[$COUNT]_${OPENMP_OPT}_$RUNDIR[$COUNT]
+	set root2_file_m = $COMPILE[$COUNT]_${MPI_OPT}_$RUNDIR[$COUNT]
+
+	if     ( $SERIAL[$COUNT] == T ) then
+		@ INCR_FINE_GRAIN ++
+		set THIS_SERIAL = $INCR_FINE_GRAIN
+		echo "	sudo -S unzip /tmp/raw_output/OUTPUT_output_${THIS_SERIAL}.zip -d /tmp/raw_output/OUTPUT_output_${THIS_SERIAL}" >> part.sh
+		set STRING1 = ( $STRING1 "/tmp/raw_output/output_${THIS_SERIAL}" )
+		set STRING_SERIAL = "sudo -S ls -l /tmp/raw_output/OUTPUT_output_${INCR_FINE_GRAIN}/home/ubuntu/wrf-stuff/wrf-coop/OUTPUT | sudo tee -a /tmp/raw_output/final_output/output_$COUNT"
+	endif
+	if     ( $OPENMP[$COUNT] == T ) then
+		@ INCR_FINE_GRAIN ++
+		set THIS_OPENMP = $INCR_FINE_GRAIN
+		echo "	sudo -S unzip /tmp/raw_output/OUTPUT_output_${THIS_OPENMP}.zip -d /tmp/raw_output/OUTPUT_output_${THIS_OPENMP}" >> part.sh
+		set STRING1 = ( $STRING1 "/tmp/raw_output/output_${THIS_OPENMP}" )
+		set STRING_OPENMP = "sudo -S ls -l /tmp/raw_output/OUTPUT_output_${INCR_FINE_GRAIN}/home/ubuntu/wrf-stuff/wrf-coop/OUTPUT | sudo tee -a /tmp/raw_output/final_output/output_$COUNT"
+	endif
+	if     (    $MPI[$COUNT] == T ) then
+		@ INCR_FINE_GRAIN ++
+		set THIS_MPI    = $INCR_FINE_GRAIN
+		echo "	sudo -S unzip /tmp/raw_output/OUTPUT_output_${THIS_MPI}.zip -d /tmp/raw_output/OUTPUT_output_${THIS_MPI}" >> part.sh
+		set STRING1 = ( $STRING1 "/tmp/raw_output/output_${THIS_MPI}"    )
+		set STRING_MPI    = "sudo -S ls -l /tmp/raw_output/OUTPUT_output_${INCR_FINE_GRAIN}/home/ubuntu/wrf-stuff/wrf-coop/OUTPUT | sudo tee -a /tmp/raw_output/final_output/output_$COUNT"
+	endif
+	echo "	sudo -S cat $STRING1 | sudo tee -a /tmp/raw_output/final_output/output_$COUNT" >> part.sh
+	echo "" >> part.sh
+	if ( $THIS_SERIAL != FALSE ) then
+		echo "	$STRING_SERIAL" >> part.sh
+	endif
+	if ( $THIS_OPENMP != FALSE ) then
+		echo "	$STRING_OPENMP" >> part.sh
+	endif
+	if ( $THIS_MPI    != FALSE ) then
+		echo "	$STRING_MPI   " >> part.sh
+	endif
+	echo "" >> part.sh
+
+#DAVE
+
+	set TCOUNT = 0
+	foreach t ( $TEST[$COUNT] $EXTRAS )
+		@ TCOUNT ++
+		if ( $TCOUNT == 1 ) goto SKIP_THIS_TEST2
+		if ( ( $SERIAL[$COUNT] == T ) && ( $OPENMP[$COUNT] == T ) ) then
+			foreach d ( d01 d02 d03 )
+				set file1 = ${root1_file}_${d}_${root2_file_s}_$t
+				set file2 = ${root1_file}_${d}_${root2_file_o}_$t
+				echo '	OK=$(diff -q /tmp/raw_output/OUTPUT_output_'"${THIS_SERIAL}"'/home/ubuntu/wrf-stuff/wrf-coop/OUTPUT/'"${file1}"' /tmp/raw_output/OUTPUT_output_'"${THIS_OPENMP}"'/home/ubuntu/wrf-stuff/wrf-coop/OUTPUT/'"${file2}"') && echo "'"${file1}"' vs '"${file2}"' status = ${?} "  | sudo tee -a /tmp/raw_output/final_output/output_'"${COUNT}" >> part.sh
+				echo "" >> part.sh
+			end
+		endif
+
+		if ( ( $SERIAL[$COUNT] == T ) && (    $MPI[$COUNT] == T ) ) then
+			foreach d ( d01 d02 d03 )
+				set file1 = ${root1_file}_${d}_${root2_file_s}_$t
+				set file2 = ${root1_file}_${d}_${root2_file_m}_$t
+				echo '	OK=$(diff -q /tmp/raw_output/OUTPUT_output_'"${THIS_SERIAL}"'/home/ubuntu/wrf-stuff/wrf-coop/OUTPUT/'"${file1}"' /tmp/raw_output/OUTPUT_output_'"${THIS_MPI}"'/home/ubuntu/wrf-stuff/wrf-coop/OUTPUT/'"${file2}"') && echo "'"${file1}"' vs '"${file2}"' status = ${?} "  | sudo tee -a /tmp/raw_output/final_output/output_'"${COUNT}" >> part.sh
+				echo "" >> part.sh
+			end
+		endif
+SKIP_THIS_TEST2:
+	end
+
+	@ COUNT ++ 
+end
+
+echo "	'''" >> part.sh
+echo "	}" >> part.sh
+echo "###############   END OF SCRIPT INCLUSION   ###############" >> part.sh
+
