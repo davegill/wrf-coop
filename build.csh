@@ -317,7 +317,8 @@ echo "" >> single_init.csh
 echo '#	-f $1 = name of the Dockerfile' >> single_init.csh
 echo '#	-t $2 = name of the generated docker image' >> single_init.csh
 echo "" >> single_init.csh
-echo 'docker build -f $1 -t $2 --build-arg argname=feature_tests .' >> single_init.csh
+#echo 'docker build -f $1 -t $2 --build-arg argname=feature_tests .' >> single_init.csh
+echo 'docker build -f $1 -t $2 .' >> single_init.csh
 echo "date" >> single_init.csh
 echo "" >> single_init.csh
 echo "#####################   END OF JOB    #####################" >> single_init.csh
@@ -1055,7 +1056,9 @@ foreach OVERALL_NUMBER_OF_TESTS ( $ALL $FEWER )
 			@ TCOUNT ++
 			if ( $TCOUNT == 1 ) goto SKIP_THIS_TEST2
 			if ( ( $SERIAL[$COUNT] == T ) && ( $OPENMP[$COUNT] == T ) ) then
-				foreach d ( d01 d02 d03 )
+#DAVE
+#				foreach d ( d01 d02 d03 )
+ 				foreach d ( d01 )
 					set file1 = ${root1_file}_${d}_${root2_file_s}_$t
 					set file2 = ${root1_file}_${d}_${root2_file_o}_$t
 					echo '	OK=$(diff -q /tmp/raw_output/OUTPUT_output_'"${THIS_SERIAL}"'/home/ubuntu/wrf-stuff/wrf-coop/OUTPUT/'"${file1}"' /tmp/raw_output/OUTPUT_output_'"${THIS_OPENMP}"'/home/ubuntu/wrf-stuff/wrf-coop/OUTPUT/'"${file2}"') && echo "'"${file1}"' vs '"${file2}"' status = ${?} "  | sudo tee -a /tmp/raw_output/final_output/output_'"${COUNT}" >> part.sh
@@ -1064,7 +1067,9 @@ foreach OVERALL_NUMBER_OF_TESTS ( $ALL $FEWER )
 			endif
 	
 			if ( ( $SERIAL[$COUNT] == T ) && (    $MPI[$COUNT] == T ) ) then
-				foreach d ( d01 d02 d03 )
+#DAVE
+#				foreach d ( d01 d02 d03 )
+ 				foreach d ( d01 )
 					set file1 = ${root1_file}_${d}_${root2_file_s}_$t
 					set file2 = ${root1_file}_${d}_${root2_file_m}_$t
 					echo '	OK=$(diff -q /tmp/raw_output/OUTPUT_output_'"${THIS_SERIAL}"'/home/ubuntu/wrf-stuff/wrf-coop/OUTPUT/'"${file1}"' /tmp/raw_output/OUTPUT_output_'"${THIS_MPI}"'/home/ubuntu/wrf-stuff/wrf-coop/OUTPUT/'"${file2}"') && echo "'"${file1}"' vs '"${file2}"' status = ${?} "  | sudo tee -a /tmp/raw_output/final_output/output_'"${COUNT}" >> part.sh
