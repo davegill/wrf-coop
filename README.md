@@ -50,8 +50,7 @@ denied: requested access to the resource is denied
 This image has the libs, data, directory structure, etc inside. The construction of this image uses the `Dockerfile-first_part` from this repository. This Docker setup was tested at https://github.com/davegill/travis_test. In the docker branch of the travis_test repo are the original `Dockerfile-template` and the `.travis.yml` files.
 
 ```
-> cp Dockerfile-first_part Dockerfile
-> docker build -t wrf-coop --build-arg argname=regtest .
+> docker build -f Dockerfile-first_part -t wrf-coop --build-arg argname=regtest .
 ```
 The argument `argname=regtest` informs Docker as to how to build the image. With a regression test, we do not need all of the WPS source (and importantly, the large meteorological data and static data).
 
