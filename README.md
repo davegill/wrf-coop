@@ -58,13 +58,13 @@ Here's the first image (wrf-coop). A coop is the structure surrounding the actua
 ```
 > docker images
 REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
-wrf-coop            latest              bd2082d1eb7d        19 minutes ago      3.66GB
-centos              latest              9f38484d220f        5 weeks ago         202MB
+wrf-coop            latest              7991cdc121de        8 minutes ago       6.71 GB
+docker.io/centos    7                   eeb6ee3f44bd        5 weeks ago         204 MB
 ```
 
-Once we have that image, we want to save it. That is the _WHOLE_ purpose of this exercise. Then we just pull it down and add in the WRF repository, and voi-fricking-la. Note, this is `firsttry`. I am at `fourteenthtry`.
+Once we have that image, we want to save it on dockerhub. That is the _WHOLE_ purpose of this exercise (as it took almost an hour to create). Then we just pull it down and add in the WRF repository, and voi-fricking-la. Note, I  am already at `fifteenthtry`.
 ```
-> docker tag bd2082d1eb7d davegill/wrf-coop:firsttry
+> docker tag 7991cdc121de davegill/wrf-coop:fifteenthtry
 
 > docker push davegill/wrf-coop
 The push refers to repository [docker.io/davegill/wrf-coop]
