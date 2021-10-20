@@ -133,7 +133,8 @@ RUN mkdir -p  /wrf/WPS_GEOG /wrf/wrfinput /wrf/wrfoutput \
  &&  chmod 6755 /wrf /wrf/WPS_GEOG /wrf/wrfinput /wrf/wrfoutput /usr/local
 
 # Download NCL
-RUN curl -SL https://ral.ucar.edu/sites/default/files/public/projects/ncar-docker-wrf/nclncarg-6.3.0.linuxcentos7.0x8664nodapgcc482.tar.gz | tar zxC /usr/local
+#https://www.earthsystemgrid.org/dataset/ncl.630.1.html
+RUN curl -SL https://www.earthsystemgrid.org/api/v1/dataset/ncl.630.1/file/ncl_ncarg-6.3.0.Linux_CentOS7.0_x86_64_nodap_gcc482.tar.gz | tar zxC /usr/local
 ENV NCARG_ROOT /usr/local
 
 # Set environment for interactive container shells
@@ -168,6 +169,7 @@ RUN if [ "$argname" = "tutorial" ] ; then curl -SL https://www2.mmm.ucar.edu/wrf
 RUN if [ "$argname" = "tutorial" ] ; then curl -SL https://www2.mmm.ucar.edu/wrf/src/namelists_v$NML_VERSION.tar.gz  | tar -xzC /wrf/wrfinput ; fi
 RUN if [ "$argname" = "tutorial" ] ; then curl -SL https://www2.mmm.ucar.edu/wrf/TUTORIAL_DATA/WRF_NCL_scripts.tar.gz | tar -xzC /wrf ; fi
 RUN if [ "$argname" = "regtest" ]  ; then curl -SL https://www2.mmm.ucar.edu/wrf/dave/data_smaller.tar.gz | tar -xzC /wrf ; fi
+RUN if [ "$argname" = "regtest" ]  ; then curl -SL https://www2.mmm.ucar.edu/wrf/dave/feature_data.tar.gz | tar -xzC /wrf ; fi
 
 ENV JASPERINC /usr/include/jasper
 ENV JASPERLIB /usr/lib64
