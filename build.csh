@@ -80,7 +80,7 @@ else if ( $TEST_GEN == SOME ) then
 	set NUMBER    = ( 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 )
 	set TEST      = ( \
 	                  "em_real        3dtke conus rap tropical " \
-	                  "em_chem        1 2 5 " \
+	                  "em_chem        1" \
 	                  "em_quarter_ss  02NE 03 03NE 04 " \
 	                  "em_b_wave      1NE 2 2NE 3 " \
 	                  "em_real8       14 17AD " \
