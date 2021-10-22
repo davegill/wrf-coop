@@ -836,7 +836,6 @@ foreach n ( $NUMBER )
 				     ( $RUNDIR[$COUNT] == em_realJ ) || \
 				     ( $RUNDIR[$COUNT] == em_realK ) || \
 				     ( $RUNDIR[$COUNT] == em_realL ) || \
-				     ( $RUNDIR[$COUNT] == em_realM ) || \
 				     ( $RUNDIR[$COUNT] == em_real8 ) ) then
 					echo '	set is_nest = `echo $t | rev | cut -c 1-2 | rev`' >> $fname
 					echo '	if ( ( $is_nest == NE ) || ( $is_nest == VN ) ) then' >> $fname
@@ -847,17 +846,30 @@ foreach n ( $NUMBER )
 	        			echo '		set OK = $status' >> $fname
 					echo '	endif' >> $fname
 				else
-					echo "	docker exec test_0${n}${test_suffix} ./script.csh RUN $COMPILE[$COUNT] $MPI_OPT $RUNDIR[$COUNT]" '$t' "NP=$NP[$COUNT]" >> $fname
+					if      ( $FEATURE[$COUNT] == FALSE ) then
+						echo "	docker exec test_0${n}${test_suffix} ./script.csh RUN $COMPILE[$COUNT] $MPI_OPT $RUNDIR[$COUNT]" '$t' "NP=$NP[$COUNT]" >> $fname
+					else if ( $FEATURE[$COUNT] == TRUE  ) then
+						echo "	docker exec test_0${n}${test_suffix} "'\' >> $fname
+						echo '		./feature_testing.csh /wrf/wrfoutput /wrf/WRF/test/em_real /wrf/cases/$t'" /wrf/input/additional /wrf/input/standard mpi-$NP[$COUNT]" >> $fname
+					endif
 					echo '	set OK = $status' >> $fname
 				endif
 				echo '	echo $OK =' "STATUS test_0${n}${test_suffix} $NAME[$COUNT] $COMPILE[$COUNT] $MPI_OPT" '$t' >> $fname
 				echo "	date" >> $fname
 				echo "	" >> $fname
 				echo "	echo 'PRE-PROC OUTPUT' " >> $fname
-				echo "	docker exec test_0${n}${test_suffix} cat WRF/test/$COMPILE[$COUNT]/real.print.out " >> $fname
-				echo "	echo 'MODEL OUTPUT' " >> $fname
+				if      ( $FEATURE[$COUNT] == FALSE ) then
+					echo "	docker exec test_0${n}${test_suffix} cat WRF/test/$COMPILE[$COUNT]/real.print.out " >> $fname
+					echo "	echo 'MODEL OUTPUT' " >> $fname
+				else if ( $FEATURE[$COUNT] == TRUE  ) then
+					echo "	docker exec test_0${n}${test_suffix} cat WRF/test/$COMPILE[$COUNT]/REAL.print.out " >> $fname
+					echo "	echo 'MODEL OUTPUT STEP 1' " >> $fname
+					echo "	docker exec test_0${n}${test_suffix} cat WRF/test/$COMPILE[$COUNT]/HOLD/rsl.out.0000 " >> $fname
+					echo "	echo 'MODEL OUTPUT STEP 2' " >> $fname
+				endif
 				echo "	docker exec test_0${n}${test_suffix} cat WRF/test/$COMPILE[$COUNT]/rsl.out.0000 " >> $fname
 				echo "	" >> $fname
+				echo "	docker exec test_0${n}${test_suffix} ls -ls WRF/test/$COMPILE[$COUNT]/HOLD | grep wrfout " >> $fname
 				echo "	docker exec test_0${n}${test_suffix} ls -ls WRF/test/$COMPILE[$COUNT] | grep wrfout " >> $fname
 				echo "	docker exec test_0${n}${test_suffix} ls -ls wrfoutput | grep _RUN_ | grep $COMPILE[$COUNT]_${MPI_OPT}_$RUNDIR[$COUNT]_"'$t ' >> $fname
 				echo "	date" >> $fname
