@@ -74,8 +74,8 @@ if      ( $TEST_GEN == ALL ) then
 	                  "em_realJ       50 51 " \
 	                  "em_realK       52FD 60 60NE " \
 	                  "em_realL       66FD 71 78 79 " \
+	                  "em_realM       basic " \
 	                  "em_chem_kpp    101 107 120 201 " \
-	                  "nmm_hwrf       1NE 2NE 3NE 4 " \
 	                )
 	set TEST_COUNT = $#TEST
 	set COUNT = 0
@@ -113,8 +113,8 @@ else if ( $TEST_GEN == SOME ) then
 	                  "em_realJ       50 51 " \
 	                  "em_realK       52FD 60 60NE " \
 	                  "em_realL       66FD 71 78 79 " \
+	                  "em_realM       basic " \
 	                  "em_chem_kpp    120 " \
-	                  "nmm_hwrf       1NE 2NE 3NE " \
 	                )
 	set TEST_COUNT = $#TEST
 	set COUNT = 0
@@ -152,8 +152,8 @@ else if ( $TEST_GEN == test ) then
 	                  "em_realJ       50 " \
 	                  "em_realK       52FD " \
 	                  "em_realL       66FD " \
+	                  "em_realM       basic " \
 	                  "em_chem_kpp    120 " \
-	                  "nmm_hwrf       1NE    " \
 	                )
 	set TEST_COUNT = $#TEST
 	set COUNT = 0
@@ -177,7 +177,7 @@ set MPI       = ( T           T           T             T           T           
 set NEST      = ( 1           1           1             1           1           1              3           1           0           1           1           1           1           1           1           1           1           1           1           1           1           1           1                       ) # NEST       
 set NAME      = ( em          chem        qss           bwave       real8       qss8           move        fire        hill        em          em          em          em          em          em          em          em          em          em          em          em          em          kpp                     ) # NAME       
 set COMPILE   = ( em_real     em_real     em_quarter_ss em_b_wave   em_real     em_quarter_ss  em_real     em_fire     em_hill2d_x em_real     em_real     em_real     em_real     em_real     em_real     em_real     em_real     em_real     em_real     em_real     em_real     em_real     em_real                 ) # COMPILE    
-set RUNDIR    = ( em_real     em_chem     em_quarter_ss em_b_wave   em_real8    em_quarter_ss8 em_move     em_fire     em_hill2d_x em_realA    em_realB    em_realC    em_realD    em_realE    em_realF    em_realG    em_realH    em_realI    em_realJ    em_realK    em_realL    basic       em_chem_kpp             ) # RUNDIR     
+set RUNDIR    = ( em_real     em_chem     em_quarter_ss em_b_wave   em_real8    em_quarter_ss8 em_move     em_fire     em_hill2d_x em_realA    em_realB    em_realC    em_realD    em_realE    em_realF    em_realG    em_realH    em_realI    em_realJ    em_realK    em_realL    em_realM    em_chem_kpp             ) # RUNDIR     
 set DASHOPT1  = ( -d          -d          -d            -d          -d          -d             -d          -d          -d          -d          -d          -d          -d          -d          -d          -d          -d          -d          -d          -d          -d          -d          -d                      ) # DASHOPT1   
 set DASHOPT2  = ( F           F           F             F           -r8         -r8            F           F           F           F           F           F           F           F           F           F           F           F           F           F           F           F           F                       ) # DASHOPT2   
 set BUILDENV1 = ( F           WRF_CHEM=1  F             F           F           F              F           F           F           F           F           F           F           F           F           F           F           F           F           F           F           F           WRF_CHEM=1              ) # BUILDENV1  
@@ -302,7 +302,6 @@ echo "#	This script builds the docker image for the rest of the testing harness 
 echo "" >> single_init.csh
 echo "#	The mandatory input argument is the name of the Dockerfile" >> single_init.csh
 echo '#	If the name is "Dockerfile", the ARW code is run' >> single_init.csh
-echo '#	If the name is "Dockerfile-NMM", the HWRF code is run' >> single_init.csh
 echo "" >> single_init.csh
 echo "date" >> single_init.csh
 echo "set SHARED = $SHARED" >> single_init.csh
@@ -328,8 +327,6 @@ echo "	cp -pr ${DROPIT}/Namelists ." >> single_init.csh
 echo "	tar -cf nml.tar Namelists" >> single_init.csh
 echo "	sed -e 's/#ADD/ADD/' Dockerfile > .foo" >> single_init.csh
 echo "	mv .foo Dockerfile" >> single_init.csh
-echo "	sed -e 's/#ADD/ADD/' Dockerfile-NMM > .foo" >> single_init.csh
-echo "	mv .foo Dockerfile-NMM" >> single_init.csh
 echo "endif" >> single_init.csh
 echo "" >> single_init.csh
 echo '#	-f $1 = name of the Dockerfile' >> single_init.csh
@@ -835,6 +832,11 @@ foreach n ( $NUMBER )
 				     ( $RUNDIR[$COUNT] == em_realF ) || \
 				     ( $RUNDIR[$COUNT] == em_realG ) || \
 				     ( $RUNDIR[$COUNT] == em_realH ) || \
+				     ( $RUNDIR[$COUNT] == em_realI ) || \
+				     ( $RUNDIR[$COUNT] == em_realJ ) || \
+				     ( $RUNDIR[$COUNT] == em_realK ) || \
+				     ( $RUNDIR[$COUNT] == em_realL ) || \
+				     ( $RUNDIR[$COUNT] == em_realM ) || \
 				     ( $RUNDIR[$COUNT] == em_real8 ) ) then
 					echo '	set is_nest = `echo $t | rev | cut -c 1-2 | rev`' >> $fname
 					echo '	if ( ( $is_nest == NE ) || ( $is_nest == VN ) ) then' >> $fname
