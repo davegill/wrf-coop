@@ -51,7 +51,6 @@ if ( ${#argv} == 0 ) then
 endif
 
 if      ( $TEST_GEN == ALL ) then
-	set NUMBER    = ( 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 )
 
 	set TEST      = ( \
 	                  "em_real        3dtke cesm conus rap tropical " \
@@ -63,21 +62,35 @@ if      ( $TEST_GEN == ALL ) then
 	                  "em_move        01 02 " \
 	                  "em_fire        01 " \
 	                  "em_hill2d_x    01 " \
-	                  "em_realA       03 03DF 03FD 06 07NE " \
+	                  "em_realA       03 03DF " \
 	                  "em_realB       10 11 14 16 16DF " \
 	                  "em_realC       17 17AD 18 20 20NE " \
-	                  "em_realD       38 48 49 50 51 " \
-	                  "em_realE       52 52DF 52FD 60 60NE " \
-	                  "em_realF       65DF 66FD 71 78 79 " \
+	                  "em_realD       38 48 49 " \
+	                  "em_realE       52 52DF " \
+	                  "em_realF       65DF " \
 	                  "em_realG       kiaps1NE kiaps2 rala ralbNE " \
 	                  "em_realH       cmt fsbm solaraNE solarb urb3aNE urb3bNE " \
+	                  "em_realI       03FD 06 07NE " \
+	                  "em_realJ       50 51 " \
+	                  "em_realK       52FD 60 60NE " \
+	                  "em_realL       66FD 71 78 79 " \
 	                  "em_chem_kpp    101 107 120 201 " \
 	                  "nmm_hwrf       1NE 2NE 3NE 4 " \
 	                )
+	set TEST_COUNT = $#TEST
+	set COUNT = 0
+	set NUMBER =
+	while ( $COUNT < $TEST_COUNT )
+		@ COUNT ++
+		if ( $COUNT < 10 ) then
+			set NUMBER = ( $NUMBER 0$COUNT )
+		else
+			set NUMBER = ( $NUMBER  $COUNT )
+		endif
+	end
 
 else if ( $TEST_GEN == SOME ) then
 
-	set NUMBER    = ( 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 )
 	set TEST      = ( \
 	                  "em_real        3dtke conus rap tropical " \
 	                  "em_chem        1 2 5 " \
@@ -88,22 +101,34 @@ else if ( $TEST_GEN == SOME ) then
 	                  "em_move        01 " \
 	                  "em_fire        01 " \
 	                  "em_hill2d_x    01 " \
-	                  "em_realA       03 03DF 03FD 06 07NE " \
+	                  "em_realA       03 03DF " \
 	                  "em_realB       10 11 14 16 " \
 	                  "em_realC       17 17AD 18 20 20NE " \
-	                  "em_realD       38 48 49 50 51 " \
-	                  "em_realE       52 52DF 52FD 60 60NE " \
-	                  "em_realF       65DF 66FD 71 78 79 " \
+	                  "em_realD       38 48 49 " \
+	                  "em_realE       52 52DF " \
+	                  "em_realF       65DF " \
 	                  "em_realG       kiaps1NE kiaps2 " \
 	                  "em_realH       cmt solaraNE urb3bNE " \
+	                  "em_realI       03FD 06 07NE " \
+	                  "em_realJ       50 51 " \
+	                  "em_realK       52FD 60 60NE " \
+	                  "em_realL       66FD 71 78 79 " \
 	                  "em_chem_kpp    120 " \
 	                  "nmm_hwrf       1NE 2NE 3NE " \
 	                )
+	set TEST_COUNT = $#TEST
+	set COUNT = 0
+	set NUMBER =
+	while ( $COUNT < $TEST_COUNT )
+		@ COUNT ++
+		if ( $COUNT < 10 ) then
+			set NUMBER = ( $NUMBER 0$COUNT )
+		else
+			set NUMBER = ( $NUMBER  $COUNT )
+		endif
+	end
 
 else if ( $TEST_GEN == test ) then
-
-	set NUMBER    = ( 01 02 ) # Logic is not set up to choose random (out of order) options
-	set NUMBER    = ( 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 )
 
 	set TEST      = ( \
 	                  "em_real        conus  " \
@@ -123,53 +148,47 @@ else if ( $TEST_GEN == test ) then
 	                  "em_realF       65DF   " \
 	                  "em_realG       cmt    " \
 	                  "em_realH       fsbm   " \
+	                  "em_realI       03FD " \
+	                  "em_realJ       50 " \
+	                  "em_realK       52FD " \
+	                  "em_realL       66FD " \
 	                  "em_chem_kpp    120 " \
 	                  "nmm_hwrf       1NE    " \
 	                )
-
-	set TEST      = ( \
-	                  "em_real        fail_test fail_comparison " \
-	                  "em_chem        1      " \
-	                  "em_quarter_ss  02     " \
-	                  "em_b_wave      1      " \
-	                  "em_real8       14     " \
-	                  "em_quarter_ss8 02     " \
-	                  "em_move        01     " \
-	                  "em_fire        01     " \
-	                  "em_hill2d_x    01     " \
-	                  "em_realA       03     " \
-	                  "em_realB       10     " \
-	                  "em_realC       17     " \
-	                  "em_realD       38     " \
-	                  "em_realE       52     " \
-	                  "em_realF       65DF   " \
-	                  "em_realG       cmt    " \
-	                  "em_realH       fsbm   " \
-	                  "em_chem_kpp    120 " \
-	                  "nmm_hwrf       1NE    " \
-	                )
+	set TEST_COUNT = $#TEST
+	set COUNT = 0
+	set NUMBER =
+	while ( $COUNT < $TEST_COUNT )
+		@ COUNT ++
+		if ( $COUNT < 10 ) then
+			set NUMBER = ( $NUMBER 0$COUNT )
+		else
+			set NUMBER = ( $NUMBER  $COUNT )
+		endif
+	end
 
 endif
 
 #	Options that are used for all test generation settings. 
 
-set SERIAL    = ( T           T           T             T           T           T              F           T           T           T           T           T           T           T           T           T           T           T                       F              )
-set OPENMP    = ( T           F           T             T           T           T              F           T           F           T           T           T           T           T           T           T           F           F                       F              )
-set MPI       = ( T           T           T             T           T           T              T           T           F           T           T           T           T           T           T           T           T           T                       T              )
-set NEST      = ( 1           1           1             1           1           1              3           1           0           1           1           1           1           1           1           1           1           1                       3              )
-set NAME      = ( em          chem        qss           bwave       real8       qss8           move        fire        hill        em          em          em          em          em          em          em          em          kpp                     hwrf           )
-set COMPILE   = ( em_real     em_real     em_quarter_ss em_b_wave   em_real     em_quarter_ss  em_real     em_fire     em_hill2d_x em_real     em_real     em_real     em_real     em_real     em_real     em_real     em_real     em_real                 nmm_real       )
-set RUNDIR    = ( em_real     em_chem     em_quarter_ss em_b_wave   em_real8    em_quarter_ss8 em_move     em_fire     em_hill2d_x em_realA    em_realB    em_realC    em_realD    em_realE    em_realF    em_realG    em_realH    em_chem_kpp             nmm_hwrf       )
-set DASHOPT1  = ( -d          -d          -d            -d          -d          -d             -d          -d          -d          -d          -d          -d          -d          -d          -d          -d          -d          -d                      -d             )
-set DASHOPT2  = ( F           F           F             F           -r8         -r8            F           F           F           F           F           F           F           F           F           F           F           F                       F              )
-set BUILDENV1 = ( F           WRF_CHEM=1  F             F           F           F              F           F           F           F           F           F           F           F           F           F           F           WRF_CHEM=1              WRF_NMM_CORE=1 )
-set BUILDENV2 = ( J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS   J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS    J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS             J=-j@$PROCS    )
-set BUILDENV3 = ( F           F           F             F           F           F              F           F           F           F           F           F           F           F           F           F           F           WRF_KPP=1               HWRF=1         )
-set BUILDENV4 = ( F           F           F             F           F           F              F           F           F           F           F           F           F           F           F           F           F           FLEX_LIB_DIR=/usr/lib64 F              )
-set BUILDENV5 = ( F           F           F             F           F           F              F           F           F           F           F           F           F           F           F           F           F           YACC=/usr/bin/yacc@-d   F              )
-#set SERIALBG  = ( T          F           T             T           T           T              F           F           F           T           T           T           T           T           T           T           T           F                       F              )
-set SERIALBG  = ( F           F           F             F           F           F              F           F           F           F           F           F           F           F           F           F           F           F                       F              )
-set NP        = ( $PROCS      $PROCS      $PROCS        $PROCS      $PROCS      $PROCS         $PROCS      $PROCS      $PROCS      $PROCS      $PROCS      $PROCS      $PROCS      $PROCS      $PROCS      $PROCS      $PROCS      $PROCS                  $PROCS         )
+set SERIAL    = ( T           T           T             T           T           T              F           T           T           T           T           T           T           T           T           T           T           T           T           T           T           F           T                       ) # SERIAL     
+set OPENMP    = ( T           F           T             T           T           T              F           T           F           T           T           T           T           T           T           T           F           T           T           T           T           F           F                       ) # OPENMP     
+set MPI       = ( T           T           T             T           T           T              T           T           F           T           T           T           T           T           T           T           T           T           T           T           T           T           T                       ) # MPI        
+set NEST      = ( 1           1           1             1           1           1              3           1           0           1           1           1           1           1           1           1           1           1           1           1           1           1           1                       ) # NEST       
+set NAME      = ( em          chem        qss           bwave       real8       qss8           move        fire        hill        em          em          em          em          em          em          em          em          em          em          em          em          em          kpp                     ) # NAME       
+set COMPILE   = ( em_real     em_real     em_quarter_ss em_b_wave   em_real     em_quarter_ss  em_real     em_fire     em_hill2d_x em_real     em_real     em_real     em_real     em_real     em_real     em_real     em_real     em_real     em_real     em_real     em_real     em_real     em_real                 ) # COMPILE    
+set RUNDIR    = ( em_real     em_chem     em_quarter_ss em_b_wave   em_real8    em_quarter_ss8 em_move     em_fire     em_hill2d_x em_realA    em_realB    em_realC    em_realD    em_realE    em_realF    em_realG    em_realH    em_realI    em_realJ    em_realK    em_realL    basic       em_chem_kpp             ) # RUNDIR     
+set DASHOPT1  = ( -d          -d          -d            -d          -d          -d             -d          -d          -d          -d          -d          -d          -d          -d          -d          -d          -d          -d          -d          -d          -d          -d          -d                      ) # DASHOPT1   
+set DASHOPT2  = ( F           F           F             F           -r8         -r8            F           F           F           F           F           F           F           F           F           F           F           F           F           F           F           F           F                       ) # DASHOPT2   
+set BUILDENV1 = ( F           WRF_CHEM=1  F             F           F           F              F           F           F           F           F           F           F           F           F           F           F           F           F           F           F           F           WRF_CHEM=1              ) # BUILDENV1  
+set BUILDENV2 = ( J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS   J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS    J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS             ) # BUILDENV2  
+set BUILDENV3 = ( F           F           F             F           F           F              F           F           F           F           F           F           F           F           F           F           F           F           F           F           F           F           WRF_KPP=1               ) # BUILDENV3  
+set BUILDENV4 = ( F           F           F             F           F           F              F           F           F           F           F           F           F           F           F           F           F           F           F           F           F           F           FLEX_LIB_DIR=/usr/lib64 ) # BUILDENV4  
+set BUILDENV5 = ( F           F           F             F           F           F              F           F           F           F           F           F           F           F           F           F           F           F           F           F           F           F           YACC=/usr/bin/yacc@-d   ) # BUILDENV5  
+set SERIALBG  = ( F           F           F             F           F           F              F           F           F           F           F           F           F           F           F           F           F           F           F           F           F           F           F                       ) # SERIALBG   
+set NP        = ( $PROCS      $PROCS      $PROCS        $PROCS      $PROCS      $PROCS         $PROCS      $PROCS      $PROCS      $PROCS      $PROCS      $PROCS      $PROCS      $PROCS      $PROCS      $PROCS      $PROCS      $PROCS      $PROCS      $PROCS      $PROCS      $PROCS      $PROCS                  ) # NP         
+set FEATURE   = ( FALSE       FALSE       FALSE         FALSE       FALSE       FALSE          FALSE       FALSE       FALSE       FALSE       FALSE       FALSE       FALSE       FALSE       FALSE       FALSE       FALSE       FALSE       FALSE       FALSE       FALSE       TRUE        FALSE                   ) # FEATURE    
+echo HI
 
 
 set SERIAL_OPT = 32
@@ -392,17 +411,10 @@ foreach n ( $NUMBER )
 				echo '	if ( $TCOUNT == 1 ) ' "goto aSKIP_test_0${n}${test_suffix}" >> $fname
 				echo "	date" >> $fname
 				echo "	echo Build container for" '$test' >> $fname
-				if ( $n == 19 ) then
-					echo "	#docker run -it --name" '$test -v $SHARED/OUTPUT:/wrf/wrfoutput wrf_nmmregtest /bin/tcsh' >> $fname
-					echo "	#docker exec -it " '$test /bin/tcsh' >> $fname
-					echo "	#docker start -ai " '$test' >> $fname
-					echo "	docker run -d -t --name" '$test -v $SHARED/OUTPUT:/wrf/wrfoutput wrf_nmmregtest' >> $fname
-				else
-					echo "	#docker run -it --name" '$test -v $SHARED/OUTPUT:/wrf/wrfoutput wrf_regtest /bin/tcsh' >> $fname
-					echo "	#docker exec -it " '$test /bin/tcsh' >> $fname
-					echo "	#docker start -ai " '$test' >> $fname
-					echo "	docker run -d -t --name" '$test -v $SHARED/OUTPUT:/wrf/wrfoutput wrf_regtest' >> $fname
-				endif
+				echo "	#docker run -it --name" '$test -v $SHARED/OUTPUT:/wrf/wrfoutput wrf_regtest /bin/tcsh' >> $fname
+				echo "	#docker exec -it " '$test /bin/tcsh' >> $fname
+				echo "	#docker start -ai " '$test' >> $fname
+				echo "	docker run -d -t --name" '$test -v $SHARED/OUTPUT:/wrf/wrfoutput wrf_regtest' >> $fname
 				echo "	date" >> $fname
 				echo "	echo Build WRF executable for" '$test' >> $fname
 				echo "	( $string"' ) &' >> $fname
@@ -528,17 +540,10 @@ foreach n ( $NUMBER )
 				set string = ( $string $str )
 
 				echo "echo Build container" >> $fname
-				if ( $n == 19 ) then
-					echo "#docker run -it --name test_0${n}${test_suffix} " '-v $SHARED/OUTPUT:/wrf/wrfoutput wrf_nmmregtest /bin/tcsh' >> $fname
-					echo "#docker exec -it test_0${n}${test_suffix} /bin/tcsh" >> $fname
-					echo "#docker start -ai test_0${n}${test_suffix}" >> $fname
-					echo "docker run -d -t --name test_0${n}${test_suffix} " '-v $SHARED/OUTPUT:/wrf/wrfoutput wrf_nmmregtest' >> $fname
-				else
-					echo "#docker run -it --name test_0${n}${test_suffix} " '-v $SHARED/OUTPUT:/wrf/wrfoutput wrf_regtest /bin/tcsh' >> $fname
-					echo "#docker exec -it test_0${n}${test_suffix} /bin/tcsh" >> $fname
-					echo "#docker start -ai test_0${n}${test_suffix}" >> $fname
-					echo "docker run -d -t --name test_0${n}${test_suffix} " '-v $SHARED/OUTPUT:/wrf/wrfoutput wrf_regtest' >> $fname
-				endif
+				echo "#docker run -it --name test_0${n}${test_suffix} " '-v $SHARED/OUTPUT:/wrf/wrfoutput wrf_regtest /bin/tcsh' >> $fname
+				echo "#docker exec -it test_0${n}${test_suffix} /bin/tcsh" >> $fname
+				echo "#docker start -ai test_0${n}${test_suffix}" >> $fname
+				echo "docker run -d -t --name test_0${n}${test_suffix} " '-v $SHARED/OUTPUT:/wrf/wrfoutput wrf_regtest' >> $fname
 				echo "date" >> $fname
 				echo "echo Build WRF executable" >> $fname
 				echo $string >> $fname
@@ -656,17 +661,10 @@ foreach n ( $NUMBER )
 				set string = ( $string $str )
 
 				echo "echo Build container" >> $fname
-				if ( $n == 19 ) then
-					echo "#docker run -it --name test_0${n}${test_suffix} " '-v $SHARED/OUTPUT:/wrf/wrfoutput wrf_nmmregtest /bin/tcsh' >> $fname
-					echo "#docker exec -it test_0${n}${test_suffix} /bin/tcsh" >> $fname
-					echo "#docker start -ai test_0${n}${test_suffix}" >> $fname
-					echo "docker run -d -t --name test_0${n}${test_suffix} " '-v $SHARED/OUTPUT:/wrf/wrfoutput wrf_nmmregtest' >> $fname
-				else
-					echo "#docker run -it --name test_0${n}${test_suffix} " '-v $SHARED/OUTPUT:/wrf/wrfoutput wrf_regtest /bin/tcsh' >> $fname
-					echo "#docker exec -it test_0${n}${test_suffix} /bin/tcsh" >> $fname
-					echo "#docker start -ai test_0${n}${test_suffix}" >> $fname
-					echo "docker run -d -t --name test_0${n}${test_suffix} " '-v $SHARED/OUTPUT:/wrf/wrfoutput wrf_regtest' >> $fname
-				endif
+				echo "#docker run -it --name test_0${n}${test_suffix} " '-v $SHARED/OUTPUT:/wrf/wrfoutput wrf_regtest /bin/tcsh' >> $fname
+				echo "#docker exec -it test_0${n}${test_suffix} /bin/tcsh" >> $fname
+				echo "#docker start -ai test_0${n}${test_suffix}" >> $fname
+				echo "docker run -d -t --name test_0${n}${test_suffix} " '-v $SHARED/OUTPUT:/wrf/wrfoutput wrf_regtest' >> $fname
 				echo "date" >> $fname
 				echo "echo Build WRF executable" >> $fname
 				echo $string >> $fname
@@ -784,17 +782,10 @@ foreach n ( $NUMBER )
 				set string = ( $string $str )
 
 				echo "echo Build container" >> $fname
-				if ( $n == 19 ) then
-					echo "#docker run -it --name test_0${n}${test_suffix} " '-v $SHARED/OUTPUT:/wrf/wrfoutput wrf_nmmregtest /bin/tcsh' >> $fname
-					echo "#docker exec -it test_0${n}${test_suffix} /bin/tcsh" >> $fname
-					echo "#docker start -ai test_0${n}${test_suffix}" >> $fname
-					echo "docker run -d -t --name test_0${n}${test_suffix} " '-v $SHARED/OUTPUT:/wrf/wrfoutput wrf_nmmregtest' >> $fname
-				else
-					echo "#docker run -it --name test_0${n}${test_suffix} " '-v $SHARED/OUTPUT:/wrf/wrfoutput wrf_regtest /bin/tcsh' >> $fname
-					echo "#docker exec -it test_0${n}${test_suffix} /bin/tcsh" >> $fname
-					echo "#docker start -ai test_0${n}${test_suffix}" >> $fname
-					echo "docker run -d -t --name test_0${n}${test_suffix} " '-v $SHARED/OUTPUT:/wrf/wrfoutput wrf_regtest' >> $fname
-				endif
+				echo "#docker run -it --name test_0${n}${test_suffix} " '-v $SHARED/OUTPUT:/wrf/wrfoutput wrf_regtest /bin/tcsh' >> $fname
+				echo "#docker exec -it test_0${n}${test_suffix} /bin/tcsh" >> $fname
+				echo "#docker start -ai test_0${n}${test_suffix}" >> $fname
+				echo "docker run -d -t --name test_0${n}${test_suffix} " '-v $SHARED/OUTPUT:/wrf/wrfoutput wrf_regtest' >> $fname
 				echo "date" >> $fname
 				echo "echo Build WRF executable" >> $fname
 				echo $string >> $fname
@@ -914,8 +905,7 @@ echo "" >> last_only_once.csh
 echo "echo 'LISTING OF FILES'" >> last_only_once.csh
 echo "ls -lsR" >> last_only_once.csh
 echo "" >> last_only_once.csh
-echo "set SHARED = $SHARED" >> last_only_once.csh
-echo 'pushd ${SHARED}/OUTPUT >& /dev/null' >> last_only_once.csh
+echo 'cd $1 >& /dev/null' >> last_only_once.csh
 echo "" >> last_only_once.csh
 set COUNT = 1
 foreach n ( $NUMBER )
@@ -968,7 +958,6 @@ SKIP_THIS_TEST:
 
 	@ COUNT ++
 end
-echo 'popd >& /dev/null' >> last_only_once.csh
 echo "" >> last_only_once.csh
 echo "date" >> last_only_once.csh
 echo "" >> last_only_once.csh
@@ -1020,21 +1009,21 @@ foreach OVERALL_NUMBER_OF_TESTS ( $ALL $FEWER )
 		if     ( $SERIAL[$COUNT] == T ) then
 			@ INCR_FINE_GRAIN ++
 			set THIS_SERIAL = $INCR_FINE_GRAIN
-			echo "	sudo -S unzip /tmp/raw_output/OUTPUT_output_${THIS_SERIAL}.zip -d /tmp/raw_output/OUTPUT_output_${THIS_SERIAL}" >> part.sh
+			echo "	sudo -S unzip /tmp/raw_output/OUTPUT_output_${THIS_SERIAL}.zip -d /tmp/raw_output/OUTPUT_${COUNT}" >> part.sh
 			set STRING1 = ( $STRING1 "/tmp/raw_output/output_${THIS_SERIAL}" )
 			set STRING_SERIAL = "sudo -S ls -l /tmp/raw_output/OUTPUT_output_${INCR_FINE_GRAIN}/home/ubuntu/wrf-stuff/wrf-coop/OUTPUT | sudo tee -a /tmp/raw_output/final_output/output_$COUNT"
 		endif
 		if     ( $OPENMP[$COUNT] == T ) then
 			@ INCR_FINE_GRAIN ++
 			set THIS_OPENMP = $INCR_FINE_GRAIN
-			echo "	sudo -S unzip /tmp/raw_output/OUTPUT_output_${THIS_OPENMP}.zip -d /tmp/raw_output/OUTPUT_output_${THIS_OPENMP}" >> part.sh
+			echo "	sudo -S unzip /tmp/raw_output/OUTPUT_output_${THIS_OPENMP}.zip -d /tmp/raw_output/OUTPUT_${COUNT}" >> part.sh
 			set STRING1 = ( $STRING1 "/tmp/raw_output/output_${THIS_OPENMP}" )
 			set STRING_OPENMP = "sudo -S ls -l /tmp/raw_output/OUTPUT_output_${INCR_FINE_GRAIN}/home/ubuntu/wrf-stuff/wrf-coop/OUTPUT | sudo tee -a /tmp/raw_output/final_output/output_$COUNT"
 		endif
 		if     (    $MPI[$COUNT] == T ) then
 			@ INCR_FINE_GRAIN ++
 			set THIS_MPI    = $INCR_FINE_GRAIN
-			echo "	sudo -S unzip /tmp/raw_output/OUTPUT_output_${THIS_MPI}.zip -d /tmp/raw_output/OUTPUT_output_${THIS_MPI}" >> part.sh
+			echo "	sudo -S unzip /tmp/raw_output/OUTPUT_output_${THIS_MPI}.zip -d /tmp/raw_output/OUTPUT_${COUNT}" >> part.sh
 			set STRING1 = ( $STRING1 "/tmp/raw_output/output_${THIS_MPI}"    )
 			set STRING_MPI    = "sudo -S ls -l /tmp/raw_output/OUTPUT_output_${INCR_FINE_GRAIN}/home/ubuntu/wrf-stuff/wrf-coop/OUTPUT | sudo tee -a /tmp/raw_output/final_output/output_$COUNT"
 		endif
@@ -1051,33 +1040,8 @@ foreach OVERALL_NUMBER_OF_TESTS ( $ALL $FEWER )
 		endif
 		echo "" >> part.sh
 	
-		set TCOUNT = 0
-		foreach t ( $TEST[$COUNT] $EXTRAS )
-			@ TCOUNT ++
-			if ( $TCOUNT == 1 ) goto SKIP_THIS_TEST2
-			if ( ( $SERIAL[$COUNT] == T ) && ( $OPENMP[$COUNT] == T ) ) then
-#DAVE
-#				foreach d ( d01 d02 d03 )
- 				foreach d ( d01 )
-					set file1 = ${root1_file}_${d}_${root2_file_s}_$t
-					set file2 = ${root1_file}_${d}_${root2_file_o}_$t
-					echo '	OK=$(diff -q /tmp/raw_output/OUTPUT_output_'"${THIS_SERIAL}"'/home/ubuntu/wrf-stuff/wrf-coop/OUTPUT/'"${file1}"' /tmp/raw_output/OUTPUT_output_'"${THIS_OPENMP}"'/home/ubuntu/wrf-stuff/wrf-coop/OUTPUT/'"${file2}"') && echo "'"${file1}"' vs '"${file2}"' status = ${?} "  | sudo tee -a /tmp/raw_output/final_output/output_'"${COUNT}" >> part.sh
-					echo "" >> part.sh
-				end
-			endif
-	
-			if ( ( $SERIAL[$COUNT] == T ) && (    $MPI[$COUNT] == T ) ) then
-#DAVE
-#				foreach d ( d01 d02 d03 )
- 				foreach d ( d01 )
-					set file1 = ${root1_file}_${d}_${root2_file_s}_$t
-					set file2 = ${root1_file}_${d}_${root2_file_m}_$t
-					echo '	OK=$(diff -q /tmp/raw_output/OUTPUT_output_'"${THIS_SERIAL}"'/home/ubuntu/wrf-stuff/wrf-coop/OUTPUT/'"${file1}"' /tmp/raw_output/OUTPUT_output_'"${THIS_MPI}"'/home/ubuntu/wrf-stuff/wrf-coop/OUTPUT/'"${file2}"') && echo "'"${file1}"' vs '"${file2}"' status = ${?} "  | sudo tee -a /tmp/raw_output/final_output/output_'"${COUNT}" >> part.sh
-					echo "" >> part.sh
-				end
-			endif
-	SKIP_THIS_TEST2:
-		end
+		echo "./last_only_once.csh /tmp/raw_output/OUTPUT_${COUNT} | sudo tee -a /tmp/raw_output/final_output/output_${COUNT}" >> part.sh
+		echo "" >> part.sh
 	
 		@ COUNT ++ 
 		@ n ++
