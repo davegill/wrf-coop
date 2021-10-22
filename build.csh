@@ -188,7 +188,6 @@ set BUILDENV5 = ( F           F           F             F           F           
 set SERIALBG  = ( F           F           F             F           F           F              F           F           F           F           F           F           F           F           F           F           F           F           F           F           F           F           F                       ) # SERIALBG   
 set NP        = ( $PROCS      $PROCS      $PROCS        $PROCS      $PROCS      $PROCS         $PROCS      $PROCS      $PROCS      $PROCS      $PROCS      $PROCS      $PROCS      $PROCS      $PROCS      $PROCS      $PROCS      $PROCS      $PROCS      $PROCS      $PROCS      $PROCS      $PROCS                  ) # NP         
 set FEATURE   = ( FALSE       FALSE       FALSE         FALSE       FALSE       FALSE          FALSE       FALSE       FALSE       FALSE       FALSE       FALSE       FALSE       FALSE       FALSE       FALSE       FALSE       FALSE       FALSE       FALSE       FALSE       TRUE        FALSE                   ) # FEATURE    
-echo HI
 
 
 set SERIAL_OPT = 32
@@ -979,75 +978,66 @@ echo "" >> part.sh
 set ALL = ${#NUMBER}
 set FEWER = $ALL
 @ FEWER --
+set OVERALL_NUMBER_OF_TESTS = $ALL
 
-foreach OVERALL_NUMBER_OF_TESTS ( $ALL $FEWER )
-	if ( $OVERALL_NUMBER_OF_TESTS == ${#NUMBER} ) then
-		echo "if (label=='"'"DO_KPP_TEST"'"'){"  >> part.sh
-	else
-		echo "else{"  >> part.sh
+echo "" >> part.sh
+
+set INCR_FINE_GRAIN = ${#NUMBER}
+set COUNT = 1
+set n = 0
+while ( $n < $OVERALL_NUMBER_OF_TESTS )
+	set THIS_SERIAL = FALSE
+	set THIS_OPENMP = FALSE
+	set THIS_MPI    = FALSE
+
+	set STRING1 = ""
+
+	set root1_file = SUCCESS_RUN_WRF
+
+	set root2_file_s = $COMPILE[$COUNT]_${SERIAL_OPT}_$RUNDIR[$COUNT]
+	set root2_file_o = $COMPILE[$COUNT]_${OPENMP_OPT}_$RUNDIR[$COUNT]
+	set root2_file_m = $COMPILE[$COUNT]_${MPI_OPT}_$RUNDIR[$COUNT]
+
+	if     ( $SERIAL[$COUNT] == T ) then
+		@ INCR_FINE_GRAIN ++
+		set THIS_SERIAL = $INCR_FINE_GRAIN
+		echo "	sudo -S unzip /tmp/raw_output/OUTPUT_output_${THIS_SERIAL}.zip -d /tmp/raw_output/OUTPUT_${COUNT}" >> part.sh
+		set STRING1 = ( $STRING1 "/tmp/raw_output/output_${THIS_SERIAL}" )
+		set STRING_SERIAL = "sudo -S ls -l /tmp/raw_output/OUTPUT_output_${INCR_FINE_GRAIN}/home/ubuntu/wrf-stuff/wrf-coop/OUTPUT | sudo tee -a /tmp/raw_output/final_output/output_$COUNT"
 	endif
-	echo "	sh '''" >> part.sh
+	if     ( $OPENMP[$COUNT] == T ) then
+		@ INCR_FINE_GRAIN ++
+		set THIS_OPENMP = $INCR_FINE_GRAIN
+		echo "	sudo -S unzip /tmp/raw_output/OUTPUT_output_${THIS_OPENMP}.zip -d /tmp/raw_output/OUTPUT_${COUNT}" >> part.sh
+		set STRING1 = ( $STRING1 "/tmp/raw_output/output_${THIS_OPENMP}" )
+		set STRING_OPENMP = "sudo -S ls -l /tmp/raw_output/OUTPUT_output_${INCR_FINE_GRAIN}/home/ubuntu/wrf-stuff/wrf-coop/OUTPUT | sudo tee -a /tmp/raw_output/final_output/output_$COUNT"
+	endif
+	if     (    $MPI[$COUNT] == T ) then
+		@ INCR_FINE_GRAIN ++
+		set THIS_MPI    = $INCR_FINE_GRAIN
+		echo "	sudo -S unzip /tmp/raw_output/OUTPUT_output_${THIS_MPI}.zip -d /tmp/raw_output/OUTPUT_${COUNT}" >> part.sh
+		set STRING1 = ( $STRING1 "/tmp/raw_output/output_${THIS_MPI}"    )
+		set STRING_MPI    = "sudo -S ls -l /tmp/raw_output/OUTPUT_output_${INCR_FINE_GRAIN}/home/ubuntu/wrf-stuff/wrf-coop/OUTPUT | sudo tee -a /tmp/raw_output/final_output/output_$COUNT"
+	endif
+	echo "	sudo -S cat $STRING1 | sudo tee -a /tmp/raw_output/final_output/output_$COUNT" >> part.sh
 	echo "" >> part.sh
-	
-	
-	set INCR_FINE_GRAIN = ${#NUMBER}
-	set COUNT = 1
-	set n = 0
-	while ( $n < $OVERALL_NUMBER_OF_TESTS )
-		set THIS_SERIAL = FALSE
-		set THIS_OPENMP = FALSE
-		set THIS_MPI    = FALSE
-	
-		set STRING1 = ""
-	
-		set root1_file = SUCCESS_RUN_WRF
-	
-		set root2_file_s = $COMPILE[$COUNT]_${SERIAL_OPT}_$RUNDIR[$COUNT]
-		set root2_file_o = $COMPILE[$COUNT]_${OPENMP_OPT}_$RUNDIR[$COUNT]
-		set root2_file_m = $COMPILE[$COUNT]_${MPI_OPT}_$RUNDIR[$COUNT]
-	
-		if     ( $SERIAL[$COUNT] == T ) then
-			@ INCR_FINE_GRAIN ++
-			set THIS_SERIAL = $INCR_FINE_GRAIN
-			echo "	sudo -S unzip /tmp/raw_output/OUTPUT_output_${THIS_SERIAL}.zip -d /tmp/raw_output/OUTPUT_${COUNT}" >> part.sh
-			set STRING1 = ( $STRING1 "/tmp/raw_output/output_${THIS_SERIAL}" )
-			set STRING_SERIAL = "sudo -S ls -l /tmp/raw_output/OUTPUT_output_${INCR_FINE_GRAIN}/home/ubuntu/wrf-stuff/wrf-coop/OUTPUT | sudo tee -a /tmp/raw_output/final_output/output_$COUNT"
-		endif
-		if     ( $OPENMP[$COUNT] == T ) then
-			@ INCR_FINE_GRAIN ++
-			set THIS_OPENMP = $INCR_FINE_GRAIN
-			echo "	sudo -S unzip /tmp/raw_output/OUTPUT_output_${THIS_OPENMP}.zip -d /tmp/raw_output/OUTPUT_${COUNT}" >> part.sh
-			set STRING1 = ( $STRING1 "/tmp/raw_output/output_${THIS_OPENMP}" )
-			set STRING_OPENMP = "sudo -S ls -l /tmp/raw_output/OUTPUT_output_${INCR_FINE_GRAIN}/home/ubuntu/wrf-stuff/wrf-coop/OUTPUT | sudo tee -a /tmp/raw_output/final_output/output_$COUNT"
-		endif
-		if     (    $MPI[$COUNT] == T ) then
-			@ INCR_FINE_GRAIN ++
-			set THIS_MPI    = $INCR_FINE_GRAIN
-			echo "	sudo -S unzip /tmp/raw_output/OUTPUT_output_${THIS_MPI}.zip -d /tmp/raw_output/OUTPUT_${COUNT}" >> part.sh
-			set STRING1 = ( $STRING1 "/tmp/raw_output/output_${THIS_MPI}"    )
-			set STRING_MPI    = "sudo -S ls -l /tmp/raw_output/OUTPUT_output_${INCR_FINE_GRAIN}/home/ubuntu/wrf-stuff/wrf-coop/OUTPUT | sudo tee -a /tmp/raw_output/final_output/output_$COUNT"
-		endif
-		echo "	sudo -S cat $STRING1 | sudo tee -a /tmp/raw_output/final_output/output_$COUNT" >> part.sh
-		echo "" >> part.sh
-		if ( $THIS_SERIAL != FALSE ) then
-			echo "	$STRING_SERIAL" >> part.sh
-		endif
-		if ( $THIS_OPENMP != FALSE ) then
-			echo "	$STRING_OPENMP" >> part.sh
-		endif
-		if ( $THIS_MPI    != FALSE ) then
-			echo "	$STRING_MPI   " >> part.sh
-		endif
-		echo "" >> part.sh
-	
-		echo "./last_only_once.csh /tmp/raw_output/OUTPUT_${COUNT} | sudo tee -a /tmp/raw_output/final_output/output_${COUNT}" >> part.sh
-		echo "" >> part.sh
-	
-		@ COUNT ++ 
-		@ n ++
-	end
-	
-	echo "	'''" >> part.sh
-	echo "}" >> part.sh
+	if ( $THIS_SERIAL != FALSE ) then
+		echo "	$STRING_SERIAL" >> part.sh
+	endif
+	if ( $THIS_OPENMP != FALSE ) then
+		echo "	$STRING_OPENMP" >> part.sh
+	endif
+	if ( $THIS_MPI    != FALSE ) then
+		echo "	$STRING_MPI   " >> part.sh
+	endif
+	echo "" >> part.sh
+
+	echo "	./last_only_once.csh /tmp/raw_output/OUTPUT_${COUNT} | sudo tee -a /tmp/raw_output/final_output/output_${COUNT}" >> part.sh
+	echo "" >> part.sh
+	echo "" >> part.sh
+
+	@ COUNT ++ 
+	@ n ++
 end
+	
 echo "###############   END OF SCRIPT INCLUSION   ###############" >> part.sh
