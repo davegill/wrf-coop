@@ -53,8 +53,8 @@ endif
 if      ( $TEST_GEN == ALL ) then
 
 	set TEST      = ( \
-	                  "em_real        3dtke cesm conus rap tropical " \
 	                  "em_chem        1 2 5 " \
+	                  "em_real        3dtke cesm conus rap tropical " \
 	                  "em_quarter_ss  02 02NE 03 03NE 04 04NE 05 05NE 06 06NE 08 09 10 11NE 12NE 13NE 14NE " \
 	                  "em_b_wave      1 1NE 2 2NE 3 3NE 4 4NE 5 5NE " \
 	                  "em_real8       14 16 17 17AD 18 38 78 79" \
@@ -92,8 +92,8 @@ if      ( $TEST_GEN == ALL ) then
 else if ( $TEST_GEN == SOME ) then
 
 	set TEST      = ( \
-	                  "em_real        3dtke conus rap tropical " \
 	                  "em_chem        1 2 5 " \
+	                  "em_real        3dtke conus rap tropical " \
 	                  "em_quarter_ss  02NE 03 03NE 04 " \
 	                  "em_b_wave      1NE 2 2NE 3 " \
 	                  "em_real8       14 17AD " \
@@ -131,8 +131,8 @@ else if ( $TEST_GEN == SOME ) then
 else if ( $TEST_GEN == test ) then
 
 	set TEST      = ( \
-	                  "em_real        conus  " \
 	                  "em_chem        1      " \
+	                  "em_real        conus  " \
 	                  "em_quarter_ss  02     " \
 	                  "em_b_wave      1      " \
 	                  "em_real8       14     " \
@@ -172,15 +172,15 @@ endif
 #	Options that are used for all test generation settings. 
 
 set SERIAL    = ( T           T           T             T           T           T              F           T           T           T           T           T           T           T           T           T           T           T           T           T           T           F           T                       ) # SERIAL     
-set OPENMP    = ( T           F           T             T           T           T              F           T           F           T           T           T           T           T           T           T           F           T           T           T           T           F           F                       ) # OPENMP     
+set OPENMP    = ( F           T           T             T           T           T              F           T           F           T           T           T           T           T           T           T           F           T           T           T           T           F           F                       ) # OPENMP     
 set MPI       = ( T           T           T             T           T           T              T           T           F           T           T           T           T           T           T           T           T           T           T           T           T           T           T                       ) # MPI        
 set NEST      = ( 1           1           1             1           1           1              3           1           0           1           1           1           1           1           1           1           1           1           1           1           1           1           1                       ) # NEST       
-set NAME      = ( em          chem        qss           bwave       real8       qss8           move        fire        hill        em          em          em          em          em          em          em          em          em          em          em          em          em          kpp                     ) # NAME       
+set NAME      = ( chem        em          qss           bwave       real8       qss8           move        fire        hill        em          em          em          em          em          em          em          em          em          em          em          em          em          kpp                     ) # NAME       
 set COMPILE   = ( em_real     em_real     em_quarter_ss em_b_wave   em_real     em_quarter_ss  em_real     em_fire     em_hill2d_x em_real     em_real     em_real     em_real     em_real     em_real     em_real     em_real     em_real     em_real     em_real     em_real     em_real     em_real                 ) # COMPILE    
-set RUNDIR    = ( em_real     em_chem     em_quarter_ss em_b_wave   em_real8    em_quarter_ss8 em_move     em_fire     em_hill2d_x em_realA    em_realB    em_realC    em_realD    em_realE    em_realF    em_realG    em_realH    em_realI    em_realJ    em_realK    em_realL    em_realM    em_chem_kpp             ) # RUNDIR     
+set RUNDIR    = ( em_chem     em_real     em_quarter_ss em_b_wave   em_real8    em_quarter_ss8 em_move     em_fire     em_hill2d_x em_realA    em_realB    em_realC    em_realD    em_realE    em_realF    em_realG    em_realH    em_realI    em_realJ    em_realK    em_realL    em_realM    em_chem_kpp             ) # RUNDIR     
 set DASHOPT1  = ( -d          -d          -d            -d          -d          -d             -d          -d          -d          -d          -d          -d          -d          -d          -d          -d          -d          -d          -d          -d          -d          -d          -d                      ) # DASHOPT1   
 set DASHOPT2  = ( F           F           F             F           -r8         -r8            F           F           F           F           F           F           F           F           F           F           F           F           F           F           F           F           F                       ) # DASHOPT2   
-set BUILDENV1 = ( F           WRF_CHEM=1  F             F           F           F              F           F           F           F           F           F           F           F           F           F           F           F           F           F           F           F           WRF_CHEM=1              ) # BUILDENV1  
+set BUILDENV1 = ( WRF_CHEM=1  F           F             F           F           F              F           F           F           F           F           F           F           F           F           F           F           F           F           F           F           F           WRF_CHEM=1              ) # BUILDENV1  
 set BUILDENV2 = ( J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS   J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS    J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS J=-j@$PROCS             ) # BUILDENV2  
 set BUILDENV3 = ( F           F           F             F           F           F              F           F           F           F           F           F           F           F           F           F           F           F           F           F           F           F           WRF_KPP=1               ) # BUILDENV3  
 set BUILDENV4 = ( F           F           F             F           F           F              F           F           F           F           F           F           F           F           F           F           F           F           F           F           F           F           FLEX_LIB_DIR=/usr/lib64 ) # BUILDENV4  
