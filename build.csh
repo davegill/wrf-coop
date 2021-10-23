@@ -1,3 +1,7 @@
+if ( ! -d ${SHARED}/OUTPUT ) then
+        mkdir ${SHARED}/OUTPUT
+        chmod -R 777 ${SHARED}/OUTPUT
+endif
 #!/bin/csh
 
 #	Choose which scripts to manufacture
@@ -305,8 +309,10 @@ echo '#	If the name is "Dockerfile", the ARW code is run' >> single_init.csh
 echo "" >> single_init.csh
 echo "date" >> single_init.csh
 echo "set SHARED = $SHARED" >> single_init.csh
-echo 'if ( ! -d ${SHARED}/OUTPUT ) mkdir ${SHARED}/OUTPUT' >> single_init.csh
-echo 'chmod -R 777 ${SHARED}/OUTPUT' >> single_init.csh
+echo 'if ( ! -d ${SHARED}/OUTPUT ) then' >> single_init.csh
+echo '	mkdir ${SHARED}/OUTPUT' >> single_init.csh
+echo '	chmod -R 777 ${SHARED}/OUTPUT' >> single_init.csh
+echo 'endif' >> single_init.csh
 echo "" >> single_init.csh
 echo "date" >> single_init.csh
 echo 'set num_containers = `docker ps -a | wc -l`' >> single_init.csh
