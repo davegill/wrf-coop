@@ -1,7 +1,3 @@
-if ( ! -d ${SHARED}/OUTPUT ) then
-        mkdir ${SHARED}/OUTPUT
-        chmod -R 777 ${SHARED}/OUTPUT
-endif
 #!/bin/csh
 
 #	Choose which scripts to manufacture
