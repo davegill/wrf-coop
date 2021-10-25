@@ -189,7 +189,6 @@ set SERIALBG  = ( F           F           F           F             F           
 set NP        = ( $PROCS      $PROCS      $PROCS      $PROCS        $PROCS      $PROCS      $PROCS         $PROCS      $PROCS      $PROCS      $PROCS      $PROCS      $PROCS      $PROCS      $PROCS      $PROCS      $PROCS      $PROCS      $PROCS      $PROCS      $PROCS      $PROCS      $PROCS                  ) # NP         
 set FEATURE   = ( FALSE       TRUE        FALSE       FALSE         FALSE       FALSE       FALSE          FALSE       FALSE       FALSE       FALSE       FALSE       FALSE       FALSE       FALSE       FALSE       FALSE       FALSE       FALSE       FALSE       FALSE       FALSE       FALSE                   ) # FEATURE    
 
-
 set SERIAL_OPT = 32
 set OPENMP_OPT = 33
 set    MPI_OPT = 34
@@ -852,7 +851,7 @@ foreach n ( $NUMBER )
 						echo "	docker exec test_0${n}${test_suffix} ./script.csh RUN $COMPILE[$COUNT] $MPI_OPT $RUNDIR[$COUNT]" '$t' "NP=$NP[$COUNT]" >> $fname
 					else if ( $FEATURE[$COUNT] == TRUE  ) then
 						echo "	docker exec test_0${n}${test_suffix} "'\' >> $fname
-						echo '		./feature_testing.csh /wrf/wrfoutput /wrf/WRF/test/em_real $RUNDIR[$COUNT]"' /wrf/cases/$t'" /wrf/input/additional /wrf/input/standard mpi-$NP[$COUNT]" >> $fname
+						echo "		./feature_testing.csh /wrf/wrfoutput /wrf/WRF/test/em_real $RUNDIR[$COUNT]"' /wrf/cases/$t'" /wrf/input/additional /wrf/input/standard mpi-$NP[$COUNT]" >> $fname
 					endif
 					echo '	set OK = $status' >> $fname
 				endif
