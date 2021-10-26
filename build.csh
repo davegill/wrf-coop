@@ -56,7 +56,7 @@ if      ( $TEST_GEN == ALL ) then
 	                  "em_chem        1 2 5 " \
 	                  "restartA       basic " \
 	                  "em_real        3dtke cesm conus rap tropical " \
-	                  "em_quarter_ss  02 02NE 03 03NE 04 04NE 05 05NE 06 06NE 08 09 10 11NE 12NE 13NE 14NE " \
+	                  "em_quarter_ss  02 02NE 03 03NE 04NE 05 05NE 06 06NE 08 09 10 11NE 12NE 13NE 14NE " \
 	                  "em_b_wave      1 1NE 2 2NE 3 3NE 4 4NE 5 5NE " \
 	                  "em_real8       14 16 17 17AD 18 38 78 79" \
 	                  "em_quarter_ss8 02 03 04 05 06 08 09 10 " \
@@ -95,7 +95,7 @@ else if ( $TEST_GEN == SOME ) then
 	                  "em_chem        1 2 5 " \
 	                  "restartA       basic " \
 	                  "em_real        3dtke conus rap tropical " \
-	                  "em_quarter_ss  02NE 03 03NE 04 " \
+	                  "em_quarter_ss  02NE 03 03NE " \
 	                  "em_b_wave      1NE 2 2NE 3 " \
 	                  "em_real8       14 17AD " \
 	                  "em_quarter_ss8 08 09 " \
