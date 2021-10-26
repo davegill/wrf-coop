@@ -54,7 +54,7 @@ if      ( $TEST_GEN == ALL ) then
 
 	set TEST      = ( \
 	                  "em_chem        1 2 5 " \
-	                  "em_realM       basic " \
+	                  "restartA       basic " \
 	                  "em_real        3dtke cesm conus rap tropical " \
 	                  "em_quarter_ss  02 02NE 03 03NE 04 04NE 05 05NE 06 06NE 08 09 10 11NE 12NE 13NE 14NE " \
 	                  "em_b_wave      1 1NE 2 2NE 3 3NE 4 4NE 5 5NE " \
@@ -93,7 +93,7 @@ else if ( $TEST_GEN == SOME ) then
 
 	set TEST      = ( \
 	                  "em_chem        1 2 5 " \
-	                  "em_realM       basic " \
+	                  "restartA       basic " \
 	                  "em_real        3dtke conus rap tropical " \
 	                  "em_quarter_ss  02NE 03 03NE 04 " \
 	                  "em_b_wave      1NE 2 2NE 3 " \
@@ -132,7 +132,7 @@ else if ( $TEST_GEN == test ) then
 
 	set TEST      = ( \
 	                  "em_chem        1      " \
-	                  "em_realM       basic " \
+	                  "restartA       basic " \
 	                  "em_real        conus  " \
 	                  "em_quarter_ss  02     " \
 	                  "em_b_wave      1      " \
@@ -177,7 +177,7 @@ set MPI       = ( T           T           T           T             T           
 set NEST      = ( 1           1           1           1             1           1           1              3           1           0           1           1           1           1           1           1           1           1           1           1           1           1           1                       ) # NEST       
 set NAME      = ( chem        em          em          qss           bwave       real8       qss8           move        fire        hill        em          em          em          em          em          em          em          em          em          em          em          em          kpp                     ) # NAME       
 set COMPILE   = ( em_real     em_real     em_real     em_quarter_ss em_b_wave   em_real     em_quarter_ss  em_real     em_fire     em_hill2d_x em_real     em_real     em_real     em_real     em_real     em_real     em_real     em_real     em_real     em_real     em_real     em_real     em_real                 ) # COMPILE    
-set RUNDIR    = ( em_chem     em_realM    em_real     em_quarter_ss em_b_wave   em_real8    em_quarter_ss8 em_move     em_fire     em_hill2d_x em_realA    em_realB    em_realC    em_realD    em_realE    em_realF    em_realG    em_realH    em_realI    em_realJ    em_realK    em_realL    em_chem_kpp             ) # RUNDIR     
+set RUNDIR    = ( em_chem     restartA    em_real     em_quarter_ss em_b_wave   em_real8    em_quarter_ss8 em_move     em_fire     em_hill2d_x em_realA    em_realB    em_realC    em_realD    em_realE    em_realF    em_realG    em_realH    em_realI    em_realJ    em_realK    em_realL    em_chem_kpp             ) # RUNDIR     
 set DASHOPT1  = ( -d          -d          -d          -d            -d          -d          -d             -d          -d          -d          -d          -d          -d          -d          -d          -d          -d          -d          -d          -d          -d          -d          -d                      ) # DASHOPT1   
 set DASHOPT2  = ( F           F           F           F             F           -r8         -r8            F           F           F           F           F           F           F           F           F           F           F           F           F           F           F           F                       ) # DASHOPT2   
 set BUILDENV1 = ( WRF_CHEM=1  F           F           F             F           F           F              F           F           F           F           F           F           F           F           F           F           F           F           F           F           F           WRF_CHEM=1              ) # BUILDENV1  
