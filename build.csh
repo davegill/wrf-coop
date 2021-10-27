@@ -1,5 +1,8 @@
 #!/bin/csh
 
+echo VARUN
+pwd
+
 #	Choose which scripts to manufacture
 
 set TEST_GEN = ALL
@@ -1060,3 +1063,6 @@ while ( $n < $OVERALL_NUMBER_OF_TESTS )
 end
 	
 echo "###############   END OF SCRIPT INCLUSION   ###############" >> part.sh
+
+echo VARUN
+ls -ls
