@@ -997,7 +997,8 @@ set OVERALL_NUMBER_OF_TESTS = $ALL
 
 echo "" >> part.sh
 
-set INCR_FINE_GRAIN = ${#NUMBER}
+#set INCR_FINE_GRAIN = ${#NUMBER}
+set INCR_FINE_GRAIN = 0
 set COUNT = 1
 set n = 0
 while ( $n < $OVERALL_NUMBER_OF_TESTS )
