@@ -54,7 +54,7 @@ if      ( $TEST_GEN == ALL ) then
 
 	set TEST      = ( \
 	                  "em_chem        1 2 5 " \
-	                  "restartA       basic " \
+	                  "restartA       basic dfi " \
 	                  "em_real        3dtke cesm conus rap tropical " \
 	                  "em_quarter_ss  02 02NE 03 03NE 04NE 05 05NE 06 06NE 08 09 10 11NE 12NE 13NE 14NE " \
 	                  "em_b_wave      1 1NE 2 2NE 3 3NE 4 4NE 5 5NE " \
@@ -93,7 +93,7 @@ else if ( $TEST_GEN == SOME ) then
 
 	set TEST      = ( \
 	                  "em_chem        1 2 5 " \
-	                  "restartA       basic " \
+	                  "restartA       basic dfi " \
 	                  "em_real        3dtke conus rap tropical " \
 	                  "em_quarter_ss  02NE 03 03NE " \
 	                  "em_b_wave      1NE 2 2NE 3 " \
