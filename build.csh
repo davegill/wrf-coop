@@ -870,7 +870,9 @@ foreach n ( $NUMBER )
 				endif
 				echo "	docker exec test_0${n}${test_suffix} cat WRF/test/$COMPILE[$COUNT]/rsl.out.0000 " >> $fname
 				echo "	" >> $fname
-				echo "	docker exec test_0${n}${test_suffix} ls -ls WRF/test/$COMPILE[$COUNT]/HOLD | grep wrfout " >> $fname
+				if ( $FEATURE[$COUNT] == TRUE  ) then
+					echo "	docker exec test_0${n}${test_suffix} ls -ls WRF/test/$COMPILE[$COUNT]/HOLD | grep wrfout " >> $fname
+				endif
 				echo "	docker exec test_0${n}${test_suffix} ls -ls WRF/test/$COMPILE[$COUNT] | grep wrfout " >> $fname
 				echo "	docker exec test_0${n}${test_suffix} ls -ls wrfoutput | grep _RUN_ | grep $COMPILE[$COUNT]_${MPI_OPT}_$RUNDIR[$COUNT]_"'$t ' >> $fname
 				echo "	./feature_testing.csh /wrf/WRF/test/em_real " >> $fname
