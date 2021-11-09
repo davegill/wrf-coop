@@ -12,7 +12,6 @@
     * [Compare the simulation results](#Compareresults)
     * [Checking WRF Chem results](#WRFChem)
     * [Checking WRF DA results](#WRFDA)
-    * [Checking NMM results](#WRFNMM)
 * [Docker Clean Up](#Cleanup)
     * [Stop, re-enter, and remove a docker container](#Stop) 
 * [Remove a docker image](#RemoveImage)
@@ -30,16 +29,16 @@ The primary responsibilities for a contributing developer include:
    * Providing commit information
    * Documentation
 
-Performing code testing for the WRF model can present a challenge to developers. The particular test case (or cases) used during the model development may be appropriate for demonstrating the correct and effective application for the specific purposes of the new option or enhanced feature. However, in many existing uses of the WRF model, the modified code may unintentionally break some other WRF model functionality. 
+Performing code testing for the WRF model can present a challenge to developers. The particular test case (or cases) used during the model development may be appropriate for demonstrating the correct and effective application for the specific purposes of the new option or enhanced feature. However, in many existing uses of the WRF model, the modified code may unintentionally break some other WRF model functionality. It is important to note that ALL of the subsequently listed tests in this document are conducted automatically when there are proposed modifications to selected branches of the WRF repository. If there are unexplained failures, the following information may be used to help a developer to identify the unintended side effect.
 
-Code proposed for WRF must be thoroughly tested prior
-to submission, and it is the proposing developer’s responsibility to perform
-all required positive and negative testing.  The developer must ensure that the proposed change
-_does_ work as described, and importantly that the modification _does not_ accidentally impact other parts of the model.  
+We will refer to "positive" and "negative" testing in this document. By "positive", we refer to testing the specific modification that was proposed. For example, if the modification is to enable a successful compilation with a particular compiler, then that must be able to be demonstrated. By "negative", we refer to the broad area of "the new modifications do not break anything already in the model". We refer to these are unintended side effects. While there are a large number of scenarious that could be tested, the existing suites listed below cover most of the features and options available within the model. It is the responsibility of the developer to address shortcomings discovered via testing. The developer must ensure that the proposed change
+_does_ work as described (positive testing), and importantly that the modification _does not_ accidentally impact other parts of the model (negative testing).  
 
 This page describes how to use docker containers for both the positive tests (activated option must perform as expected) and negative tests (no unintended consequences) of code proposed to WRF. This document provides developers with simple instructions to allow them to more fully vet their code by providing data and configuration files for a wide variety of known working setups. Before issuing a pull request to the WRF github repository, the developer's code modification must demonstrate the continued proper functioning of these existing WRF capabilities.
 
 ### What is tested<a name="Tested"/>
+
+There are three types of tests that are automatically conducted when pull requests (PRs) are submitted to the select branches of the community WRF repository. These tests have been designed to be easily interpreted as either _correct_ or _incorrect_. The first type of test includes a comparison for bit-for-bit identical results given different parallel run-time options (results compered between simulations), and objective indications of correct functioning from within each single simulation (SUCCESS message found in output, correct number of time periods in the output file, no NaNs in the generated data). The second type of test is also of the bit-for-bit variety. In these tests, a simulation is compared to a restart simulation with the same valid ending time, which should result in bit-wise identical results. The third type of test is the _compilation only_ of the WRF DA system. When a developer is able to produce an affirmative demonstration that all three types of testing are succeeding, the largest share of developer responsibility is met.
 
 The real-data ARW simulations are tested for the 2000 Jan 24-25 1200 UTC case (though typically for only the first half hour of the time period). 
 
