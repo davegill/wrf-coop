@@ -18,7 +18,7 @@
 	* [Checking WRF Chem results](#WRFChem)
 	* [Checking WRF DA results](#WRFDA)
 * [Docker Clean Up](#Cleanup)
-    * [Stop, re-enter, and remove a docker container](#Stop) 
+   	* [Stop, re-enter, and remove a docker container](#Stop) 
 * [Remove a docker image](#RemoveImage)
 
 ## Purpose<a name="Purpose"/>
@@ -139,9 +139,7 @@ The following describe the required steps run the WRF regression system on you l
 
 ### Get the WRF docker infrastructure<a name="Getdocker"/>
 
-1. Docker is needed
-
-If you would like to test any of these exact cases on your local machine, using the described docker containers, then the docker application is required. The capability for the build and run testing (using the WRF container) necessarily requires the use of the the docker utility on your local machine (docker.com). Please note that the download and installation of docker onto your system is NOT explained here.
+1. Docker is needed. If you would like to test any of these exact cases on your local machine, using the described docker containers, then the docker application is required. The capability for the build and run testing (using the WRF container) necessarily requires the use of the the docker utility on your local machine (docker.com). Please note that the download and installation of docker onto your system is NOT explained here.
 
 2. To start the process of constructing a working WRF docker container, clone the WRF-specific wrf-coop repository, and checkout the specific branch used by the automated testing. Once you have the docker application running on your machine, this repository contains the code that eventually builds the container structures for WRF.
 ```
