@@ -6,20 +6,22 @@
 	* [Parallel run-time](#First)
 	* [Restart testing](#Second)
 	* [WRF DA build](#Third)
-* [Get the WRF docker infrastructure](#Getdocker)
-* [Prepare the docker image](#Prepareimage)
-* [Contruct the docker containers](#Constrcutcontainers)
-* [Build executables from source, run tests](#Buildexec)
-    * [Run a sample test case](#Runsample)
-    * [Check the simulation results](#Checkresults)
-    * [Compare the simulation results](#Compareresults)
-    * [Checking WRF Chem results](#WRFChem)
-    * [Checking WRF DA results](#WRFDA)
+* [Docker: end to end](#docker)
+	* [Get the WRF docker infrastructure](#Getdocker)
+	* [Prepare the docker image](#Prepareimage)
+	* [Contruct the docker containers](#Constrcutcontainers)
+	* [Build executables from source, run tests](#Buildexec)
+* [WRF is built inside a container - now what](#NowWhat)
+	* [Run a sample test case](#Runsample)
+	* [Check the simulation results](#Checkresults)
+	* [Compare the simulation results](#Compareresults)
+	* [Checking WRF Chem results](#WRFChem)
+	* [Checking WRF DA results](#WRFDA)
 * [Docker Clean Up](#Cleanup)
     * [Stop, re-enter, and remove a docker container](#Stop) 
 * [Remove a docker image](#RemoveImage)
 
-### Purpose<a name="Purpose"/>
+## Purpose<a name="Purpose"/>
 
 Contributors who intend to propose modifications to the WRF repository have responsibilities beyond their own personal tests that they have previously used to validate the proper functioning of the new feature or option. 
 
@@ -39,7 +41,7 @@ _does_ work as described (positive testing), and importantly that the modificati
 
 This page describes how to use docker containers for both the positive tests (activated option must perform as expected) and negative tests (no unintended consequences) of code proposed to WRF. This document provides developers with simple instructions to allow them to more fully vet their code by providing data and configuration files for a wide variety of known working setups. Before issuing a pull request to the WRF github repository, the developer's code modification must demonstrate the continued proper functioning of these existing WRF capabilities.
 
-### What is tested<a name="Tested"/>
+## What is tested<a name="Tested"/>
 
 There are three types of tests that are automatically conducted when pull requests (PRs) are submitted to the select branches of the community WRF repository. These tests have been designed to be easily interpreted as either _correct_ or _incorrect_. The first type of test includes a comparison for bit-for-bit identical results given different parallel run-time options (results compered between simulations), and objective indications of correct functioning from within each single simulation (SUCCESS message found in output, correct number of time periods in the output file, no NaNs in the generated data). The second type of test is also of the bit-for-bit variety. In these tests, a simulation is compared to a restart simulation with the same valid ending time, which should result in bit-wise identical results. The third type of test is the _compilation only_ of the WRF DA system. When a developer is able to produce an affirmative demonstration that all three types of testing are succeeding, the largest share of developer responsibility is met.
 
@@ -112,7 +114,7 @@ Several types of tests are accessible within this docker testing system.
 
 ### Restart testing<a name="Second"/>
 
-The topography for the nested domains over the central US for the ARW restart simulations are shown in the following figures.
+The topography for the nested domains over the central US for the 30/10-km ARW restart simulations are shown in the following figures.
 ![feature_d01](https://user-images.githubusercontent.com/12666234/140980453-5dddbd1a-78dd-422f-a5b3-5aeb165edbf6.png)
 
 ![feature_d02](https://user-images.githubusercontent.com/12666234/140980457-f12597f2-3e0f-4e65-8a15-62daf8b8c0ed.png)
@@ -131,26 +133,31 @@ The testing uses groupings of three WRF run-time configuration files, `namelist.
 | dfi   | CONUS |  0 | 3 |
 
 
-## Get the WRF docker infrastructure<a name="Getdocker"/>
+## Docker: end to end<a name="docker"/>
 
-1. Docker is needed   
+The following describe the required steps run the WRF regression system on you local machine. These exact steps are those utilized when running the automated regression testing system for the WRF continuous integration. THe recipe is convenient for developers needing to replicate specific failures identified by the automated regression tests.
 
-The capability for the build and run testing (using the WRF container) necessarily requires the use of the the docker utility on your local machine (docker.com).
+### Get the WRF docker infrastructure<a name="Getdocker"/>
 
-2. To start the process of constructing a working WRF docker container, clone the WRF-specific wrf-coop repository. This is the code that eventually builds the container structures for WRF.
+1. Docker is needed
+
+If you would like to test any of these exact cases on your local machine, using the described docker containers, then the docker application is required. The capability for the build and run testing (using the WRF container) necessarily requires the use of the the docker utility on your local machine (docker.com). Please note that the download and installation of docker onto your system is NOT explained here.
+
+2. To start the process of constructing a working WRF docker container, clone the WRF-specific wrf-coop repository, and checkout the specific branch used by the automated testing. Once you have the docker application running on your machine, this repository contains the code that eventually builds the container structures for WRF.
 ```
 git clone https://github.com/davegill/wrf-coop
 cd wrf-coop
+git checkout regression+feature
 ```
 
-## Prepare the docker image<a name="Prepareimage"/>
+### Prepare the docker image<a name="Prepareimage"/>
 
-1. From inside the top-level `wrf-coop` directory, edit the runtime files for docker to test the single specific WRF fork, repository, and branch: `Dockerfile` and `Dockerfile-NMM`. 
+1. From inside the top-level `wrf-coop` directory, edit the runtime file for docker to test the single specific WRF fork, repository, and branch: `Dockerfile`. 
 
 Here is the entire Dockerfile for ARW: `Dockerfile`:
 ```
 #
-FROM davegill/wrf-coop:thirteenthtry
+FROM davegill/wrf-coop:fifteenththtry
 MAINTAINER Dave Gill <gill@ucar.edu>
 
 RUN git clone _FORK_/_REPO_.git WRF \
@@ -162,32 +169,15 @@ RUN git clone https://github.com/davegill/SCRIPTS.git SCRIPTS \
   && cp SCRIPTS/rd_l2_norm.py . && chmod 755 rd_l2_norm.py \
   && cp SCRIPTS/script.csh .    && chmod 755 script.csh    \
   && ln -sf SCRIPTS/Namelists . 
+  
+RUN git clone https://github.com/davegill/wrf_feature_testing.git wrf_feature_testing \
+  && cd wrf_feature_testing && mv * .. && cd ..
 
 VOLUME /wrf
 CMD ["/bin/tcsh"]
 ```
 
-Here is the entire Dockerfile for NMM: `Dockerfile-NMM`:
-```
-#
-FROM davegill/wrf-coop:sixthtry
-MAINTAINER Dave Gill <gill@ucar.edu>
-
-RUN git clone _FORK_/_REPO_.git WRF \
-  && cd WRF \
-  && git checkout _BRANCH_ \
-  && cd ..
-
-RUN git clone https://github.com/davegill/SCRIPTS.git SCRIPTS \
-  && cp SCRIPTS/rd_l2_norm.py . && chmod 755 rd_l2_norm.py \
-  && cp SCRIPTS/script.csh .    && chmod 755 script.csh    \
-  && ln -sf SCRIPTS/Namelists . 
-
-VOLUME /wrf
-CMD ["/bin/tcsh"]
-```
-
-What needs to be modified in both files is the location of the WRF repository to test. Look for the section (in both files) that has:
+What needs to be modified in this file is the location of the WRF repository to test. Look for the section that has:
 ```
 RUN git clone _FORK_/_REPO_.git WRF \
   && cd WRF \
@@ -196,49 +186,46 @@ RUN git clone _FORK_/_REPO_.git WRF \
 ```
 
 For example, replacing those italicized names (including the leading and closing underscore characters) with the following:   
-*\_FORK\_* => `https://github.com/davegill`   
+*\_FORK\_* => `https://github.com/wrf-model`   
 *\_REPO\_* => `WRF`   
-*\_BRANCH\_* => `irr=3`   
+*\_BRANCH\_* => `release-v4.4`   
 
-would yield the same final text to be used within both `Dockerfile` and `Dockerfile-NMM`.
+would yield the final text to be used within `Dockerfile`.
 ```
-RUN git clone https://github.com/davegill/WRF.git WRF \
+RUN git clone https://github.com/wrf-model/WRF.git WRF \
   && cd WRF \
-  && git checkout irr=3 \
+  && git checkout release-v4.4 \
   && cd ..
 ```
 
-Please note that some people have their repository name as `WRF-1` (instead of the more traditional `WRF`).
+Please note that some people have chosen to name their repository differently than `WRF: such as  `WRF-1` or `WRFV4`.
 
 2. Construct the docker image
 
-Using the `Dockerfile` and the `Dockerfile-NMM`, build two docker images. Note that there are indeed periods at the trailing ends of these commands!
+Using the editted `Dockerfile`, build the docker image. Note that there is indeed a trailing period that is a mandatory part of this command!
 
 ```
-docker build -t wrf_regtest .
-docker build -f Dockerfile-NMM -t wrf_nmmregtest .
+docker build -f Dockerfile -t wrf_regtest .
 ```
 
-You have to be in the directory where the Dockerfiles are located (or else use the `-f` option). Each of the two commands takes about 5 minutes to complete (downloading several GB of data and code). Afterwards, there are two docker images (`wrf_regtest` and `wrf_nmmregtest`) that can be used to build your WRF containers. The images that include the name `wrf-coop` are the public dockerhub pieces that include Linux, the compiler, user libraries (such as netcdf and mpi), user executables (again such as from netcdf and mpi), and directory structure for the WRF model. These preparatory images are not used directly by users.
+You have to be in the directory where the Dockerfile is located (or else use the `-f Dockerfile` option). The `docker build` command takes about 5 minutes to complete (downloading several GB of data and code). Afterwards, there is the docker image (`wrf_regtest`) that can be used to build your WRF containers. The image that includes the name `wrf-coop` is the public dockerhub intermediate image that includes Linux, the compiler, user libraries (such as netcdf and mpi), user executables (again such as from netcdf and mpi), the metgrid first-guess data, and the supporting directory structure for the automated testing. This preparatory image is not intended to be used directly by users.
 ```
 docker images
 
-REPOSITORY          TAG                 IMAGE ID            CREATED              SIZE
-wrf_nmmregtest      latest              13b80465a2f4        2 days ago           5.78GB
-wrf_regtest         latest              cb75a489c00c        About a minute ago   5.67 GB
-davegill/wrf-coop   thirteenthtry       c06fd248f249        6 hours ago          5.21 GB
-davegill/wrf-coop   sixthtry            c36f5f2b0cc6        3 months ago         5.32GB
+REPOSITORY                    TAG                 IMAGE ID            CREATED             SIZE
+wrf-regtest                   latest              861fc54c4a6a        6 days ago          7.28 GB
+docker.io/davegill/wrf-coop   fifteenthtry        7991cdc121de        2 weeks ago         6.71 GB
 ```
 
-## Contruct the docker containers<a name="Constrcutcontainers"/>
+### Contruct the docker containers<a name="Constrcutcontainers"/>
 
 1. Choose a shared directory for docker
 
 To share data and files back and forth between the host OS and the docker container, a user-defined assignment maps a local host OS directory to a directory inside of the WRF container. For example, let's assume that the existing local directory on the host OS is `/users/gill/DOCKER_STUFF`.
 
-2. Build the containers 
+2. Build the container 
 
-Each of these take about 30 seconds to complete (nothing to download, just local processing). These commands should each be issued from separate terminal windows from the host OS (i.e. don't issue a docker command inside of a WRF docker container).
+Each container takes about 30 seconds to complete (nothing to download, just local processing). The commands for each container should each be issued from separate terminal windows from the host OS (i.e. don't issue a docker command inside of a WRF docker container).
 
 ```
 docker run -it --name ARW -v /users/gill/DOCKER_STUFF:/wrf/wrfoutput wrf_regtest /bin/tcsh
@@ -248,13 +235,7 @@ You are now in the ARW container. You'll notice that the prompt has changed:
 [wrfuser@cc600ad4caea ~]$
 ```
 
-In another window execute:
-```
-docker run -it --name NMM -v /users/gill/DOCKER_STUFF:/wrf/wrfoutput wrf_nmmregtest /bin/tcsh
-```
-You are now in the NMM container.
-
-## Build executables from source, run tests<a name="Buildexec"/>
+### Build executables from source, run tests<a name="Buildexec"/>
 
 Once the WRF containers are built and you are inside of the ARW container, building the WRF code is as usual. 
 
@@ -265,9 +246,9 @@ Once the WRF containers are built and you are inside of the ARW container, build
    * 33: OpenMP (threaded, shared memory, SM)
    * 34: MPI (message passing, distributed memory, DM)
    
-3. Since this is the entire WRF source code that is in the container, all of the standard `configure` options are available. 
+3. Since this conatiner inclues the entire WRF source code, all of the standard `configure` options are available. 
    * -d: debug, traceback, no optimization
-   * -D: -d + bounds check + identify uninitialized 
+   * -D: -d + bounds check + identify uninitialized values + check floating point interrupts
    * -r8: 8-byte reals as default
 ```
 cd WRF
@@ -277,6 +258,10 @@ configure -d << EOF
 EOF
 compile em_real -j 4 >& foo ; tail -20 foo
 ```
+
+## WRF is built inside a container - now what<a name="NowWhat"/>
+
+If everything has gone according to plan, you are now inside of a docker container, and the WRF model is built. The container has all of the necessary first-guess gridded data (from metgrid) and the run-time configuration files (namelist.input) to replicate the cases covered in the automated testing. 
 
 ### Run a sample test case<a name="Runsample"/>
 
