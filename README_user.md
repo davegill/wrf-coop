@@ -113,21 +113,22 @@ Several types of tests are accessible within this docker testing system.
 ### Restart testing<a name="Second"/>
 
 The topography for the nested domains over the central US for the ARW restart simulations are shown in the following figures.
-![ncview HGT_M_d01](https://user-images.githubusercontent.com/12666234/140979010-e6118790-97b2-4f47-99fb-357126fca727.png)
+![feature_d01](https://user-images.githubusercontent.com/12666234/140980453-5dddbd1a-78dd-422f-a5b3-5aeb165edbf6.png)
 
-![ncview HGT_M_d02](https://user-images.githubusercontent.com/12666234/140979048-70256134-7fd0-4a2b-8759-bdd5a33dd25d.png)
+![feature_d02](https://user-images.githubusercontent.com/12666234/140980457-f12597f2-3e0f-4e65-8a15-62daf8b8c0ed.png)
 
-Currrently all of the restart builds are for ARW em_real. Since the comparison is between the first (the full-length simulation) and the second (shorter, restart simulation) WRF runs, there is no need to try out different parallel options. 
+
+Currrently all of the restart builds are for ARW em_real. Since the comparison is between the first (the full-length simulation) and the second (shorter, restart simulation) WRF runs, there is no need to try out different parallel options. The time period is 2016 Mar 23-24 0000 UTC, though again the simulations are very short: 12 minutes in duration.
 
 The testing uses groupings of three WRF run-time configuration files, `namelist.input.1`, `namelist.input.3`, and `namelist.input.3` to exercise an expandable list of features that are all included within the WRF docker container. The current list of tests conducted is produced from information within two githhub respositories:
    * All available namelists choices for em_real: https://github.com/davegill/wrf_feature_testing/tree/main/cases
    * Requested tests are defined in: https://github.com/davegill/wrf-coop/blob/regression+feature/build.csh
 
 
-| **Test** | **MP** | **CU** | **LW** | **SW** | **PBL** | **SFC** | **LSM** | **URB** | **DFI** |
-| ------|:--:|:--:|:--:|:--:|:--: |:--: |:--: |:--: |:--: |
-| basic | D | D | D | D |  D |  1 | D |  0 | 3 |
-| dfi   | D | D | D | D |  D |  1 | D |  0 | 3 |
+| **Test** | **SUITE** | **URB** | **DFI** |
+| ------|:--:|:--: |:--: |
+| basic | CONUS |  0 | 0 |
+| dfi   | CONUS |  0 | 3 |
 
 
 ## Get the WRF docker infrastructure<a name="Getdocker"/>
