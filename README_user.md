@@ -579,10 +579,10 @@ ncdump -h wrfout_d01_2006-04-06_00:00:00 | grep -i nan
                 IVGTYP:description = "DOMINANT VEGETATION CATEGORY" ;
                 ISLTYP:description = "DOMINANT SOIL CATEGORY" ;
 ```
-4. For WRF-Chem, the following tests (i.e., namelist.input.$TESTNUMBER) should be conducted
+4. For WRF-Chem, the following tests (i.e., namelist.input.$TESTNUMBER) could be conducted:
    * 1
-   * 5
-   * 6 (namelist in MPI subdirectory)
+   * 2
+   * 5 
 
 ### Checking WRF DA results<a name="WRFDA"/>
 
@@ -602,7 +602,7 @@ cd WRFPLUS
 EOF
 ./compile wrfplus >& foo
 ls -ls main/*.exe
--rwxr-xr-x 1 liuz ncar 64177872 Mar 12 10:56 wrfplus.exe
+56868 -rwxr-xr-x 1 wrfuser wrf 58230600 Nov  9 19:22 main/wrfplus.exe
 ```
 
 For WRFDA-4DVar build:
@@ -615,55 +615,57 @@ cd ~
 cp -pr WRF WRFDA
 cd WRFDA
 setenv CRTM 1   # will build with CRTM, optional
-setenv WRFPLUS_DIR built-wrfplus-directory # must have for 4DVar
+setenv WRFPLUS_DIR ~/WRFPLUS    # built-wrfplus-directory: must have buillt prior to 4DVar
 ./configure 4dvar << EOF
 18
 EOF
 ./compile all_wrfvar >& foo
+ls -1 var/build/*.exe | wc -l
+43
 ls -lrt var/build/*.exe  # 43 executables
--rwxr-xr-x 1 liuz ncar 110278320 Mar 12 11:28 var/build/da_wrfvar.exe
--rwxr-xr-x 1 liuz ncar     30184 Mar 12 11:28 var/build/da_advance_time.exe
--rwxr-xr-x 1 liuz ncar   5314584 Mar 12 11:28 var/build/da_update_bc.exe
--rwxr-xr-x 1 liuz ncar   5277832 Mar 12 11:28 var/build/da_update_bc_ad.exe
--rwxr-xr-x 1 liuz ncar   6090656 Mar 12 11:28 var/build/gen_be_stage0_wrf.exe
--rwxr-xr-x 1 liuz ncar   6070440 Mar 12 11:28 var/build/gen_be_stage0_gsi.exe
--rwxr-xr-x 1 liuz ncar   6041080 Mar 12 11:28 var/build/gen_be_ep1.exe
--rwxr-xr-x 1 liuz ncar   6114944 Mar 12 11:29 var/build/gen_be_ep2.exe
--rwxr-xr-x 1 liuz ncar   6012408 Mar 12 11:29 var/build/gen_be_stage1.exe
--rwxr-xr-x 1 liuz ncar   5955120 Mar 12 11:29 var/build/gen_be_vertloc.exe
--rwxr-xr-x 1 liuz ncar   5997040 Mar 12 11:29 var/build/gen_be_addmean.exe
--rwxr-xr-x 1 liuz ncar   6004432 Mar 12 11:29 var/build/gen_be_stage1_gsi.exe
--rwxr-xr-x 1 liuz ncar   6000128 Mar 12 11:29 var/build/gen_be_stage1_1dvar.exe
--rwxr-xr-x 1 liuz ncar   5983736 Mar 12 11:29 var/build/gen_be_stage2.exe
--rwxr-xr-x 1 liuz ncar    171512 Mar 12 11:29 var/build/gen_be_stage2_gsi.exe
--rwxr-xr-x 1 liuz ncar   6090424 Mar 12 11:29 var/build/gen_mbe_stage2.exe
--rwxr-xr-x 1 liuz ncar   6004280 Mar 12 11:29 var/build/gen_be_stage2_1dvar.exe
--rwxr-xr-x 1 liuz ncar   5971448 Mar 12 11:29 var/build/gen_be_stage2a.exe
--rwxr-xr-x 1 liuz ncar   5983736 Mar 12 11:29 var/build/gen_be_stage3.exe
--rwxr-xr-x 1 liuz ncar   5959168 Mar 12 11:29 var/build/gen_be_stage4_global.exe
--rwxr-xr-x 1 liuz ncar   5992208 Mar 12 11:29 var/build/gen_be_stage4_regional.exe
--rwxr-xr-x 1 liuz ncar   5959160 Mar 12 11:29 var/build/gen_be_cov2d.exe
--rwxr-xr-x 1 liuz ncar   5959160 Mar 12 11:29 var/build/gen_be_cov3d.exe
--rwxr-xr-x 1 liuz ncar   5971656 Mar 12 11:29 var/build/gen_be_cov3d3d_bin3d_contrib.exe
--rwxr-xr-x 1 liuz ncar   5975744 Mar 12 11:29 var/build/gen_be_cov3d3d_contrib.exe
--rwxr-xr-x 1 liuz ncar   5971648 Mar 12 11:30 var/build/gen_be_cov2d3d_contrib.exe
--rwxr-xr-x 1 liuz ncar   5971648 Mar 12 11:30 var/build/gen_be_cov3d2d_contrib.exe
--rwxr-xr-x 1 liuz ncar   5950968 Mar 12 11:30 var/build/gen_be_diags.exe
--rwxr-xr-x 1 liuz ncar   5967544 Mar 12 11:30 var/build/gen_be_diags_read.exe
--rwxr-xr-x 1 liuz ncar   5967352 Mar 12 11:30 var/build/gen_be_hist.exe
--rwxr-xr-x 1 liuz ncar   5979744 Mar 12 11:30 var/build/gen_be_ensrf.exe
--rwxr-xr-x 1 liuz ncar   6054528 Mar 12 11:30 var/build/gen_be_etkf.exe
--rwxr-xr-x 1 liuz ncar   5963320 Mar 12 11:30 var/build/gen_be_ensmean.exe
--rwxr-xr-x 1 liuz ncar    270480 Mar 12 11:30 var/build/da_tune_obs_hollingsworth1.exe
--rwxr-xr-x 1 liuz ncar    180488 Mar 12 11:30 var/build/da_tune_obs_hollingsworth2.exe
--rwxr-xr-x 1 liuz ncar    129800 Mar 12 11:30 var/build/da_tune_obs_desroziers.exe
--rwxr-xr-x 1 liuz ncar   5133368 Mar 12 11:30 var/build/da_verif_obs.exe
--rwxr-xr-x 1 liuz ncar   5364056 Mar 12 11:30 var/build/da_verif_grid.exe
--rwxr-xr-x 1 liuz ncar    109920 Mar 12 11:30 var/build/da_bias_airmass.exe
--rwxr-xr-x 1 liuz ncar     47520 Mar 12 11:30 var/build/da_bias_sele.exe
--rwxr-xr-x 1 liuz ncar    101296 Mar 12 11:30 var/build/da_bias_scan.exe
--rwxr-xr-x 1 liuz ncar     56104 Mar 12 11:30 var/build/da_bias_verif.exe
--rwxr-xr-x 1 liuz ncar   5169112 Mar 12 11:30 var/build/da_rad_diags.exe
+-rwxr-xr-x 1 wrfuser wrf    34416 Nov  9 19:28 var/build/da_advance_time.exe
+-rwxr-xr-x 1 wrfuser wrf   171856 Nov  9 19:28 var/build/gen_be_stage2_gsi.exe
+-rwxr-xr-x 1 wrfuser wrf   125888 Nov  9 19:28 var/build/da_tune_obs_desroziers.exe
+-rwxr-xr-x 1 wrfuser wrf    89192 Nov  9 19:28 var/build/da_rad_diags.exe
+-rwxr-xr-x 1 wrfuser wrf   164216 Nov  9 19:28 var/build/da_update_bc.exe
+-rwxr-xr-x 1 wrfuser wrf   696400 Nov  9 19:29 var/build/gen_be_addmean.exe
+-rwxr-xr-x 1 wrfuser wrf   720960 Nov  9 19:29 var/build/gen_be_stage4_regional.exe
+-rwxr-xr-x 1 wrfuser wrf   687912 Nov  9 19:29 var/build/gen_be_cov3d.exe
+-rwxr-xr-x 1 wrfuser wrf   696360 Nov  9 19:29 var/build/gen_be_cov3d3d_bin3d_contrib.exe
+-rwxr-xr-x 1 wrfuser wrf   704544 Nov  9 19:29 var/build/gen_be_cov3d3d_contrib.exe
+-rwxr-xr-x 1 wrfuser wrf   700448 Nov  9 19:29 var/build/gen_be_cov2d3d_contrib.exe
+-rwxr-xr-x 1 wrfuser wrf   700448 Nov  9 19:29 var/build/gen_be_cov3d2d_contrib.exe
+-rwxr-xr-x 1 wrfuser wrf   679720 Nov  9 19:29 var/build/gen_be_diags.exe
+-rwxr-xr-x 1 wrfuser wrf   696272 Nov  9 19:29 var/build/gen_be_diags_read.exe
+-rwxr-xr-x 1 wrfuser wrf   696104 Nov  9 19:29 var/build/gen_be_hist.exe
+-rwxr-xr-x 1 wrfuser wrf   708504 Nov  9 19:29 var/build/gen_be_ensrf.exe
+-rwxr-xr-x 1 wrfuser wrf   692112 Nov  9 19:29 var/build/gen_be_ensmean.exe
+-rwxr-xr-x 1 wrfuser wrf   276208 Nov  9 19:29 var/build/da_tune_obs_hollingsworth1.exe
+-rwxr-xr-x 1 wrfuser wrf   181968 Nov  9 19:29 var/build/da_tune_obs_hollingsworth2.exe
+-rwxr-xr-x 1 wrfuser wrf   201504 Nov  9 19:29 var/build/da_verif_grid.exe
+-rwxr-xr-x 1 wrfuser wrf   110112 Nov  9 19:29 var/build/da_bias_airmass.exe
+-rwxr-xr-x 1 wrfuser wrf    43600 Nov  9 19:29 var/build/da_bias_sele.exe
+-rwxr-xr-x 1 wrfuser wrf    97400 Nov  9 19:29 var/build/da_bias_scan.exe
+-rwxr-xr-x 1 wrfuser wrf    52208 Nov  9 19:29 var/build/da_bias_verif.exe
+-rwxr-xr-x 1 wrfuser wrf   119256 Nov  9 19:30 var/build/da_update_bc_ad.exe
+-rwxr-xr-x 1 wrfuser wrf   819456 Nov  9 19:30 var/build/gen_be_stage0_wrf.exe
+-rwxr-xr-x 1 wrfuser wrf   769832 Nov  9 19:30 var/build/gen_be_ep1.exe
+-rwxr-xr-x 1 wrfuser wrf   799240 Nov  9 19:30 var/build/gen_be_stage0_gsi.exe
+-rwxr-xr-x 1 wrfuser wrf   737072 Nov  9 19:30 var/build/gen_be_stage1.exe
+-rwxr-xr-x 1 wrfuser wrf   683880 Nov  9 19:30 var/build/gen_be_vertloc.exe
+-rwxr-xr-x 1 wrfuser wrf   733184 Nov  9 19:30 var/build/gen_be_stage1_gsi.exe
+-rwxr-xr-x 1 wrfuser wrf   732976 Nov  9 19:30 var/build/gen_be_stage1_1dvar.exe
+-rwxr-xr-x 1 wrfuser wrf   712496 Nov  9 19:30 var/build/gen_be_stage2.exe
+-rwxr-xr-x 1 wrfuser wrf   819184 Nov  9 19:30 var/build/gen_mbe_stage2.exe
+-rwxr-xr-x 1 wrfuser wrf   733032 Nov  9 19:30 var/build/gen_be_stage2_1dvar.exe
+-rwxr-xr-x 1 wrfuser wrf   700208 Nov  9 19:30 var/build/gen_be_stage2a.exe
+-rwxr-xr-x 1 wrfuser wrf   708400 Nov  9 19:30 var/build/gen_be_stage3.exe
+-rwxr-xr-x 1 wrfuser wrf   687920 Nov  9 19:30 var/build/gen_be_stage4_global.exe
+-rwxr-xr-x 1 wrfuser wrf   687912 Nov  9 19:30 var/build/gen_be_cov2d.exe
+-rwxr-xr-x 1 wrfuser wrf   749760 Nov  9 19:30 var/build/gen_be_etkf.exe
+-rwxr-xr-x 1 wrfuser wrf    88560 Nov  9 19:30 var/build/da_verif_obs.exe
+-rwxr-xr-x 1 wrfuser wrf   843672 Nov  9 19:30 var/build/gen_be_ep2.exe
+-rwxr-xr-x 1 wrfuser wrf 79194744 Nov  9 20:28 var/build/da_wrfvar.exe
 ```
 
 WRFDA non-4DVar build can skip the step of building WRFPlus:
@@ -673,75 +675,20 @@ setenv HDF5 hdf5-lib-directory # optional, some obs file I/O need this.
 -->
 ```
 cd ~
-cp -pr WRF WRFDA
-cd WRFDA
+cp -pr WRF WRFDA2
+cd WRFDA2
 setenv CRTM 1   # will build with CRTM, optional
+unset WRFPLUS_DIR
 ./configure wrfda << EOF
 34
 EOF
 ./compile all_wrfvar >& foo
-ls -lrt var/build/*.exe will get the same 43 executables.
+ls -1 var/build/*.exe | wc -l
+43
 ```
+The command `ls -lrt var/build/*.exe` will give the same 43 executables.
 
-### Checking NMM results<a name="WRFNMM"/>
 
-Most developers do not anticipate sharing contributions with the NMM dynamical core. It is mandatory that the existing build of the NMM WRF model work with the new code, a peaceful co-existence. This is an example of negative testing: tests need to be undertaken to demonstrate that no harm has been done to the existing NMM WRF capabilities. This testing must be done inside the NMM container. A couple of NMM-specific environment variables are required to be set prior to the build. The ARW tests are much smaller than the NMM tests. While the ARW jobs are able to run with only 2 GB of memory, the NMM jobs use 8 GB. 
-
-1. Build the NMM WRF code
-```
-cd WRF
-setenv WRF_NMM_CORE 1
-setenv HWRF 1
-configure -d << EOF
-34
-EOF
-compile nmm_real >& foo
-ls -ls main/*.exe
-39756 -rwxr-xr-x 1 wrfuser wrf 40708544 Apr  7 18:55 main/real_nmm.exe
-49948 -rwxr-xr-x 1 wrfuser wrf 51144032 Apr  7 18:55 main/wrf.exe
-```
-2. Run the NMM WRF code
-```
-cd test/nmm_real
-ln -sf /wrf/Data/nmm_hwrf/* .
-cp /wrf/Namelists/weekly/nmm_hwrf/namelist.input.1NE namelist.input
-mpirun -np 3 --oversubscribe real_nmm.exe 
-mpirun -np 3 --oversubscribe wrf.exe
-```
-3. Check the NMM WRF output
-
-This includes looking at the standard print out, looking for the "SUCCESS" message.
-```
-tail rsl.out.0000
-Timing for main: time 2012-10-28_06:09:30 on domain   2:    0.37067 elapsed seconds
-Timing for main: time 2012-10-28_06:09:45 on domain   2:    0.51848 elapsed seconds
-Timing for main: time 2012-10-28_06:09:45 on domain   1:   12.89504 elapsed seconds
-Timing for main: time 2012-10-28_06:10:00 on domain   2:    0.36900 elapsed seconds
-Timing for Writing wrfout_d02_2012-10-28_06:10:00 for domain        2:    1.00879 elapsed seconds
-Timing for main: time 2012-10-28_06:10:15 on domain   2:    1.52304 elapsed seconds
-Timing for main: time 2012-10-28_06:10:30 on domain   2:    0.36961 elapsed seconds
-Timing for main: time 2012-10-28_06:10:30 on domain   1:    4.61200 elapsed seconds
-Timing for Writing wrfout_d01_2012-10-28_06:10:30 for domain        1:    7.46972 elapsed seconds
-d01 2012-10-28_06:10:30 wrf: SUCCESS COMPLETE WRF
-```
-
-Verify that there are two time periods in the output (check both domains):
-```
-ncdump -h wrfout_d01_2012-10-28_06:00:00 | grep Time | grep UNLIMITED
-	Time = UNLIMITED ; // (2 currently)
-ncdump -h wrfout_d02_2012-10-28_06:00:00 | grep Time | grep UNLIMITED
-	Time = UNLIMITED ; // (2 currently)
-```
-
-Check that there are no NaN values in the history output (check both domains):
-```
-ncdump wrfout_d01_2012-10-28_06:00:00 | grep -i nan
-ncdump wrfout_d02_2012-10-28_06:00:00 | grep -i nan
-```
-4. For NMM, the following run-time tests should be conducted:
-   * 1NE
-   * 2NE
-   * 3NE
 
 ## Docker Clean Up<a name="Cleanup"/>
 
