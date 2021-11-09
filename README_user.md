@@ -3,6 +3,9 @@
 **Contents**
 * [Purpose](#Purpose)
 * [What is tested](#Tested)
+	* [Parallel run-time](#First)
+	* [Restart testing](#Second)
+	* [WRF DA build](#Third)
 * [Get the WRF docker infrastructure](#Getdocker)
 * [Prepare the docker image](#Prepareimage)
 * [Contruct the docker containers](#Constrcutcontainers)
@@ -40,7 +43,9 @@ This page describes how to use docker containers for both the positive tests (ac
 
 There are three types of tests that are automatically conducted when pull requests (PRs) are submitted to the select branches of the community WRF repository. These tests have been designed to be easily interpreted as either _correct_ or _incorrect_. The first type of test includes a comparison for bit-for-bit identical results given different parallel run-time options (results compered between simulations), and objective indications of correct functioning from within each single simulation (SUCCESS message found in output, correct number of time periods in the output file, no NaNs in the generated data). The second type of test is also of the bit-for-bit variety. In these tests, a simulation is compared to a restart simulation with the same valid ending time, which should result in bit-wise identical results. The third type of test is the _compilation only_ of the WRF DA system. When a developer is able to produce an affirmative demonstration that all three types of testing are succeeding, the largest share of developer responsibility is met.
 
-The real-data ARW simulations are tested for the 2000 Jan 24-25 1200 UTC case (though typically for only the first half hour of the time period). 
+### Parallel run-time<a name="First"/>
+
+The real-data ARW simulations are tested for the 2000 Jan 24-25 1200 UTC case (though typically for only the first half hour of the time period). Yes, these simulations are very short, typically only about 10 time steps. With a 3:1 nest, the 10 time steps are on the fine grid.
 
 The domain for the ARW real-data simulations is shown in the figure.
 ![Screen Shot 2020-04-06 at 10 52 27 AM](https://user-images.githubusercontent.com/12666234/78584017-d5263d00-77f4-11ea-89b3-54cdf8357090.png)
@@ -52,7 +57,6 @@ Several types of tests are accessible within this docker testing system.
 |  Build Type        | Precision | 3D/2D | SERIAL | OPENMP | MPI | Ideal/Real | Nested |
 | ------------------ |:---------:|:-----:|:------:|:------:|:---:|:----------:|:--:|
 |ARW em_real         |  4 and 8  |   3D  |  yes   | yes    | yes |    real    | Y |
-|NMM HWRF            |     4     |   3D  |        |        | yes |    real    | Y |
 |ARW chemistry       |     4     |   3D  |  yes   |        | yes |    real    | N |
 |ARW super cell      |  4 and 8  |   3D  |  yes   | yes    | yes |   ideal    | Y |
 |ARW baroclinic wave |     4     |   3D  |  yes   | yes    | yes |   ideal    | Y |
@@ -62,9 +66,9 @@ Several types of tests are accessible within this docker testing system.
 
 2. The testing uses the WRF run-time configuration file, `namelist.input` to exercise an expandable list of features that are all included within the WRF docker container. The current list of tests conducted is produced from information within two githhub respositories:
    * All available namelists choices for em_real: https://github.com/davegill/SCRIPTS/tree/master/Namelists/weekly/em_real/MPI
-   * Requested tests: https://github.com/davegill/wrf-coop/blob/master/build.csh
+   * Requested tests are defined in: https://github.com/davegill/wrf-coop/blob/regression+feature/build.csh
 
-| Test | MP | CU | LW | SW | PBL | SFC | LSM | URB |
+| **Test** | **MP** | **CU** | **LW** | **SW** | **PBL** | **SFC** | **LSM** | **URB** |
 | ------|:--:|:--:|:--:|:--:|:--: |:--: |:--: |:--: |
 | 3dtke | D | D | D | D |  D |  1 | D |  0 |
 | conus | D | D | D | D | D | D | D |  0 |
@@ -72,15 +76,11 @@ Several types of tests are accessible within this docker testing system.
 | tropical | D | D | D | D | D | D | D |  0 |
 | 03 |  3 |  3 |  24 |  24 |  4 |  4 |  1 |  0 |
 | 03DF |  3 |  3 |  4 |  4 |  4 |  4 |  1 |  0 |
-| 03FD |  3 |  3 |  4 |  4 |  4 |  4 |  1 |  0 |
-| 06 |  6 |  6 |  24 |  24 |  8 |  2 |  1 |  0 |
-| 07NE |  8 | 14 |  5 |  5 | 8 | 1 |  2 |  2 |
 | 10 |  10 |  2 |  1 |  2 |  4 |  4 |  7 |  0 |
 | **Test** | **MP** | **CU** | **LW** | **SW** | **PBL** | **SFC** | **LSM** | **URB** |
 | 11 |  10 |  2 |  1 |  2 |  4 |  4 |  7 |  0 |
 | 14 |  3 |  6 |  3 |  3 |  4 |  4 |  3 |  0 |
 | 16 |  8 | 14 |  5 |  5 | 9 | 2 |  7 |  0 |
-| 16DF |  8 | 14 |  5 |  5 | 9 | 2 |  7 |  0 |
 | 17 |  4 |  2 |  3 |  3 |  2 |  2 |  2 |  0 |
 | 17AD |  4 |  2 |  3 |  3 |  2 |  2 |  2 |  0 |
 | 18 |  8 | 6 |  5 |  5 | 10 | 10 |  7 |  0 |
@@ -107,7 +107,28 @@ Several types of tests are accessible within this docker testing system.
 | kiaps1NE |  16 |  14 |  14 |  14 |  11 |  1 |  4 |  0 |
 | kiaps2 |  16 |  14 |  14 |  14 |  1 |  91 |  4 |  1 |
 | solaraNE |  8 |  1 |  4 |  4 |  5 |  5 |  2 |  3 |
+| urb3bNE |  16 |  16 |  14 |  14 |  8 |  2 |  4 |  3 |
 | **Test** | **MP** | **CU** | **LW** | **SW** | **PBL** | **SFC** | **LSM** | **URB** |
+
+### Restart testing<a name="Second"/>
+
+The topography for the nested domains over the central US for the ARW restart simulations are shown in the following figures.
+![ncview HGT_M_d01](https://user-images.githubusercontent.com/12666234/140979010-e6118790-97b2-4f47-99fb-357126fca727.png)
+
+![ncview HGT_M_d02](https://user-images.githubusercontent.com/12666234/140979048-70256134-7fd0-4a2b-8759-bdd5a33dd25d.png)
+
+Currrently all of the restart builds are for ARW em_real. Since the comparison is between the first (the full-length simulation) and the second (shorter, restart simulation) WRF runs, there is no need to try out different parallel options. 
+
+The testing uses groupings of three WRF run-time configuration files, `namelist.input.1`, `namelist.input.3`, and `namelist.input.3` to exercise an expandable list of features that are all included within the WRF docker container. The current list of tests conducted is produced from information within two githhub respositories:
+   * All available namelists choices for em_real: https://github.com/davegill/wrf_feature_testing/tree/main/cases
+   * Requested tests are defined in: https://github.com/davegill/wrf-coop/blob/regression+feature/build.csh
+
+
+| **Test** | **MP** | **CU** | **LW** | **SW** | **PBL** | **SFC** | **LSM** | **URB** | **DFI** |
+| ------|:--:|:--:|:--:|:--:|:--: |:--: |:--: |:--: |:--: |
+| basic | D | D | D | D |  D |  1 | D |  0 | 3 |
+| dfi   | D | D | D | D |  D |  1 | D |  0 | 3 |
+
 
 ## Get the WRF docker infrastructure<a name="Getdocker"/>
 
