@@ -11,11 +11,16 @@
 	* [Prepare the docker image](#Prepareimage)
 	* [Contruct the docker containers](#Constrcutcontainers)
 	* [Build executables from source, run tests](#Buildexec)
-* [WRF is built inside a container - now what](#NowWhat)
+* [Parallel test: WRF is built inside a container - now what](#NowWhat)
 	* [Run a sample test case](#Runsample)
 	* [Check the simulation results](#Checkresults)
 	* [Compare the simulation results](#Compareresults)
 	* [Checking WRF Chem results](#WRFChem)
+* [Restart test: WRF is built inside a container - now what](#NowWhat2)
+	* [Run a sample test case](#Runsample2)
+	* [Check the simulation results](#Checkresults2)
+	* [Compare the simulation results](#Compareresults2)
+* [WRFDA test: WRF is built inside a container - now what](#NowWhat3)
 	* [Checking WRF DA results](#WRFDA)
 * [Docker Clean Up](#Cleanup)
    	* [Stop, re-enter, and remove a docker container](#Stop) 
@@ -257,7 +262,7 @@ EOF
 compile em_real -j 4 >& foo ; tail -20 foo
 ```
 
-## WRF is built inside a container - now what<a name="NowWhat"/>
+## Parallel test: WRF is built inside a container - now what<a name="NowWhat"/>
 
 If everything has gone according to plan, you are now inside of a docker container, and the WRF model is built. The container has all of the necessary first-guess gridded data (from metgrid) and the run-time configuration files (namelist.input) to replicate the cases covered in the automated testing. 
 
