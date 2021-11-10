@@ -64,7 +64,19 @@ https://github.com/wrf-model/WRF/pull/1569. It is a test PR, and only has a sing
 
 The standard file that is returned from jenkins looks like:
 ```
-blah
+Please find result of the WRF regression test cases in the attachment. This build is for Commit ID: 8a00cd403a9a3f30cc1028fc88d6b7dcf22355ab, requested by: davegill for PR: https://github.com/wrf-model/WRF/pull/1580. For any query please send e-mail to David Gill.
+
+    Test Type              | Expected  | Received |  Failed
+    = = = = = = = = = = = = = = = = = = = = = = = =  = = = =
+    Number of Tests        : 19           17
+    Number of Builds       : 48           45
+    Number of Simulations  : 160           155        0
+    Number of Comparisons  : 101           100        0
+
+    Failed Simulations are: 
+    None
+    Which comparisons are not bit-for-bit: 
+    None
 ```
 The restart test output is a bit different:
 ```
