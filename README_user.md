@@ -586,7 +586,326 @@ ncdump -h wrfout_d01_2006-04-06_00:00:00 | grep -i nan
    * 1
    * 2
    * 5 
-   * 
+
+## Restart test: WRF is built inside a container - now what<a name="NowWhat2"/>
+
+If everything has gone according to plan, you are now inside of a docker container, and the WRF model is built. The container has all of the necessary first-guess gridded data (from metgrid) and the run-time configuration files (namelist.input) to replicate the cases covered in the automated testing. The restart tests are similar to the physics-based tests in that the real.exe program generates the IC/BC, and then the WRF model generates the model output. However, in the restart tests, a second WRF model simulation is started from a restart file. The comparsion is between the two matching time periods.
+
+### Run a sample test case<a name="Runsample2"/>
+
+1. All of the required gridded fields, such as from metgrid, are inside the container. Those need to be in the working directory. With the shared directory between the docker container and the host OS, other data can easily be brought into the container.
+```
+cd test/em_real
+ln -sf /wrf/input/standard/* .
+ln -sf /wrf/input/additional/* .
+```
+2. From the lengthy run-time configuration table above, choose a suffix from the test names. For example, the first few are listed as:
+   * 3dtke
+   * conus
+   * rap
+   * tropical
+
+This example shows selecting to run the `basic` restart test. There are three namelists: real, first run of WRF, second run of WRF.
+```
+cp /wrf/cases/basic/namelist.input.* .
+```
+3. Since the code was built with DM (option 34 on the `configure` script), we can request multiple processors. Depending on the initial setup of your docker system, there may be fewer processes available within the container than physically available on your host machine. The `--oversubscribe` option permits multiple MPI ranks to be handled by the same process sequentially. The timing performance suffers, but the parallel testing is valid.
+```
+cp namelist.input.1 namelist.input
+mpirun -np 3 --oversubscribe real.exe
+cp namelist.input.2 namelist.input
+mpirun -np 3 --oversubscribe wrf.exe
+```
+After the first model run, save the simulation results for comparison with the restart results.
+```
+mkdir HOLD
+mv rsl* HOLD
+mv wrfo* HOLD
+```
+Now run the restart run, with the third namelist file.
+```
+cp namelist.input.3 namelist.input
+mpirun -np 3 --oversubscribe wrf.exe
+```
+
+### Check the simulation results<a name="Checkresults2"/>
+
+1. The output from standard err and standard out in the container are treated similarly as typical WRF simulations. The last line should contain the string "SUCCESS". The output from the first simulation has more than the last few minutes.
+```
+cat HOLD/rsl.out.0000 | tail -20
+taskid: 0 hostname: b5af8c9633dc
+Quilting with   1 groups of   0 I/O tasks.
+ Ntasks in X            1 , ntasks in Y            3
+*************************************
+Configuring physics suite 'conus'
+
+         mp_physics:      8      8
+         cu_physics:      6      6
+      ra_lw_physics:      4      4
+      ra_sw_physics:      4      4
+     bl_pbl_physics:      2      2
+  sf_sfclay_physics:      2      2
+ sf_surface_physics:      2      2
+*************************************
+  Domain # 1: dx = 30000.000 m
+  Domain # 2: dx = 10000.000 m
+WRF V4.3.1 MODEL
+git commit 40a45822f189c7b1ab1c099deb96059141f52416
+ *************************************
+ Parent domain
+ ids,ide,jds,jde            1          75           1          70
+ ims,ime,jms,jme           -4          80          -4          30
+ ips,ipe,jps,jpe            1          75           1          23
+ *************************************
+DYNAMICS OPTION: Eulerian Mass Coordinate
+   alloc_space_field: domain            1 ,              99266656  bytes allocated
+  med_initialdata_input: calling input_input
+   Input data is acceptable to use: wrfinput_d01
+ CURRENT DATE          = 2016-03-23_00:00:00
+ SIMULATION START DATE = 2016-03-23_00:00:00
+Timing for processing wrfinput file (stream 0) for domain        1:    0.19767 elapsed seconds
+Max map factor in domain 1 =  1.00. Scale the dt in the model accordingly.
+ D01: Time step                              =    180.000000      (s)
+ D01: Grid Distance                          =    30.0000000      (km)
+ D01: Grid Distance Ratio dt/dx              =    6.00000000      (s/km)
+ D01: Ratio Including Maximum Map Factor     =    6.02711725      (s/km)
+ D01: NML defined reasonable_time_step_ratio =    6.00000000
+INPUT LandUse = "MODIFIED_IGBP_MODIS_NOAH"
+ LANDUSE TYPE = "MODIFIED_IGBP_MODIS_NOAH" FOUND          41  CATEGORIES           2  SEASONS WATER CATEGORY =           17  SNOW CATEGORY =           15
+INITIALIZE THREE Noah LSM RELATED TABLES
+Skipping over LUTYPE = USGS
+ LANDUSE TYPE = MODIFIED_IGBP_MODIS_NOAH FOUND          20  CATEGORIES
+ INPUT SOIL TEXTURE CLASSIFICATION = STAS
+ SOIL TEXTURE CLASSIFICATION = STAS FOUND          19  CATEGORIES
+ThompMP: read qr_acr_qgV3.dat instead of computing
+ThompMP: read qr_acr_qsV2.dat instead of computing
+ThompMP: read freezeH2O.dat instead of computing
+ *************************************
+ Nesting domain
+ ids,ide,jds,jde            1          88           1          79
+ ims,ime,jms,jme           -4          93          -4          36
+ ips,ipe,jps,jpe            1          88           1          26
+ INTERMEDIATE domain
+ ids,ide,jds,jde           23          57          20          51
+ ims,ime,jms,jme           18          62          15          40
+ ips,ipe,jps,jpe           21          59          18          30
+ *************************************
+d01 2016-03-23_00:00:00  alloc_space_field: domain            2 ,              14653080  bytes allocated
+d01 2016-03-23_00:00:00  alloc_space_field: domain            2 ,             132391596  bytes allocated
+d01 2016-03-23_00:00:00 *** Initializing nest domain # 2 from an input file. ***
+d01 2016-03-23_00:00:00 med_initialdata_input: calling input_input
+d01 2016-03-23_00:00:00  Input data is acceptable to use: wrfinput_d02
+Timing for processing wrfinput file (stream 0) for domain        2:    0.42219 elapsed seconds
+INPUT LandUse = "MODIFIED_IGBP_MODIS_NOAH"
+ LANDUSE TYPE = "MODIFIED_IGBP_MODIS_NOAH" FOUND          41  CATEGORIES           2  SEASONS WATER CATEGORY =           17  SNOW CATEGORY =           15
+INITIALIZE THREE Noah LSM RELATED TABLES
+Skipping over LUTYPE = USGS
+ LANDUSE TYPE = MODIFIED_IGBP_MODIS_NOAH FOUND          20  CATEGORIES
+ INPUT SOIL TEXTURE CLASSIFICATION = STAS
+ SOIL TEXTURE CLASSIFICATION = STAS FOUND          19  CATEGORIES
+INPUT LandUse = "MODIFIED_IGBP_MODIS_NOAH"
+ LANDUSE TYPE = "MODIFIED_IGBP_MODIS_NOAH" FOUND          41  CATEGORIES           2  SEASONS WATER CATEGORY =           17  SNOW CATEGORY =           15
+INITIALIZE THREE Noah LSM RELATED TABLES
+Skipping over LUTYPE = USGS
+ LANDUSE TYPE = MODIFIED_IGBP_MODIS_NOAH FOUND          20  CATEGORIES
+ INPUT SOIL TEXTURE CLASSIFICATION = STAS
+ SOIL TEXTURE CLASSIFICATION = STAS FOUND          19  CATEGORIES
+Max map factor in domain 1 =  1.00. Scale the dt in the model accordingly.
+ D01: Time step                              =    180.000000      (s)
+ D01: Grid Distance                          =    30.0000000      (km)
+ D01: Grid Distance Ratio dt/dx              =    6.00000000      (s/km)
+ D01: Ratio Including Maximum Map Factor     =    6.02711725      (s/km)
+ D01: NML defined reasonable_time_step_ratio =    6.00000000
+INPUT LandUse = "MODIFIED_IGBP_MODIS_NOAH"
+ LANDUSE TYPE = "MODIFIED_IGBP_MODIS_NOAH" FOUND          41  CATEGORIES           2  SEASONS WATER CATEGORY =           17  SNOW CATEGORY =           15
+INITIALIZE THREE Noah LSM RELATED TABLES
+Skipping over LUTYPE = USGS
+ LANDUSE TYPE = MODIFIED_IGBP_MODIS_NOAH FOUND          20  CATEGORIES
+ INPUT SOIL TEXTURE CLASSIFICATION = STAS
+ SOIL TEXTURE CLASSIFICATION = STAS FOUND          19  CATEGORIES
+Timing for Writing wrfout_d01_2016-03-23_00:00:00 for domain        1:    0.54745 elapsed seconds
+d01 2016-03-23_00:00:00  Input data is acceptable to use: wrfbdy_d01
+Timing for processing lateral boundary for domain        1:    0.19290 elapsed seconds
+ Tile Strategy is not specified. Assuming 1D-Y
+WRF TILE   1 IS      1 IE     75 JS      1 JE     23
+WRF NUMBER OF TILES =   1
+d01 2016-03-23_00:00:00  ----------------------------------------
+d01 2016-03-23_00:00:00  W-DAMPING  BEGINS AT W-COURANT NUMBER =    1.00000000
+d01 2016-03-23_00:00:00  ----------------------------------------
+Timing for Writing wrfout_d02_2016-03-23_00:00:00 for domain        2:    0.62049 elapsed seconds
+ Tile Strategy is not specified. Assuming 1D-Y
+WRF TILE   1 IS      1 IE     88 JS      1 JE     26
+WRF NUMBER OF TILES =   1
+Timing for main: time 2016-03-23_00:01:00 on domain   2:   14.40621 elapsed seconds
+Timing for main: time 2016-03-23_00:02:00 on domain   2:    1.70425 elapsed seconds
+Timing for main: time 2016-03-23_00:03:00 on domain   2:    1.73284 elapsed seconds
+Timing for main: time 2016-03-23_00:03:00 on domain   1:   36.24318 elapsed seconds
+Timing for Writing wrfout_d01_2016-03-23_00:03:00 for domain        1:    0.54027 elapsed seconds
+Timing for Writing wrfout_d02_2016-03-23_00:03:00 for domain        2:    0.61870 elapsed seconds
+Timing for main: time 2016-03-23_00:04:00 on domain   2:    2.34946 elapsed seconds
+Timing for main: time 2016-03-23_00:05:00 on domain   2:    1.82419 elapsed seconds
+Timing for main: time 2016-03-23_00:06:00 on domain   2:    1.74596 elapsed seconds
+Timing for main: time 2016-03-23_00:06:00 on domain   1:    9.23054 elapsed seconds
+Timing for Writing wrfout_d01_2016-03-23_00:06:00 for domain        1:    0.53650 elapsed seconds
+Timing for Writing wrfout_d02_2016-03-23_00:06:00 for domain        2:    0.75719 elapsed seconds
+Timing for main: time 2016-03-23_00:07:00 on domain   2:    2.51444 elapsed seconds
+Timing for main: time 2016-03-23_00:08:00 on domain   2:    1.77137 elapsed seconds
+Timing for main: time 2016-03-23_00:09:00 on domain   2:    1.76484 elapsed seconds
+Timing for main: time 2016-03-23_00:09:00 on domain   1:    9.30836 elapsed seconds
+Timing for Writing wrfout_d01_2016-03-23_00:09:00 for domain        1:    0.53476 elapsed seconds
+Timing for Writing restart for domain        1:    2.19493 elapsed seconds
+Timing for Writing restart for domain        2:    2.48162 elapsed seconds
+Timing for Writing wrfout_d02_2016-03-23_00:09:00 for domain        2:    0.61364 elapsed seconds
+Timing for main: time 2016-03-23_00:10:00 on domain   2:    2.45654 elapsed seconds
+Timing for main: time 2016-03-23_00:11:00 on domain   2:    1.76309 elapsed seconds
+Timing for main: time 2016-03-23_00:12:00 on domain   2:    1.78088 elapsed seconds
+Timing for Writing wrfout_d02_2016-03-23_00:12:00 for domain        2:    0.61547 elapsed seconds
+Timing for main: time 2016-03-23_00:12:00 on domain   1:   14.63783 elapsed seconds
+Timing for Writing wrfout_d01_2016-03-23_00:12:00 for domain        1:    0.53513 elapsed seconds
+d01 2016-03-23_00:12:00 wrf: SUCCESS COMPLETE WRF
+[wrfuser@b5af8c9633dc em_real]$ cat HOLD/rsl.out.0000 | tail -20
+Timing for main: time 2016-03-23_00:05:00 on domain   2:    1.82419 elapsed seconds
+Timing for main: time 2016-03-23_00:06:00 on domain   2:    1.74596 elapsed seconds
+Timing for main: time 2016-03-23_00:06:00 on domain   1:    9.23054 elapsed seconds
+Timing for Writing wrfout_d01_2016-03-23_00:06:00 for domain        1:    0.53650 elapsed seconds
+Timing for Writing wrfout_d02_2016-03-23_00:06:00 for domain        2:    0.75719 elapsed seconds
+Timing for main: time 2016-03-23_00:07:00 on domain   2:    2.51444 elapsed seconds
+Timing for main: time 2016-03-23_00:08:00 on domain   2:    1.77137 elapsed seconds
+Timing for main: time 2016-03-23_00:09:00 on domain   2:    1.76484 elapsed seconds
+Timing for main: time 2016-03-23_00:09:00 on domain   1:    9.30836 elapsed seconds
+Timing for Writing wrfout_d01_2016-03-23_00:09:00 for domain        1:    0.53476 elapsed seconds
+Timing for Writing restart for domain        1:    2.19493 elapsed seconds
+Timing for Writing restart for domain        2:    2.48162 elapsed seconds
+Timing for Writing wrfout_d02_2016-03-23_00:09:00 for domain        2:    0.61364 elapsed seconds
+Timing for main: time 2016-03-23_00:10:00 on domain   2:    2.45654 elapsed seconds
+Timing for main: time 2016-03-23_00:11:00 on domain   2:    1.76309 elapsed seconds
+Timing for main: time 2016-03-23_00:12:00 on domain   2:    1.78088 elapsed seconds
+Timing for Writing wrfout_d02_2016-03-23_00:12:00 for domain        2:    0.61547 elapsed seconds
+Timing for main: time 2016-03-23_00:12:00 on domain   1:   14.63783 elapsed seconds
+Timing for Writing wrfout_d01_2016-03-23_00:12:00 for domain        1:    0.53513 elapsed seconds
+d01 2016-03-23_00:12:00 wrf: SUCCESS COMPLETE WRF
+```
+The output from the restart run has only the last few time steps included.
+```
+cat rsl.out.0000
+taskid: 0 hostname: b5af8c9633dc
+Quilting with   1 groups of   0 I/O tasks.
+ Ntasks in X            1 , ntasks in Y            3
+*************************************
+Configuring physics suite 'conus'
+
+         mp_physics:      8      8
+         cu_physics:      6      6
+      ra_lw_physics:      4      4
+      ra_sw_physics:      4      4
+     bl_pbl_physics:      2      2
+  sf_sfclay_physics:      2      2
+ sf_surface_physics:      2      2
+*************************************
+  Domain # 1: dx = 30000.000 m
+  Domain # 2: dx = 10000.000 m
+WRF V4.3.1 MODEL
+git commit 40a45822f189c7b1ab1c099deb96059141f52416
+ *************************************
+ Parent domain
+ ids,ide,jds,jde            1          75           1          70
+ ims,ime,jms,jme           -4          80          -4          30
+ ips,ipe,jps,jpe            1          75           1          23
+ *************************************
+DYNAMICS OPTION: Eulerian Mass Coordinate
+   alloc_space_field: domain            1 ,              99266656  bytes allocated
+ RESTART run: opening wrfrst_d01_2016-03-23_00:09:00 for reading
+   Input data is acceptable to use: wrfrst_d01_2016-03-23_00:09:00
+Timing for processing restart file for domain        1:    0.82162 elapsed seconds
+Max map factor in domain 1 =  1.00. Scale the dt in the model accordingly.
+ D01: Time step                              =    180.000000      (s)
+ D01: Grid Distance                          =    30.0000000      (km)
+ D01: Grid Distance Ratio dt/dx              =    6.00000000      (s/km)
+ D01: Ratio Including Maximum Map Factor     =    6.02711725      (s/km)
+ D01: NML defined reasonable_time_step_ratio =    6.00000000
+INITIALIZE THREE Noah LSM RELATED TABLES
+Skipping over LUTYPE = USGS
+ LANDUSE TYPE = MODIFIED_IGBP_MODIS_NOAH FOUND          20  CATEGORIES
+ INPUT SOIL TEXTURE CLASSIFICATION = STAS
+ SOIL TEXTURE CLASSIFICATION = STAS FOUND          19  CATEGORIES
+ThompMP: read qr_acr_qgV3.dat instead of computing
+ThompMP: read qr_acr_qsV2.dat instead of computing
+ThompMP: read freezeH2O.dat instead of computing
+ *************************************
+ Nesting domain
+ ids,ide,jds,jde            1          88           1          79
+ ims,ime,jms,jme           -4          93          -4          36
+ ips,ipe,jps,jpe            1          88           1          26
+ INTERMEDIATE domain
+ ids,ide,jds,jde           23          57          20          51
+ ims,ime,jms,jme           18          62          15          40
+ ips,ipe,jps,jpe           21          59          18          30
+ *************************************
+d01 2016-03-23_00:09:00  alloc_space_field: domain            2 ,              14653080  bytes allocated
+d01 2016-03-23_00:09:00  alloc_space_field: domain            2 ,             132391596  bytes allocated
+ RESTART: nest, opening wrfrst_d02_2016-03-23_00:09:00 for reading
+d01 2016-03-23_00:09:00  Input data is acceptable to use: wrfrst_d02_2016-03-23_00:09:00
+Timing for processing restart file for domain        2:    1.03193 elapsed seconds
+INITIALIZE THREE Noah LSM RELATED TABLES
+Skipping over LUTYPE = USGS
+ LANDUSE TYPE = MODIFIED_IGBP_MODIS_NOAH FOUND          20  CATEGORIES
+ INPUT SOIL TEXTURE CLASSIFICATION = STAS
+ SOIL TEXTURE CLASSIFICATION = STAS FOUND          19  CATEGORIES
+Timing for Writing wrfout_d01_2016-03-23_00:09:00 for domain        1:    0.53463 elapsed seconds
+d01 2016-03-23_00:09:00  Input data is acceptable to use: wrfbdy_d01
+d01 2016-03-23_00:09:00 WRF restart, LBC starts at 2016-03-23_00:00:00 and restart starts at 2016-03-23_00:09:00
+ LBC for restart: Starting valid date = 2016-03-23_00:00:00, Ending valid date = 2016-03-23_03:00:00
+ LBC for restart: Restart time            = 2016-03-23_00:09:00
+ LBC for restart: Found the correct bounding LBC time periods
+ LBC for restart: Found the correct bounding LBC time periods for restart time = 2016-03-23_00:09:00
+Timing for processing lateral boundary for domain        1:    0.19339 elapsed seconds
+ Tile Strategy is not specified. Assuming 1D-Y
+WRF TILE   1 IS      1 IE     75 JS      1 JE     23
+WRF NUMBER OF TILES =   1
+d01 2016-03-23_00:09:00  ----------------------------------------
+d01 2016-03-23_00:09:00  W-DAMPING  BEGINS AT W-COURANT NUMBER =    1.00000000
+d01 2016-03-23_00:09:00  ----------------------------------------
+Timing for Writing wrfout_d02_2016-03-23_00:09:00 for domain        2:    0.61333 elapsed seconds
+ Tile Strategy is not specified. Assuming 1D-Y
+WRF TILE   1 IS      1 IE     88 JS      1 JE     26
+WRF NUMBER OF TILES =   1
+Timing for main: time 2016-03-23_00:10:00 on domain   2:    2.46924 elapsed seconds
+Timing for main: time 2016-03-23_00:11:00 on domain   2:    1.77693 elapsed seconds
+Timing for main: time 2016-03-23_00:12:00 on domain   2:    1.77342 elapsed seconds
+Timing for Writing wrfout_d02_2016-03-23_00:12:00 for domain        2:    0.61170 elapsed seconds
+Timing for main: time 2016-03-23_00:12:00 on domain   1:   11.53879 elapsed seconds
+Timing for Writing wrfout_d01_2016-03-23_00:12:00 for domain        1:    0.53638 elapsed seconds
+d01 2016-03-23_00:12:00 wrf: SUCCESS COMPLETE WRF
+```
+2. There should be no NaN values in the generated model output file. There are two domains for the original run and the restart run. That is a total of four tests for NaNs.
+```
+ncdump wrfout_d01_2016-03-23_00:12:00 | grep -i nan | grep -v DOMINANT
+ncdump wrfout_d02_2016-03-23_00:12:00 | grep -i nan | grep -v DOMINANT
+ncdump HOLD/wrfout_d01_2016-03-23_00:12:00 | grep -i nan | grep -v DOMINANT
+ncdump HOLD/wrfout_d02_2016-03-23_00:12:00 | grep -i nan | grep -v DOMINANT
+```
+
+### Compare the simulation results<a name="Compareresults2"/>
+
+The restart tests are require to produce bit-wise identical results. Confirming these bit identical results is via a pair-wise comparison (original full-length simulation vs the shorter restart run). When there are no differences (the results are bit-wise identical), only the column headers are listed for each time period. Since there are two domains for the restart tests, a comparison is required for each domain.
+
+```
+set D = wrfout_d01_2016-03-23_00:12:00
+../../external/io_netcdf/diffwrf HOLD/$D $D
+ Just plot  F
+Diffing HOLD/wrfout_d01_2016-03-23_00:12:00 wrfout_d01_2016-03-23_00:12:00
+ Next Time 2016-03-23_00:12:00
+     Field   Ndifs    Dims       RMS (1)            RMS (2)     DIGITS    RMSE     pntwise max
+
+set D = wrfout_d02_2016-03-23_00:12:00
+../../external/io_netcdf/diffwrf HOLD/$D $D
+ Just plot  F
+Diffing HOLD/wrfout_d02_2016-03-23_00:12:00 wrfout_d02_2016-03-23_00:12:00
+ Next Time 2016-03-23_00:12:00
+     Field   Ndifs    Dims       RMS (1)            RMS (2)     DIGITS    RMSE     pntwise max
+```
+
+
 ## WRFDA test: WRF is built inside a container - now what<a name="NowWhat3"/>
 
 The actual run-time tests for the WRF Data Assimilation are beyond what we are prepared to do for pedestrian regression testing where developers modify physics and a few registry entries. Given these typical changes, the vast majority of the unintentional difficulties from developers is introducing a compile-time error wth WRF DA. These tests are to verify that the WRF DA code is still able to generate executables.
