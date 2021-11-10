@@ -50,3 +50,12 @@ second is to run WRF (full run), and the third namelist is for the restart WRF
 run. Typically, having a nest with 12 fine-grid time steps (for the full run) is
 sufficient to check that restarts work.
 
+### How to test the `Feature` feature?
+
+Temporarily, this is an option that is not run by default. To activate this ability
+to run the restart tests, the labels need to be modified on the PR.
+1. The label `Feature` has to be included.
+2. The only label permitted is `Feature`.
+
+You are thinking, hmmm, this restriction seems a bit problematic. But no, we are mostly testing on
+wrf-model/WRF#1569. It is a test PR, and only has a single label: `Feature`.
