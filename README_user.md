@@ -858,7 +858,7 @@ Timing for main: time 2016-03-23_00:12:00 on domain   1:   11.53879 elapsed seco
 Timing for Writing wrfout_d01_2016-03-23_00:12:00 for domain        1:    0.53638 elapsed seconds
 d01 2016-03-23_00:12:00 wrf: SUCCESS COMPLETE WRF
 ```
-2. There should be no NaN values in the generated model output file. There are two domains for the original run and the restart run. That is a total of four tests for NaNs.
+2. There should be no NaN values in any of the generated model output files (we only really need to test the last time periods, because the model never recovers from throwing a NaN). There are two domains for the original run and the restart run. That is a total of four tests for NaNs.
 ```
 ncdump wrfout_d01_2016-03-23_00:12:00 | grep -i nan | grep -v DOMINANT
 ncdump wrfout_d02_2016-03-23_00:12:00 | grep -i nan | grep -v DOMINANT
@@ -868,7 +868,7 @@ ncdump HOLD/wrfout_d02_2016-03-23_00:12:00 | grep -i nan | grep -v DOMINANT
 
 ### Compare the simulation results<a name="Compareresults2"/>
 
-The restart tests are require to produce bit-wise identical results. Confirming these bit identical results is via a pair-wise comparison (original full-length simulation vs the shorter restart run). When there are no differences (the results are bit-wise identical), only the column headers are listed for each time period. Since there are two domains for the restart tests, a comparison is required for each domain.
+The restart tests are required to produce bit-wise identical results. Confirming these bit identical results is via a pair-wise comparison (original full-length simulation vs the shorter restart run). When there are no differences (the results are bit-wise identical), only the column headers are listed for each time period. Since there are two domains for the restart tests, a comparison is required for each domain.
 
 ```
 set D = wrfout_d01_2016-03-23_00:12:00
