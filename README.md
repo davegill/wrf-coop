@@ -107,7 +107,7 @@ The second image is faster (it requires a much shorter time to build the image),
 > docker build -t wrftest .
 ```
 
-### With the second image, build four containers
+### With the second image, build three containers
 We construct a few containers from the `wrftest` image: WRF Chem (test_001), Restart feature (test_002), Real (test_003). These containers take only a few seconds each to create.
 ```
 > docker run -d -t --name test_001 wrftest
@@ -328,10 +328,10 @@ mv /classroom/dave/wrf-coop/DOING_NOW_test_003s /classroom/dave/wrf-coop/COMPLET
 
 On a single desktop, a reasonable run-time command would be:
 ```
-> date ; ( ./single_init.csh ; ./test_001s.csh ; ./test_001m.csh ; ./test_002m.csh ; ./test_003s.csh ; ./test_003o.csh ; ./test_003m.csh ; single_end.csh ; last_only_once.csh OUTPUT ) >& output ; date
+> date ; ( ./single_init.csh Dockerfile wrf_regtest ; ./test_001s.csh ; ./test_001m.csh ; ./test_002m.csh ; ./test_003s.csh ; ./test_003o.csh ; ./test_003m.csh ; single_end.csh wrf_regtest ; last_only_once.csh OUTPUT ) >& output ; date
 ```
 
-To view how the status of the testing after the command is complete, search for `SUCCESS`. There should be four `SUCCESS` messages for each test conducted (in this example, we did five tests):
+To view how the status of the testing after the command is complete, search for `SUCCESS`. There should be three `SUCCESS` messages for each test conducted (in this example, we did five tests):
 1. From inside of the WRF model print out
 2. Build the executable
 3. Run the preprocessor (real or ideal)
@@ -357,13 +357,13 @@ long list of availble tests.
 
 The correct usage would be to assign each test to a separate node.
 ```
-> date ; ( ./single_init.csh ; ./test_001s.csh ; ./single_end.csh ) >& output ; date
+> date ; ( ./single_init.csh Dockerfile wrf_regtest ; ./test_001s.csh ; ./single_end.csh wrf_regtest ) >& output ; date
 ```
 ```
-> date ; ( ./single_init.csh ; ./test_001o.csh ; ./single_end.csh ) >& output ; date
+> date ; ( ./single_init.csh Dockerfile wrf_regtest ; ./test_001o.csh ; ./single_end.csh wrf_regtest ) >& output ; date
 ```
 ```
-> date ; ( ./single_init.csh ; ./test_001m.csh ; ./single_end.csh ) >& output ; date
+> date ; ( ./single_init.csh Dockerfile wrf_regtest ; ./test_001m.csh ; ./single_end.csh wrf_regtest ) >& output ; date
 ```
 When all of the jobs are complete, then issue
 ```
