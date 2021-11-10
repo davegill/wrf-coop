@@ -139,7 +139,7 @@ The testing uses groupings of three WRF run-time configuration files, `namelist.
 
 ### WRF DA build<a name="Third"/>
 
-The WRF DA code is accidentally broken when modifications are made to some of the dyn_em subroutines, or when modifications to a registry file mandates an associated update in the DA source. It is usually sufficient to test for the successful build of the WRF DA executables for a few scenarios: 3dvar, wrfplus, and 4dvar.
+The WRF DA code is accidentally broken when modifications are made to some of the dyn_em subroutines, or when modifications to a registry file mandates an associated update in the DA source. It is usually sufficient to test for the successful build of the WRF DA executables for a few scenarios: WRFPlus, WRFDA-4DVAR, and WRFDA.
 
 
 ## Docker: end to end<a name="docker"/>
