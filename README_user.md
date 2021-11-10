@@ -71,7 +71,7 @@ Several types of tests are accessible within this docker testing system.
 |ARW moving nest     |     4     |   3D  |        |        | yes |    real    | Y |
 |ARW 2D hill         |     4     |   2D  |  yes   |        |     |   ideal    | N |
 
-2. The testing uses the WRF run-time configuration file, `namelist.input` to exercise an expandable list of features that are all included within the WRF docker container. The current list of tests conducted is produced from information within two githhub respositories:
+2. The testing uses the WRF run-time configuration file, `namelist.input` to exercise an expandable list of features that are all included within the WRF docker container. The current list of tests conducted is produced from information within two github respositories:
    * All available namelists choices for em_real: https://github.com/davegill/SCRIPTS/tree/master/Namelists/weekly/em_real/MPI
    * Requested tests are defined in: https://github.com/davegill/wrf-coop/blob/regression+feature/build.csh
 
@@ -137,6 +137,10 @@ The testing uses groupings of three WRF run-time configuration files, `namelist.
 | basic | CONUS |  0 | 0 |
 | dfi   | CONUS |  0 | 3 |
 
+### WRF DA build<a name="Third"/>
+
+The WRF DA code is accidentally broken when modifications are made to some of the dyn_em subroutines, or when modifications to a registry file mandates an associated update in the DA source. It is usually sufficient to test for the successful build of the WRF DA executables for a few scenarios: 3dvar, wrfplus, and 4dvar.
+
 
 ## Docker: end to end<a name="docker"/>
 
@@ -201,11 +205,11 @@ RUN git clone https://github.com/wrf-model/WRF.git WRF \
   && cd ..
 ```
 
-Please note that some people have chosen to name their repository differently than `WRF: such as  `WRF-1` or `WRFV4`.
+Please note that some people have chosen to name their repository differently than `WRF`: such as  `WRF-1` or `WRFV4`.
 
 2. Construct the docker image
 
-Using the editted `Dockerfile`, build the docker image. Note that there is indeed a trailing period that is a mandatory part of this command!
+Using the edited `Dockerfile`, build the docker image. Note that there is indeed a trailing period that is a mandatory part of this command!
 
 ```
 docker build -f Dockerfile -t wrf_regtest .
