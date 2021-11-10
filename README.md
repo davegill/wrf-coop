@@ -196,12 +196,12 @@ set JOB = INDEPENDENT
 The script `build.csh` generates executables files. The `build.csh` does not run any test.
 ```
 > build.csh
-Run ./single.csh
+Run ./single_init.csh
 Run ./test_001s.csh
-Run ./test_001o.csh
 Run ./test_001m.csh
 Run ./test_002m.csh
 Run ./test_003s.csh
+Run ./test_003o.csh
 Run ./test_003m.csh
 Run ./test_004s.csh
 Run ./test_004o.csh
@@ -244,57 +244,91 @@ Run ./test_017m.csh
 Run ./test_018s.csh
 Run ./test_018m.csh
 Run ./test_019s.csh
+Run ./test_019o.csh
 Run ./test_019m.csh
+Run ./test_020s.csh
+Run ./test_020o.csh
+Run ./test_020m.csh
+Run ./test_021s.csh
+Run ./test_021o.csh
+Run ./test_021m.csh
+Run ./test_022s.csh
+Run ./test_022o.csh
+Run ./test_022m.csh
+Run ./test_023s.csh
+Run ./test_023m.csh
+Run ./last_only_once.csh
 ```
 
 Each manufactured job script looks similar to this:
 ```
 #!/bin/csh
 #####################   TOP OF JOB    #####################
-echo TEST CASE = test_001s
+touch /classroom/dave/wrf-coop/DOING_NOW_test_003s
+chmod 666 /classroom/dave/wrf-coop/DOING_NOW_test_003s
+echo TEST CASE = test_003s
 date
+set SHARED = /classroom/dave/wrf-coop
 #	Build: case = em, SERIAL
 echo Build container
-docker run -d -t --name test_001s wrf_regtest
+#docker run -it --name test_003s  -v $SHARED/OUTPUT:/wrf/wrfoutput wrf_regtest /bin/tcsh
+#docker exec -it test_003s /bin/tcsh
+#docker start -ai test_003s
+docker run -d -t --name test_003s  -v $SHARED/OUTPUT:/wrf/wrfoutput wrf_regtest
 date
 echo Build WRF executable
-docker exec test_001s ./script.csh BUILD CLEAN 32 1 em_real -d J=-j@3
+docker exec test_003s ./script.csh BUILD CLEAN 32 1 em_real -d J=-j@8
 date
-docker exec test_001s ls -ls WRF/main/wrf.exe
-docker exec test_001s ls -ls WRF/main/real.exe
+docker exec test_003s ls -ls WRF/main/wrf.exe
+set OK_WRF = $status
+docker exec test_003s ls -ls WRF/main/real.exe
+set OK_PRE = $status
+if ( ( $OK_WRF == 0 ) && ( $OK_PRE == 0 ) ) then
+	echo "SUCCESSFUL BUILD"
+	docker exec test_003s ls -ls wrfoutput | grep _BUILD_ | grep em_real_32 
+else
+	echo "FAILED BUILD LOG START"
+	docker exec test_003s cat WRF/compile.log.em_real.32
+	echo "FAILED BUILD LOG END"
+endif
 date
  
 set TCOUNT = 1
-foreach t ( em_real        03DF   )
+foreach t ( em_real        3dtke conus rap tropical    )
 	date
-	if ( $TCOUNT == 1 )  goto SKIP_test_001s
-	echo RUN WRF test_001s for em_real 32 em_real, NML =  $t
-	docker exec test_001s ./script.csh RUN em_real 32 em_real $t
+	if ( $TCOUNT == 1 )  goto SKIP_test_003s
+	echo '======================================================================'
+	echo RUN WRF test_003s for em_real 32 em_real, NML =  $t
+	docker exec test_003s ./script.csh RUN em_real 32 em_real $t
 	set OK = $status
-	echo $OK for test $t
+	echo $OK = STATUS test_003s em em_real 32 $t
 	date
 	
-	docker exec test_001s cat WRF/test/em_real/wrf.print.out 
+	echo 'PRE-PROC OUTPUT' 
+	docker exec test_003s cat WRF/test/em_real/real.print.out 
+	echo 'MODEL OUTPUT' 
+	docker exec test_003s cat WRF/test/em_real/wrf.print.out 
 	
-	docker exec test_001s ls -ls WRF/test/em_real | grep wrfout 
-	docker exec test_001s ls -ls wrfoutput
+	docker exec test_003s ls -ls WRF/test/em_real | grep wrfout 
+	docker exec test_003s ls -ls wrfoutput | grep _RUN_ | grep em_real_32_em_real_$t 
 	date
-SKIP_test_001s:
+SKIP_test_003s:
 	@ TCOUNT ++
 end
 date
-docker stop test_001s
+docker stop test_003s
 date
-docker rm test_001s
+docker rm test_003s
 date
-echo docker rmi wrf_regtest
-date
+touch /classroom/dave/wrf-coop/COMPLETE_test_003s
+chmod 666 /classroom/dave/wrf-coop/COMPLETE_test_003s
+mv /classroom/dave/wrf-coop/DOING_NOW_test_003s /classroom/dave/wrf-coop/COMPLETE_test_003s
 #####################   END OF JOB    #####################
 ```
 
 On a single desktop, a reasonable run-time command would be:
 ```
-> date ; ( ./single.csh ; ./test_001s.csh ; ./test_001o.csh ; ./test_001m.csh ; ./test_002m.csh ; ./test_003s.csh ; ./test_003m.csh ; ./test_019s.csh ; ./test_019m.csh ;) >& output ; date
+> date ; ( ./single_init.csh ; ./test_001s.csh ; ./test_001m.csh ; ./test_002m.csh ; ./test_003s.csh ; ./test_003o.csh ; ./test_003m.csh ; single_end.csh ; last_only_once.csh OUTPUT ) >& output ; date
 ```
 
 To view how the status of the testing after the command is complete, search for `SUCCESS`. There should be four `SUCCESS` messages for each test conducted (in this example, we did five tests):
@@ -316,73 +350,24 @@ d01 2000-01-24_12:30:00 wrf: SUCCESS COMPLETE WRF
 0 -rw-r--r-- 1 wrfuser wrf 0 Apr 29 15:43 SUCCESS_BUILD_WRF_em_real_34
 0 -rw-r--r-- 1 wrfuser wrf 0 Apr 29 15:43 SUCCESS_RUN_REAL_em_real_34_03DF
 0 -rw-r--r-- 1 wrfuser wrf 0 Apr 29 15:44 SUCCESS_RUN_WRF_d01_em_real_34_03DF
-d01 2008-01-11_00:15:00 wrf: SUCCESS COMPLETE WRF
-0 -rw-r--r-- 1 wrfuser wrf 0 Apr 29 15:48 SUCCESS_BUILD_WRF_nmm_real_34
-0 -rw-r--r-- 1 wrfuser wrf 0 Apr 29 15:48 SUCCESS_RUN_REAL_nmm_real_34_1NE
-0 -rw-r--r-- 1 wrfuser wrf 0 Apr 29 15:49 SUCCESS_RUN_WRF_d01_nmm_real_34_1NE
 ```
 
-When intending to run on multiple nodes, with the appropriate modifications, the `build.csh` would generate:
-```
-> build.csh
-Run ./single.csh
-Run ./test_001s.csh
-Run ./test_001o.csh
-Run ./test_001m.csh
-Run ./test_002m.csh
-Run ./test_003s.csh
-Run ./test_003m.csh
-Run ./test_004s.csh
-Run ./test_004o.csh
-Run ./test_004m.csh
-Run ./test_005s.csh
-Run ./test_005o.csh
-Run ./test_005m.csh
-Run ./test_006s.csh
-Run ./test_006o.csh
-Run ./test_006m.csh
-Run ./test_007s.csh
-Run ./test_007o.csh
-Run ./test_007m.csh
-Run ./test_008m.csh
-Run ./test_009s.csh
-Run ./test_009o.csh
-Run ./test_009m.csh
-Run ./test_010s.csh
-Run ./test_011s.csh
-Run ./test_011o.csh
-Run ./test_011m.csh
-Run ./test_012s.csh
-Run ./test_012o.csh
-Run ./test_012m.csh
-Run ./test_013s.csh
-Run ./test_013o.csh
-Run ./test_013m.csh
-Run ./test_014s.csh
-Run ./test_014o.csh
-Run ./test_014m.csh
-Run ./test_015s.csh
-Run ./test_015o.csh
-Run ./test_015m.csh
-Run ./test_016s.csh
-Run ./test_016o.csh
-Run ./test_016m.csh
-Run ./test_017s.csh
-Run ./test_017o.csh
-Run ./test_017m.csh
-Run ./test_018s.csh
-Run ./test_018m.csh
-```
+When intending to run on multiple nodes, with the appropriate modifications, the `build.csh` generates the
+long list of availble tests.
 
 The correct usage would be to assign each test to a separate node.
 ```
-> date ; ( ./single.csh ; ./test_001s.csh ) >& output ; date
+> date ; ( ./single_init.csh ; ./test_001s.csh ; ./single_end.csh ) >& output ; date
 ```
 ```
-> date ; ( ./single.csh ; ./test_001o.csh ) >& output ; date
+> date ; ( ./single_init.csh ; ./test_001o.csh ; ./single_end.csh ) >& output ; date
 ```
 ```
-> date ; ( ./single.csh ; ./test_001s.csh ) >& output ; date
+> date ; ( ./single_init.csh ; ./test_001m.csh ; ./single_end.csh ) >& output ; date
+```
+When all of the jobs are complete, then issue
+```
+> date ; ( ./last_only_once.csh OUTPUT ) >& output ; date
 ```
 
 
