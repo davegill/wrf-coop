@@ -21,7 +21,7 @@ tests are associated with the string `restartA`. The restart tests are also asso
 the second column of the shell variable arrays (such as SERIAL, OPENMP, ... NP, FEATURE), but until
 we add LOTS of new feature tests, we make no changes in that area of the file.
 
-The two lines that have _multiple_ entries for `restartA` should be modified. For example, let us
+The _two_ lines that have _multiple_ entries for `restartA` should be modified. For example, let us
 assume that the new test is for adaptive time stepping, with the mnemonic `adapt`.
 
 Original:
