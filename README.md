@@ -63,7 +63,7 @@ wrf-coop            latest              bd2082d1eb7d        19 minutes ago      
 centos              latest              9f38484d220f        5 weeks ago         202MB
 ```
 
-Once we have that image, we want to save it. That is the _WHOLE_ purpose of this exercise. Then we just pull it down and add in the WRF repository, and voi-fricking-la. Note, this is `firsttry`. I am at `thirteenthtry`.
+Once we have that image, we want to save it. That is the _WHOLE_ purpose of this exercise. Then we just pull it down and add in the WRF repository, and voi-fricking-la. Note, this is `firsttry`. I am at `fifteenthtry`.
 ```
 > docker tag bd2082d1eb7d davegill/wrf-coop:firsttry
 
@@ -108,43 +108,43 @@ The second image is faster (it requires a much shorter time to build the image),
 ```
 
 ### With the second image, build four containers
-We construct a few containers from the `wrftest` image: real (test_001), nmm (test_002), chem (test_003), chem_kpp (test_019). These containers take only a few seconds each to create.
+We construct a few containers from the `wrftest` image: WRF Chem (test_001), Restart feature (test_002), Real (test_003). These containers take only a few seconds each to create.
 ```
 > docker run -d -t --name test_001 wrftest
 > docker run -d -t --name test_002 wrftest
 > docker run -d -t --name test_003 wrftest
-> docker run -d -t --name test_019 wrftest
 ```
 
 
 ### With those available containers, build the WRF code in four separate ways
-Build the specific containers: em_real (test_001), NMM (test_002), Chem (test_003), Chem KPP (test_019). These each require 5-20 minutes each, with most of the time consumed in the compilation of the WRF object files from source.
+Build the specific containers: WRF Chem (test_001), Restart feature (test_002), Real (test_003). These each require 5-20 minutes each, with most of the time consumed in the compilation of the WRF object files from source.
 ```
-> docker exec test_001 ./script.csh BUILD CLEAN 34 1 em_real -d J=-j@3
-> docker exec test_002 ./script.csh BUILD CLEAN 34 3 nmm_real -d J=-j@3 WRF_NMM_CORE=1 HWRF=1
-> docker exec test_003 ./script.csh BUILD CLEAN 34 1 em_real -d J=-j@3 WRF_CHEM=1
-> docker exec test_019 ./script.csh BUILD CLEAN 34 1 em_real -d J=-j@3 WRF_CHEM=1 WRF_KPP=1 FLEX_LIB_DIR=/usr/lib64 YACC=/usr/bin/yacc@-d
+> docker exec test_001 ./script.csh BUILD CLEAN 34 1 em_real -d J=-j@3 WRF_CHEM=1
+> docker exec test_002 ./script.csh BUILD CLEAN 34 1 em_real -d J=-j@3
+> docker exec test_003 ./script.csh BUILD CLEAN 34 1 em_real -d J=-j@3
 ```
 If your machine is _beefy_ enough, put these build jobs (as in "build a wrf executable") in the background, and run them all at the same time. Since each job is asking for `make` to use three parallel threads to speed up the build process of the WRF executables (`J=-j@3`), a _beefy_ enough machine for these four tasks (the fourseparate builds) would have twelve or more non-hyperthreaded processors.	
 ```
-> docker exec test_001 ./script.csh BUILD CLEAN 34 1 em_real -d J=-j@3 &
-> docker exec test_002 ./script.csh BUILD CLEAN 34 3 nmm_real -d J=-j@3 WRF_NMM_CORE=1 HWRF=1 &
-> docker exec test_003 ./script.csh BUILD CLEAN 34 1 em_real -d J=-j@3 WRF_CHEM=1 &
-> docker exec test_019 ./script.csh BUILD CLEAN 34 1 em_real -d J=-j@3 WRF_CHEM=1 WRF_KPP=1 FLEX_LIB_DIR=/usr/lib64 YACC=/usr/bin/yacc@-d &
+> docker exec test_001 ./script.csh BUILD CLEAN 34 1 em_real -d J=-j@3 WRF_CHEM=1 &
+> docker exec test_002 ./script.csh BUILD CLEAN 34 1 em_real -d J=-j@3 &
+> docker exec test_003 ./script.csh BUILD CLEAN 34 1 em_real -d J=-j@3 &
 > wait
 ```
 
 ### Do a simulation
 Run a single test in each container, takes less than a minute for each.
 ```
-> docker exec test_001 ./script.csh RUN em_real 34 em_real 01 NP=3 ; set OK = $status ; echo $OK for test 01
+> docker exec test_001 ./script.csh RUN em_real 34 em_chem 1 NP=3 ; set OK = $status ; echo $OK for test 1
+0 for test 1
+
+> docker exec test_002 \
+	./feature_testing.csh /wrf/wrfoutput /wrf/WRF/test/em_real \
+	restartA /wrf/cases/basic /wrf/input/additional /wrf/input/standard mpi-3 ; \
+	set OK = $status ; echo $OK for test basic
+0 for test basic
+
+> docker exec test_003 ./script.csh RUN em_real 34 em_real 01 NP=3 ; set OK = $status ; echo $OK for test 01
 0 for test 01
-> docker exec test_002 ./script.csh RUN nmm_real 34 nmm_hwrf 1NE NP=3 ; set OK = $status ; echo $OK for test 1NE
-0 for test 1NE
-> docker exec test_003 ./script.csh RUN em_real 34 em_chem 1 NP=3 ; set OK = $status ; echo $OK for test 1
-0 for test 1
-> docker exec test_019 ./script.csh RUN em_real 34 em_chem_kpp 120 NP=3 ; set OK = $status ; echo $OK for test 120
-0 for test 1
 ```
 
 ### When the tests are completed
@@ -162,7 +162,7 @@ CONTAINER ID        IMAGE               COMMAND             CREATED             
 > docker images
 REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
 wrf_regtest         latest              cb75a489c00c        About a minute ago   5.67 GB
-davegill/wrf-coop   thirteenthtry       c06fd248f249        6 hours ago          5.21 GB
+davegill/wrf-coop   fifteenthtry        c06fd248f249        6 hours ago          5.21 GB
 ```
 ```
 > docker rmi 196313365c17 efc665da99ef
