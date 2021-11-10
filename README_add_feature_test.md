@@ -8,7 +8,9 @@ tests that run for a short time period, and are able to provide bit-wise identic
 results upon completion.
 
 Only two files (currently) need to be modified. Once a large number of feature tests are
-added, then this file will be generalized.
+added, then this README file will be updated.
+
+And possibly, "large number of tests" is defined as about two more. 🙂
 
 
 ### build.csh
