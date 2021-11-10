@@ -104,15 +104,15 @@ firsttry: digest: sha256:5ee88699d04e2867ff1bc2c437f604426483968608d6bab031ff721
 The second image is faster (it requires a much shorter time to build the image), thank you very much. 
 ```
 > cp Dockerfile-second_part Dockerfile
-> docker build -t wrftest .
+> docker build -t wrf_regtest .
 ```
 
 ### With the second image, build three containers
-We construct a few containers from the `wrftest` image: WRF Chem (test_001), Restart feature (test_002), Real (test_003). These containers take only a few seconds each to create.
+We construct a few containers from the `wrf_regtest` image: WRF Chem (test_001), Restart feature (test_002), Real (test_003). These containers take only a few seconds each to create.
 ```
-> docker run -d -t --name test_001 wrftest
-> docker run -d -t --name test_002 wrftest
-> docker run -d -t --name test_003 wrftest
+> docker run -d -t --name test_001 wrf_regtest
+> docker run -d -t --name test_002 wrf_regtest
+> docker run -d -t --name test_003 wrf_regtest
 ```
 
 
