@@ -24,7 +24,7 @@
 	* [Checking WRF DA results](#WRFDA)
 * [Docker Clean Up](#Cleanup)
    	* [Stop, re-enter, and remove a docker container](#Stop) 
-* [Remove a docker image](#RemoveImage)
+	* [Remove a docker image](#RemoveImage)
 
 ## Purpose<a name="Purpose"/>
 
@@ -586,6 +586,10 @@ ncdump -h wrfout_d01_2006-04-06_00:00:00 | grep -i nan
    * 1
    * 2
    * 5 
+   * 
+## WRFDA test: WRF is built inside a container - now what<a name="NowWhat3"/>
+
+The actual run-time tests for the WRF Data Assimilation are beyond what we are prepared to do for pedestrian regression testing where developers modify physics and a few registry entries. Given these typical changes, the vast majority of the unintentional difficulties from developers is introducing a compile-time error wth WRF DA. These tests are to verify that the WRF DA code is still able to generate executables.
 
 ### Checking WRF DA results<a name="WRFDA"/>
 
@@ -593,13 +597,16 @@ ncdump -h wrfout_d01_2006-04-06_00:00:00 | grep -i nan
 
 WRFDA can be built in 4DVar mode or non-4DVar mode. The 4DVar build allows a user to also run
 3DVar and hybrid-3D/4DEnVar. The 4DVar build needs to additionally build WRFPlus (i.e., the tangent linear and adjoint (TL/AD) of WRF).
-Users may find a benefit to having separate directories for WRF, WRFPLUS, and WRFDA.
+For this set of building tests, users will find a benefit to having separate directories for WRF, WRFPLUS, and WRFDA. Note that all of the
+instructions begin with "copy all of the WRF code into a new directory, and then build in that new directory". We want to always start with a 
+clean directory for the build. We verify results in the WRF DA build tests by looking for executables.
 
 For WRFPlus build:
 ```
 cd ~
 cp -pr WRF WRFPLUS
 cd WRFPLUS 
+./clean -a
 ./configure wrfplus << EOF
 18
 EOF
@@ -619,6 +626,7 @@ cp -pr WRF WRFDA
 cd WRFDA
 setenv CRTM 1   # will build with CRTM, optional
 setenv WRFPLUS_DIR ~/WRFPLUS    # built-wrfplus-directory: must have buillt prior to 4DVar
+./clean -a
 ./configure 4dvar << EOF
 18
 EOF
@@ -682,6 +690,7 @@ cp -pr WRF WRFDA2
 cd WRFDA2
 setenv CRTM 1   # will build with CRTM, optional
 unset WRFPLUS_DIR
+./clean -a
 ./configure wrfda << EOF
 34
 EOF
@@ -719,28 +728,25 @@ Once a container is running, other host OS terminal windows may enter the same c
 ```
 docker exec -it ARW /bin/tcsh
 ```
-Once the docker container status is `Exited`, the container may be removed. This step is typically used when building a new container. Removing the container is also required when the intention is to remove the docker image (by default, you cannot remove an image that has a container).
+Once the docker container status is `Exited`, the container may be removed. This step is typically used when building a new container. Removing the container is also required when the intention is to remove the docker image (by default, you cannot remove an image that has an active or stopped container).
 
 To remove a docker container, first exit all processes from the container (just `exit` from inside the container in each terminal window). Then stop the container, and then remove the container.
 ```
 docker stop ARW
 docker rm ARW
 ```
-
 ### Remove a docker image<a name="RemoveImage"/>
 
 What docker images are available to remove:
 ```
 docker images
 REPOSITORY          TAG                 IMAGE ID            CREATED              SIZE
-wrf_nmmregtest      latest              13b80465a2f4        2 days ago           5.78GB
 wrf_regtest         latest              cb75a489c00c        About a minute ago   5.67 GB
-davegill/wrf-coop   thirteenthtry       c06fd248f249        6 hours ago          5.21 GB
-davegill/wrf-coop   sixthtry            c36f5f2b0cc6        3 months ago         5.32GB
+davegill/wrf-coop   fifteenthtry        c06fd248f249        6 hours ago          5.21 GB
 ```
-As mentioned previously, leave the `wrf-coop` images alone. To remove the images that made both the `ARW` and `NMM` containers (in the above example):
+As mentioned previously, leave the `wrf-coop` images alone. To remove the image that made the `ARW` container (in the above example):
 ```
-docker rmi 13b80465a2f4 d7dd1400f486
+docker rmi cb75a489c00c
 ```
 The final clean-up step is to let docker do some removal of unnecessary space.
 ```
