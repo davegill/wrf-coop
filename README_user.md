@@ -603,11 +603,9 @@ cd test/em_real
 ln -sf /wrf/input/standard/* .
 ln -sf /wrf/input/additional/* .
 ```
-2. From the lengthy run-time configuration table above, choose a suffix from the test names. For example, the first few are listed as:
-   * 3dtke
-   * conus
-   * rap
-   * tropical
+2. The restart test case suites have just been instituted. There are currently two:
+   * basic
+   * dfi
 
 This example shows selecting to run the `basic` restart test. There are three namelists: real, first run of WRF, second run of WRF.
 ```
