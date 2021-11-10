@@ -765,27 +765,6 @@ Timing for Writing wrfout_d02_2016-03-23_00:12:00 for domain        2:    0.6154
 Timing for main: time 2016-03-23_00:12:00 on domain   1:   14.63783 elapsed seconds
 Timing for Writing wrfout_d01_2016-03-23_00:12:00 for domain        1:    0.53513 elapsed seconds
 d01 2016-03-23_00:12:00 wrf: SUCCESS COMPLETE WRF
-[wrfuser@b5af8c9633dc em_real]$ cat HOLD/rsl.out.0000 | tail -20
-Timing for main: time 2016-03-23_00:05:00 on domain   2:    1.82419 elapsed seconds
-Timing for main: time 2016-03-23_00:06:00 on domain   2:    1.74596 elapsed seconds
-Timing for main: time 2016-03-23_00:06:00 on domain   1:    9.23054 elapsed seconds
-Timing for Writing wrfout_d01_2016-03-23_00:06:00 for domain        1:    0.53650 elapsed seconds
-Timing for Writing wrfout_d02_2016-03-23_00:06:00 for domain        2:    0.75719 elapsed seconds
-Timing for main: time 2016-03-23_00:07:00 on domain   2:    2.51444 elapsed seconds
-Timing for main: time 2016-03-23_00:08:00 on domain   2:    1.77137 elapsed seconds
-Timing for main: time 2016-03-23_00:09:00 on domain   2:    1.76484 elapsed seconds
-Timing for main: time 2016-03-23_00:09:00 on domain   1:    9.30836 elapsed seconds
-Timing for Writing wrfout_d01_2016-03-23_00:09:00 for domain        1:    0.53476 elapsed seconds
-Timing for Writing restart for domain        1:    2.19493 elapsed seconds
-Timing for Writing restart for domain        2:    2.48162 elapsed seconds
-Timing for Writing wrfout_d02_2016-03-23_00:09:00 for domain        2:    0.61364 elapsed seconds
-Timing for main: time 2016-03-23_00:10:00 on domain   2:    2.45654 elapsed seconds
-Timing for main: time 2016-03-23_00:11:00 on domain   2:    1.76309 elapsed seconds
-Timing for main: time 2016-03-23_00:12:00 on domain   2:    1.78088 elapsed seconds
-Timing for Writing wrfout_d02_2016-03-23_00:12:00 for domain        2:    0.61547 elapsed seconds
-Timing for main: time 2016-03-23_00:12:00 on domain   1:   14.63783 elapsed seconds
-Timing for Writing wrfout_d01_2016-03-23_00:12:00 for domain        1:    0.53513 elapsed seconds
-d01 2016-03-23_00:12:00 wrf: SUCCESS COMPLETE WRF
 ```
 The output from the restart run has only the last few time steps included.
 ```
