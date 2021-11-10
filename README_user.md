@@ -634,7 +634,7 @@ mpirun -np 3 --oversubscribe wrf.exe
 
 1. The output from standard err and standard out in the container are treated similarly as typical WRF simulations. The last line should contain the string "SUCCESS". The output from the first simulation has more than the last few minutes.
 ```
-cat HOLD/rsl.out.0000 | tail -20
+cat HOLD/rsl.out.0000
 taskid: 0 hostname: b5af8c9633dc
 Quilting with   1 groups of   0 I/O tasks.
  Ntasks in X            1 , ntasks in Y            3
