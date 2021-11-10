@@ -58,4 +58,4 @@ to run the restart tests, the labels need to be modified on the PR.
 2. The only label permitted is `Feature`.
 
 You are thinking, hmmm, this restriction seems a bit problematic. But no, we are mostly testing on
-github.com/wrf-model/WRF#1569. It is a test PR, and only has a single label: `Feature`.
+https:github.com/wrf-model/WRF#1569. It is a test PR, and only has a single label: `Feature`.
