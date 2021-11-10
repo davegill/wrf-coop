@@ -25,6 +25,13 @@ New:
 ```
 No other changes are required in the build.csh file.
 
-2. The directory with the list of feature tests must be updated. This is in a separate
-repository: https://github.com/davegill/wrf_feature_testing/tree/main/cases
+2. The second change is in a separate repository. 
+https://github.com/davegill/wrf_feature_testing
+The `cases` directory has the name of each of the required feature test. 
+A new directory is added, with three files. The directory name, in this instance,
+would be `adapt`. The added files are `namelist.input.1`, `namelist.input.2`, and
+`namelist.input.3`. For a restart case, the first namelist is to run real, the 
+second is to run WRF (full run), and the third namelist is for the restart WRF
+run. Typically, having a nest with 12 fine-grid time steps (for the full run) is
+sufficient to check that restarts work.
 
