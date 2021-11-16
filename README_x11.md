@@ -42,7 +42,7 @@ Password:
 
 Once you are root, you may install packages - for example `ncview`.
 ```
-[root@69d976dbd6b1 wrf]# yum install -y ncview
+[root@69d976dbd6b1 wrf]# yum -y install ncview
 ```
 
 Once the installation is complete, stop being the root user. Notice that your prompt changes again, and that a standard user can see `ncview`.
