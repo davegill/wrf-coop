@@ -3,22 +3,22 @@
 It is recognized that this is only important when the container will be used interactively by the user. Batch submissions of jobs or use of the containers for
 regression testing do not constitute typical use cases for interactive visualization.
 
-###On a Mac
+### On a Mac
 1. Open Xquartz, and go to Xquartz > Preferences > Security
 2. Check the option to "Allow connections from network clients"
 3. Completely quit Xquartz and re-open it
 
-###Disable access control
+### Disable access control
 In the terminal, before you run your image, enter `xhost + 127.0.0.1`   
 There are security implications with this (`xhost +` disables access control, including 127.0.0.1 says to ONLY allow the local host).
 
-###Pass in an env variable with `docker run`
+### Pass in an env variable with `docker run`
 On a generic local host, include `-e DISPLAY=host.docker.internal:0`, which sets an environment variable. For example:
 ```
 docker run -it --name test_003m  -v $SHARED/OUTPUT:/wrf/wrfoutput -e DISPLAY=host.docker.internal:0 wrf_regtest /bin/tcsh
 ```
 
-###Install ncview in the container
+### Install ncview in the container
 To use a tool, such as `ncview` (which is currently not installed in the image), it works to have two terminal windows. In one of the terminal windows the 
 user is on the local host OS, and in the other window the user is in the running container. The wrf_regtest containers are not built with `sudo` permission.
 In the local host OS, set the root password for the running container. We make the user 
