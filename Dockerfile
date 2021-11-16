@@ -10,6 +10,7 @@ RUN git clone _FORK_/_REPO_.git WRF \
 RUN git clone https://github.com/davegill/SCRIPTS.git SCRIPTS \
   && cp SCRIPTS/rd_l2_norm.py . && chmod 755 rd_l2_norm.py \
   && cp SCRIPTS/script.csh .    && chmod 755 script.csh    \
+  && cp SCRIPTS/da_builds.csh . && chmod 755 da_builds.csh \
   && ln -sf SCRIPTS/Namelists . 
 
 RUN git clone https://github.com/davegill/wrf_feature_testing.git wrf_feature_testing \
