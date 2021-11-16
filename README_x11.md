@@ -22,7 +22,7 @@ docker run -it --name test_003m  -v $SHARED/OUTPUT:/wrf/wrfoutput -e DISPLAY=hos
 To use a tool, such as `ncview` (which is currently not installed in the image), it works to have two terminal windows. In one of the terminal windows the 
 user is on the local host OS, and in the other window the user is in the running container. The wrf_regtest containers are not built with `sudo` permission.
 In the local host OS, set the root password for the running container. We make the user 
-root (`-u 0`), and then enter the `passwd` command.
+root (`-u 0`), and then execute the `passwd` command.
 ```
 docker exec -itu 0 test_003m passwd
 ```
