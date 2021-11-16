@@ -987,6 +987,48 @@ echo "Run ./last_only_once.csh"
 
 
 
+if ( -e test_000m.csh ) then
+	rm -rf test_000m.csh
+endif
+touch test_000m.csh
+chmod +x test_000m.csh
+echo '#\!/bin/csh' >> test_000m.csh
+echo "#####################   TOP OF JOB    #####################" >> test_000m.csh
+echo "touch $DROPIT/DOING_NOW_test_000m" >> test_000m.csh
+echo "chmod 666 $DROPIT/DOING_NOW_test_000m" >> test_000m.csh
+echo "echo TEST CASE = test_000m" >> test_000m.csh
+echo "date" >> test_000m.csh
+echo "set SHARED = $SHARED" >> test_000m.csh
+echo "#	Build: case = DA, MPI" >> test_000m.csh
+echo 'echo "Build container"' >> test_000m.csh
+echo 'docker run -d -t --name test_000m  -v $SHARED/OUTPUT:/wrf/wrfoutput wrf_regtest' >> test_000m.csh
+echo "date" >> test_000m.csh
+echo 'echo "Build DA executable"' >> test_000m.csh
+echo "docker exec test_000m ./da_builds.csh WRFDA" >> test_000m.csh
+echo 'set OK_DA = $status' >> test_000m.csh
+echo "date" >> test_000m.csh
+echo 'if ( $OK_DA == 0 ) then' >> test_000m.csh
+echo '	echo "SUCCESSFUL BUILD"' >> test_000m.csh
+echo "	docker exec test_000m ls -ls wrfoutput | grep _BUILD_ | grep WRFDA" >> test_000m.csh
+echo "else" >> test_000m.csh
+echo '	echo "FAILED BUILD LOG START"' >> test_000m.csh
+echo "	docker exec test_000m cat WRF/foo" >> test_000m.csh
+echo '	echo "FAILED BUILD LOG END"' >> test_000m.csh
+echo "endif" >> test_000m.csh
+echo "date" >> test_000m.csh
+echo "" >> test_000m.csh
+echo "docker stop test_000m" >> test_000m.csh
+echo "date" >> test_000m.csh
+echo "docker rm test_000m" >> test_000m.csh
+echo "date" >> test_000m.csh
+echo "touch $DROPIT/COMPLETE_test_000m" >> test_000m.csh
+echo "chmod 666 $DROPIT/COMPLETE_test_000m" >> test_000m.csh
+echo "mv $DROPIT/DOING_NOW_test_000m $DROPIT/COMPLETE_test_000m" >> test_000m.csh
+echo "#####################   END OF JOB    #####################" >> test_000m.csh
+
+
+
+
 if ( -e part.sh ) then
 	rm part.sh
 endif
