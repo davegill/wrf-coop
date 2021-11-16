@@ -12,7 +12,7 @@ regression testing do not constitute typical use cases for interactive visualiza
 In the terminal, before you run your image, enter `xhost + 127.0.0.1`   
 There are security implications with this (`xhost +` disables access control, including 127.0.0.1 says to ONLY allow the local host).
 
-### Pass in an env variable with `docker run`
+### Pass in an env variable to the about-to-be-built container, via `docker run`
 On a generic local host, include `-e DISPLAY=host.docker.internal:0`, which sets an environment variable. For example:
 ```
 docker run -it --name test_003m  -v $SHARED/OUTPUT:/wrf/wrfoutput -e DISPLAY=host.docker.internal:0 wrf_regtest /bin/tcsh
