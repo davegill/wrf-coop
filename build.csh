@@ -1109,7 +1109,7 @@ while ( $n < $OVERALL_NUMBER_OF_TESTS )
 
 	if ( ( ( $SERIAL[$COUNT] == T ) && ( $OPENMP[$COUNT] == T ) )   || \
 	     ( ( $SERIAL[$COUNT] == T ) && (    $MPI[$COUNT] == T ) ) ) then
-		echo "	./last_only_once.csh /tmp/raw_output/OUTPUT_${COUNT} | sudo tee -a /tmp/raw_output/final_output/output_${COUNT}" >> part.sh
+		echo "	./last_only_once.csh /tmp/raw_output/OUTPUT_${COUNT}/home/ubuntu/wrf-stuff/wrf-coop/OUTPUT | sudo tee -a /tmp/raw_output/final_output/output_${COUNT}" >> part.sh
 	endif
 	echo "" >> part.sh
 	echo "" >> part.sh
