@@ -1015,7 +1015,7 @@ echo '	echo "SUCCESSFUL BUILD"' >> test_000m.csh
 echo "	docker exec test_000m ls -ls wrfoutput | grep _BUILD_ | grep WRFDA" >> test_000m.csh
 echo "else" >> test_000m.csh
 echo '	echo "FAILED BUILD LOG START"' >> test_000m.csh
-echo "	docker exec test_000m cat WRF/foo" >> test_000m.csh
+echo "	docker exec test_000m cat WRFDA2/foo" >> test_000m.csh
 echo '	echo "FAILED BUILD LOG END"' >> test_000m.csh
 echo "endif" >> test_000m.csh
 echo "date" >> test_000m.csh
