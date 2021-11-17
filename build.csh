@@ -1048,6 +1048,14 @@ set OVERALL_NUMBER_OF_TESTS = $ALL
 
 echo "" >> part.sh
 
+echo "	sudo -S unzip /tmp/raw_output/OUTPUT_output_0.zip -d /tmp/raw_output/OUTPUT_0" >> part.sh
+echo "	sudo -S cat /tmp/raw_output/output_0 | sudo tee -a /tmp/raw_output/final_output/output_0" >> part.sh
+echo "" >> part.sh
+echo "	sudo -S ls -l /tmp/raw_output/OUTPUT_output_0/home/ubuntu/wrf-stuff/wrf-coop/OUTPUT | sudo tee -a /tmp/raw_output/final_output/output_0" >> part.sh
+
+echo "" >> part.sh
+echo "" >> part.sh
+
 #set INCR_FINE_GRAIN = ${#NUMBER}
 set INCR_FINE_GRAIN = 0
 set COUNT = 1
