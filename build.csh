@@ -925,6 +925,9 @@ echo "" >> last_only_once.csh
 echo "echo 'LISTING OF FILES'" >> last_only_once.csh
 echo "ls -lsR" >> last_only_once.csh
 echo "" >> last_only_once.csh
+echo "echo 'LISTING OF FILES in $1'" >> last_only_once.csh
+echo 'ls -lsR $1' >> last_only_once.csh
+echo "" >> last_only_once.csh
 echo 'cd $1 >& /dev/null' >> last_only_once.csh
 echo "" >> last_only_once.csh
 set COUNT = 1
