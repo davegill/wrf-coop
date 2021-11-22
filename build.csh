@@ -1097,7 +1097,6 @@ while ( $n < $OVERALL_NUMBER_OF_TESTS )
 		set STRING_MPI    = "sudo -S ls -l /tmp/raw_output/OUTPUT_output_${INCR_FINE_GRAIN}/home/ubuntu/wrf-stuff/wrf-coop/OUTPUT | sudo tee -a /tmp/raw_output/final_output/output_$COUNT"
 	endif
 	echo "	sudo -S cat $STRING1 | sudo tee -a /tmp/raw_output/final_output/output_$COUNT" >> part.sh
-	echo "" >> part.sh
 	if ( $THIS_SERIAL != FALSE ) then
 		echo "	$STRING_SERIAL" >> part.sh
 	endif
@@ -1107,15 +1106,14 @@ while ( $n < $OVERALL_NUMBER_OF_TESTS )
 	if ( $THIS_MPI    != FALSE ) then
 		echo "	$STRING_MPI   " >> part.sh
 	endif
-	echo "" >> part.sh
 
 	if ( ( ( $SERIAL[$COUNT] == T ) && ( $OPENMP[$COUNT] == T ) )   || \
 	     ( ( $SERIAL[$COUNT] == T ) && (    $MPI[$COUNT] == T ) ) ) then
 		echo "	./last_only_once.csh /tmp/raw_output/OUTPUT_${COUNT}/home/ubuntu/wrf-stuff/wrf-coop/OUTPUT | sudo tee -a /tmp/raw_output/final_output/output_${COUNT}" >> part.sh
 	endif
-	echo "" >> part.sh
 
-	echo "	cp /tmp/raw_output/OUTPUT_${COUNT}"'/home/ubuntu/wrf-stuff/wrf-coop/OUTPUT/SUCCESS_RUN_WRF* /tmp/Success_files' >> part.sh
+	echo "	sudo -S ls -ls /tmp/raw_output/OUTPUT_${COUNT}/home/ubuntu/wrf-stuff/wrf-coop/OUTPUT | sudo tee -a /tmp/raw_output/final_output/output_${COUNT}" >> part.sh
+	echo "	sudo -S cp /tmp/raw_output/OUTPUT_${COUNT}"'/home/ubuntu/wrf-stuff/wrf-coop/OUTPUT/SUCCESS_RUN_WRF* /tmp/Success_files' >> part.sh
 	echo "" >> part.sh
 	echo "" >> part.sh
 
