@@ -1114,6 +1114,9 @@ while ( $n < $OVERALL_NUMBER_OF_TESTS )
 		echo "	./last_only_once.csh /tmp/raw_output/OUTPUT_${COUNT}/home/ubuntu/wrf-stuff/wrf-coop/OUTPUT | sudo tee -a /tmp/raw_output/final_output/output_${COUNT}" >> part.sh
 	endif
 	echo "" >> part.sh
+
+	echo "	cp /tmp/raw_output/OUTPUT_${COUNT}"'/home/ubuntu/wrf-stuff/wrf-coop/OUTPUT/SUCCESS_RUN_WRF* /tmp/Success_files' >> part.sh
+	echo "" >> part.sh
 	echo "" >> part.sh
 
 	@ COUNT ++ 
