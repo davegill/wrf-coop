@@ -95,7 +95,7 @@ else if ( $TEST_GEN == SOME ) then
 	                  "em_chem        1 2 5 " \
 	                  "restartA       basic dfi " \
 	                  "em_realA       03 03DF " \
-	                  "em_realC       17 17AD 18 20 20NE " \
+	                  "em_realC       17 18 20 " \
 	                  "em_realK       52FD 60 60NE " \
 	                  "em_realL       66FD 71 78 79 " \
 	                  "em_real        3dtke conus rap tropical " \
