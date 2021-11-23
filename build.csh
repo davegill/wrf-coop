@@ -1052,7 +1052,6 @@ echo "" >> part.sh
 
 echo "	sudo -S unzip /tmp/raw_output/OUTPUT_output_0.zip -d /tmp/raw_output/OUTPUT_0" >> part.sh
 echo "	sudo -S cat /tmp/raw_output/output_0 | sudo tee -a /tmp/raw_output/final_output/output_0" >> part.sh
-echo "" >> part.sh
 echo "	sudo -S ls -l /tmp/raw_output/OUTPUT_output_0/home/ubuntu/wrf-stuff/wrf-coop/OUTPUT | sudo tee -a /tmp/raw_output/final_output/output_0" >> part.sh
 
 echo "" >> part.sh
@@ -1107,13 +1106,15 @@ while ( $n < $OVERALL_NUMBER_OF_TESTS )
 		echo "	$STRING_MPI   " >> part.sh
 	endif
 
+	echo "	if [ -d /tmp/raw_output/OUTPUT_${COUNT}"'/home/ubuntu/wrf-stuff/wrf-coop/OUTPUT ] ; then \ ' >> part.sh
 	if ( ( ( $SERIAL[$COUNT] == T ) && ( $OPENMP[$COUNT] == T ) )   || \
 	     ( ( $SERIAL[$COUNT] == T ) && (    $MPI[$COUNT] == T ) ) ) then
-		echo "	./last_only_once.csh /tmp/raw_output/OUTPUT_${COUNT}/home/ubuntu/wrf-stuff/wrf-coop/OUTPUT | sudo tee -a /tmp/raw_output/final_output/output_${COUNT}" >> part.sh
+		echo "		./last_only_once.csh /tmp/raw_output/OUTPUT_${COUNT}/home/ubuntu/wrf-stuff/wrf-coop/OUTPUT | sudo tee -a /tmp/raw_output/final_output/output_${COUNT}" >> part.sh
 	endif
 
-	echo "	sudo -S ls -ls /tmp/raw_output/OUTPUT_${COUNT}/home/ubuntu/wrf-stuff/wrf-coop/OUTPUT | sudo tee -a /tmp/raw_output/final_output/output_${COUNT}" >> part.sh
-	echo "#	sudo -S cp /tmp/raw_output/OUTPUT_${COUNT}"'/home/ubuntu/wrf-stuff/wrf-coop/OUTPUT/SUCCESS_RUN_WRF* /tmp/Success_files' >> part.sh
+	echo "		sudo -S ls -ls /tmp/raw_output/OUTPUT_${COUNT}/home/ubuntu/wrf-stuff/wrf-coop/OUTPUT | sudo tee -a /tmp/raw_output/final_output/output_${COUNT}" >> part.sh
+	echo "		sudo -S cp /tmp/raw_output/OUTPUT_${COUNT}"'/home/ubuntu/wrf-stuff/wrf-coop/OUTPUT/SUCCESS_RUN_WRF* /tmp/Success_files' >> part.sh
+	echo "	fi " >> part.sh
 	echo "" >> part.sh
 	echo "" >> part.sh
 
