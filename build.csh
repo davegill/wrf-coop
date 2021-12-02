@@ -54,7 +54,7 @@ if      ( $TEST_GEN == ALL ) then
 
 	set TEST      = ( \
 	                  "em_chem        1 2 5 " \
-	                  "restartA       basic dfi " \
+	                  "restartA       basic dfi diff_opt_2 km_opt_1 km_opt_2 km_opt_3 nest_starts_later " \
 	                  "em_realA       03 03DF " \
 	                  "em_realC       17 17AD 18 20 20NE " \
 	                  "em_realK       52FD 60 60NE " \
@@ -93,7 +93,7 @@ else if ( $TEST_GEN == SOME ) then
 
 	set TEST      = ( \
 	                  "em_chem        1 2 5 " \
-	                  "restartA       basic dfi " \
+	                  "restartA       basic dfi diff_opt_2 km_opt_1 km_opt_2 km_opt_3 nest_starts_later " \
 	                  "em_realA       03 03DF " \
 	                  "em_realC       17 18 20 " \
 	                  "em_realK       52FD 60 60NE " \
