@@ -73,8 +73,8 @@ if      ( $TEST_GEN == ALL ) then
 	                  "em_realF       65DF " \
 	                  "em_realG       kiaps1NE kiaps2 rala ralbNE " \
 	                  "em_realH       cmt fsbm solaraNE solarb urb3aNE urb3bNE " \
-	                  "em_realI       03FD 06 03ST " \
-	                  "em_realJ       50 51 " \
+	                  "em_realI       03FD 06 " \
+	                  "em_realJ       03ST 50 51 " \
 	                  "em_chem_kpp    101 107 120 201 " \
 	                )
 	set TEST_COUNT = $#TEST
@@ -112,8 +112,8 @@ else if ( $TEST_GEN == SOME ) then
 	                  "em_realF       65DF " \
 	                  "em_realG       kiaps1NE kiaps2 " \
 	                  "em_realH       cmt solaraNE urb3bNE " \
-	                  "em_realI       03FD 06 03ST " \
-	                  "em_realJ       50 51 " \
+	                  "em_realI       03FD 06 " \
+	                  "em_realJ       03ST 50 51 " \
 	                  "em_chem_kpp    120 " \
 	                )
 	set TEST_COUNT = $#TEST
