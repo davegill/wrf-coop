@@ -932,6 +932,17 @@ echo 'ls -lsR $1' >> last_only_once.csh
 echo "" >> last_only_once.csh
 echo 'cd $1 >& /dev/null' >> last_only_once.csh
 echo "" >> last_only_once.csh
+echo "if ( ( -e SUCCESS_BUILD_WRF_d01_wrfplus_18_WRFPlus ) && ( -e SUCCESS_BUILD_WRF_d01_all_wrfvar_18_WRFDA-4DVar ) ) then" >> last_only_once.csh
+echo "	echo SUCCESS_BUILD_WRF_d01_wrfplus_18_WRFPlus SUCCESS_BUILD_WRF_d01_all_wrfvar_18_WRFDA-4DVar = 0" >> last_only_once.csh
+echo "else" >> last_only_once.csh
+echo "	if ( -e FAIL_BUILD_WRF_d01_wrfplus_18_WRFPlus ) then" >> last_only_once.csh
+echo "		echo FAIL_BUILD_WRF_d01_wrfplus_18_WRFPlus = 1" >> last_only_once.csh
+echo "	endif" >> last_only_once.csh
+echo "	if ( -e FAIL_BUILD_WRF_d01_all_wrfvar_18_WRFDA-4DVar ) then" >> last_only_once.csh
+echo "		echo FAIL_BUILD_WRF_d01_all_wrfvar_18_WRFDA-4DVar = 1" >> last_only_once.csh
+echo "	endif" >> last_only_once.csh
+endif
+echo "" >> last_only_once.csh
 set COUNT = 1
 foreach n ( $NUMBER )
 
