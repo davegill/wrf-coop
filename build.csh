@@ -1125,7 +1125,7 @@ while ( $n < $OVERALL_NUMBER_OF_TESTS )
 	endif
 
 	echo "		sudo -S ls -ls /tmp/"'raw_output_$BUILD_NUMBER'"/OUTPUT_${COUNT}/home/ubuntu/wrf-stuff/wrf-coop/OUTPUT | sudo tee -a /tmp/"'raw_output_$BUILD_NUMBER'"/final_output/output_${COUNT}" >> part.sh
-	echo "		sudo -S cp /tmp/"'raw_output_$BUILD_NUMBER'"/OUTPUT_${COUNT}"'/home/ubuntu/wrf-stuff/wrf-coop/OUTPUT/SUCCESS_RUN_WRF* /tmp/Success_files' >> part.sh
+	echo "		sudo -S cp /tmp/"'raw_output_$BUILD_NUMBER'"/OUTPUT_${COUNT}"'/home/ubuntu/wrf-stuff/wrf-coop/OUTPUT/SUCCESS_RUN_WRF* /tmp/Success_files_$BUILD_NUMBER' >> part.sh
 	echo "	fi " >> part.sh
 	echo "" >> part.sh
 	echo "" >> part.sh
