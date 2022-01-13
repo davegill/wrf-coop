@@ -1062,9 +1062,9 @@ set OVERALL_NUMBER_OF_TESTS = $ALL
 
 echo "" >> part.sh
 
-echo "	sudo -S unzip /tmp/raw_output/OUTPUT_output_0.zip -d /tmp/raw_output/OUTPUT_0" >> part.sh
-echo "	sudo -S cat /tmp/raw_output/output_0 | sudo tee -a /tmp/raw_output/final_output/output_0" >> part.sh
-echo "	sudo -S ls -l /tmp/raw_output/OUTPUT_output_0/home/ubuntu/wrf-stuff/wrf-coop/OUTPUT | sudo tee -a /tmp/raw_output/final_output/output_0" >> part.sh
+echo '	sudo -S unzip /tmp/raw_output_$BUILD_NUMBER/OUTPUT_output_0.zip -d /tmp/raw_output_$BUILD_NUMBER/OUTPUT_0' >> part.sh
+echo '	sudo -S cat /tmp/raw_output_$BUILD_NUMBER/output_0 | sudo tee -a /tmp/raw_output_$BUILD_NUMBER/final_output/output_0' >> part.sh
+echo '	sudo -S ls -l /tmp/raw_output_$BUILD_NUMBER/OUTPUT_output_0/home/ubuntu/wrf-stuff/wrf-coop/OUTPUT | sudo tee -a /tmp/raw_output_$BUILD_NUMBER/final_output/output_0' >> part.sh
 
 echo "" >> part.sh
 echo "" >> part.sh
@@ -1089,25 +1089,25 @@ while ( $n < $OVERALL_NUMBER_OF_TESTS )
 	if     ( $SERIAL[$COUNT] == T ) then
 		@ INCR_FINE_GRAIN ++
 		set THIS_SERIAL = $INCR_FINE_GRAIN
-		echo "	sudo -S unzip /tmp/raw_output/OUTPUT_output_${THIS_SERIAL}.zip -d /tmp/raw_output/OUTPUT_${COUNT}" >> part.sh
-		set STRING1 = ( $STRING1 "/tmp/raw_output/output_${THIS_SERIAL}" )
-		set STRING_SERIAL = "sudo -S ls -l /tmp/raw_output/OUTPUT_output_${INCR_FINE_GRAIN}/home/ubuntu/wrf-stuff/wrf-coop/OUTPUT | sudo tee -a /tmp/raw_output/final_output/output_$COUNT"
+		echo "	sudo -S unzip /tmp/"'raw_output_$BUILD_NUMBER'"/OUTPUT_output_${THIS_SERIAL}.zip -d /tmp/"'raw_output_$BUILD_NUMBER'"/OUTPUT_${COUNT}" >> part.sh
+		set STRING1 = ( $STRING1 "/tmp/"'raw_output_$BUILD_NUMBER'"/output_${THIS_SERIAL}" )
+		set STRING_SERIAL = "sudo -S ls -l /tmp/"'raw_output_$BUILD_NUMBER'"/OUTPUT_output_${INCR_FINE_GRAIN}/home/ubuntu/wrf-stuff/wrf-coop/OUTPUT | sudo tee -a /tmp/"'raw_output_$BUILD_NUMBER'"/final_output/output_$COUNT"
 	endif
 	if     ( $OPENMP[$COUNT] == T ) then
 		@ INCR_FINE_GRAIN ++
 		set THIS_OPENMP = $INCR_FINE_GRAIN
-		echo "	sudo -S unzip /tmp/raw_output/OUTPUT_output_${THIS_OPENMP}.zip -d /tmp/raw_output/OUTPUT_${COUNT}" >> part.sh
-		set STRING1 = ( $STRING1 "/tmp/raw_output/output_${THIS_OPENMP}" )
-		set STRING_OPENMP = "sudo -S ls -l /tmp/raw_output/OUTPUT_output_${INCR_FINE_GRAIN}/home/ubuntu/wrf-stuff/wrf-coop/OUTPUT | sudo tee -a /tmp/raw_output/final_output/output_$COUNT"
+		echo "	sudo -S unzip /tmp/"'raw_output_$BUILD_NUMBER'"/OUTPUT_output_${THIS_OPENMP}.zip -d /tmp/"'raw_output_$BUILD_NUMBER'"/OUTPUT_${COUNT}" >> part.sh
+		set STRING1 = ( $STRING1 "/tmp/"'raw_output_$BUILD_NUMBER'"/output_${THIS_OPENMP}" )
+		set STRING_OPENMP = "sudo -S ls -l /tmp/"'raw_output_$BUILD_NUMBER'"/OUTPUT_output_${INCR_FINE_GRAIN}/home/ubuntu/wrf-stuff/wrf-coop/OUTPUT | sudo tee -a /tmp/"'raw_output_$BUILD_NUMBER'"/final_output/output_$COUNT"
 	endif
 	if     (    $MPI[$COUNT] == T ) then
 		@ INCR_FINE_GRAIN ++
 		set THIS_MPI    = $INCR_FINE_GRAIN
-		echo "	sudo -S unzip /tmp/raw_output/OUTPUT_output_${THIS_MPI}.zip -d /tmp/raw_output/OUTPUT_${COUNT}" >> part.sh
-		set STRING1 = ( $STRING1 "/tmp/raw_output/output_${THIS_MPI}"    )
-		set STRING_MPI    = "sudo -S ls -l /tmp/raw_output/OUTPUT_output_${INCR_FINE_GRAIN}/home/ubuntu/wrf-stuff/wrf-coop/OUTPUT | sudo tee -a /tmp/raw_output/final_output/output_$COUNT"
+		echo "	sudo -S unzip /tmp/"'raw_output_$BUILD_NUMBER'"/OUTPUT_output_${THIS_MPI}.zip -d /tmp/"'raw_output_$BUILD_NUMBER'"/OUTPUT_${COUNT}" >> part.sh
+		set STRING1 = ( $STRING1 "/tmp/"'raw_output_$BUILD_NUMBER'"/output_${THIS_MPI}"    )
+		set STRING_MPI    = "sudo -S ls -l /tmp/"'raw_output_$BUILD_NUMBER'"/OUTPUT_output_${INCR_FINE_GRAIN}/home/ubuntu/wrf-stuff/wrf-coop/OUTPUT | sudo tee -a /tmp/"'raw_output_$BUILD_NUMBER'"/final_output/output_$COUNT"
 	endif
-	echo "	sudo -S cat $STRING1 | sudo tee -a /tmp/raw_output/final_output/output_$COUNT" >> part.sh
+	echo "	sudo -S cat $STRING1 | sudo tee -a /tmp/"'raw_output_$BUILD_NUMBER'"/final_output/output_$COUNT" >> part.sh
 	if ( $THIS_SERIAL != FALSE ) then
 		echo "	$STRING_SERIAL" >> part.sh
 	endif
@@ -1118,14 +1118,14 @@ while ( $n < $OVERALL_NUMBER_OF_TESTS )
 		echo "	$STRING_MPI   " >> part.sh
 	endif
 
-	echo "	if [ -d /tmp/raw_output/OUTPUT_${COUNT}"'/home/ubuntu/wrf-stuff/wrf-coop/OUTPUT ] ; then \ ' >> part.sh
+	echo "	if [ -d /tmp/"'raw_output_$BUILD_NUMBER'"/OUTPUT_${COUNT}"'/home/ubuntu/wrf-stuff/wrf-coop/OUTPUT ] ; then \ ' >> part.sh
 	if ( ( ( $SERIAL[$COUNT] == T ) && ( $OPENMP[$COUNT] == T ) )   || \
 	     ( ( $SERIAL[$COUNT] == T ) && (    $MPI[$COUNT] == T ) ) ) then
-		echo "		./last_only_once.csh /tmp/raw_output/OUTPUT_${COUNT}/home/ubuntu/wrf-stuff/wrf-coop/OUTPUT | sudo tee -a /tmp/raw_output/final_output/output_${COUNT}" >> part.sh
+		echo "		./last_only_once.csh /tmp/"'raw_output_$BUILD_NUMBER'"/OUTPUT_${COUNT}/home/ubuntu/wrf-stuff/wrf-coop/OUTPUT | sudo tee -a /tmp/"'raw_output_$BUILD_NUMBER'"/final_output/output_${COUNT}" >> part.sh
 	endif
 
-	echo "		sudo -S ls -ls /tmp/raw_output/OUTPUT_${COUNT}/home/ubuntu/wrf-stuff/wrf-coop/OUTPUT | sudo tee -a /tmp/raw_output/final_output/output_${COUNT}" >> part.sh
-	echo "		sudo -S cp /tmp/raw_output/OUTPUT_${COUNT}"'/home/ubuntu/wrf-stuff/wrf-coop/OUTPUT/SUCCESS_RUN_WRF* /tmp/Success_files' >> part.sh
+	echo "		sudo -S ls -ls /tmp/"'raw_output_$BUILD_NUMBER'"/OUTPUT_${COUNT}/home/ubuntu/wrf-stuff/wrf-coop/OUTPUT | sudo tee -a /tmp/"'raw_output_$BUILD_NUMBER'"/final_output/output_${COUNT}" >> part.sh
+	echo "		sudo -S cp /tmp/"'raw_output_$BUILD_NUMBER'"/OUTPUT_${COUNT}"'/home/ubuntu/wrf-stuff/wrf-coop/OUTPUT/SUCCESS_RUN_WRF* /tmp/Success_files' >> part.sh
 	echo "	fi " >> part.sh
 	echo "" >> part.sh
 	echo "" >> part.sh
