@@ -69,10 +69,10 @@ if      ( $TEST_GEN == ALL ) then
 	                  "em_hill2d_x    01 " \
 	                  "em_realB       10 11 14 16 16DF " \
 	                  "em_realD       38 48 49 " \
-	                  "em_realE       52 52DF " \
+	                  "em_realE       52DF " \
 	                  "em_realF       65DF " \
 	                  "em_realG       kiaps1NE kiaps2 rala ralbNE " \
-	                  "em_realH       cmt fsbm solaraNE solarb urb3aNE urb3bNE 03ST" \
+	                  "em_realH       52 cmt fsbm solaraNE solarb urb3aNE urb3bNE 03ST" \
 	                  "em_realI       03FD 06 " \
 	                  "em_realJ       50 51 " \
 	                  "em_chem_kpp    101 107 120 201 " \
@@ -108,10 +108,10 @@ else if ( $TEST_GEN == SOME ) then
 	                  "em_hill2d_x    01 " \
 	                  "em_realB       10 11 14 16 " \
 	                  "em_realD       38 48 49 " \
-	                  "em_realE       52 52DF " \
+	                  "em_realE       52DF " \
 	                  "em_realF       65DF " \
 	                  "em_realG       kiaps1NE kiaps2 " \
-	                  "em_realH       cmt solaraNE urb3bNE 03ST " \
+	                  "em_realH       52 cmt solaraNE urb3bNE 03ST " \
 	                  "em_realI       03FD 06 " \
 	                  "em_realJ       50 51 " \
 	                  "em_chem_kpp    120 " \
